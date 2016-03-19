@@ -7,3 +7,14 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+/Reflector/packages
+/Reflector/TestResults
+/Reflector/Reflector/bin
+/Reflector/Reflector/obj
+/Reflector/ReflectorTests/obj
+/Reflector/ReflectorTests/bin
+/Reflector/.vs/Reflector/v14/.suo
+/Reflector/Reflector.sln
+*.project
+*
+*.classpath

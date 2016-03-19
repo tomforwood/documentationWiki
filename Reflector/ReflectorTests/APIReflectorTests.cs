@@ -23,7 +23,7 @@ namespace Reflector.Tests
             JObject json = rep.getJson();
             Debug.WriteLine(json.ToString());
 
-            Uri uri = new Uri("C:/Users/Tom/workspace/documentationWiki/src/main/resources/schema/ClassRepresentation.json");
+            Uri uri = new Uri("C:/Users/Tom/source/documentationWiki/common/schema/ClassRepresentation.json");
             Validator valid = new Validator(uri);
 
             IList<ValidationError> errors;
@@ -45,7 +45,7 @@ namespace Reflector.Tests
             rep.fish = "fishy";
             JObject json = rep.getJson();
 
-            Uri uri = new Uri("C:/Users/Tom/workspace/documentationWiki/src/main/resources/schema/ClassRepresentation.json");
+            Uri uri = new Uri("C:/Users/Tom/source/documentationWiki/common/schema/ClassRepresentation.json");
             Validator valid = new Validator(uri);
 
             IList<ValidationError> errors;
