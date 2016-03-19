@@ -1,9 +1,10 @@
-import static org.junit.Assert.*;
+package org.forwoods.docuwiki.documentationWiki.api;
+
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
-import org.forwoods.docuwiki.documentationWiki.api.ClassRepresentation;
+import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.junit.Before;
 import org.junit.Test;
 
