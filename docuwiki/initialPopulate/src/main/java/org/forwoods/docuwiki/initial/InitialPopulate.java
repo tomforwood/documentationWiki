@@ -5,20 +5,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.WriteResult;
 
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
 
 
 public class InitialPopulate {
@@ -27,6 +21,7 @@ public class InitialPopulate {
 	private String collectionName= "annotatedClasses";
 
 
+	@SuppressWarnings("deprecation")
 	public InitialPopulate() {
 		MongoClient mongo = new MongoClient();
 		database = mongo.getDB("docuWiki");
@@ -44,6 +39,7 @@ public class InitialPopulate {
 		DBCollection dbCollection = database.getCollection(collectionName);
 		JacksonDBCollection<ClassRepresentation, Object> coll = JacksonDBCollection.wrap(dbCollection , ClassRepresentation.class);
 		WriteResult<ClassRepresentation, Object> insert = coll.insert(rep);
+		//BsonDocument.parse(json) TODO use this method?
 		System.out.println(insert.getSavedId());
 	}
 	

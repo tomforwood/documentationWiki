@@ -1,51 +1,28 @@
 package org.forwoods.docuwiki.documentable;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties("_id")
 public class ClassRepresentation extends Documentable{
-	public enum Modifier{
-		
-		
-		PUBLIC("public"),
-		PRIVATE("private");
-
-		static Map<String, Modifier> lookup = new HashMap<>();
-		
-		static {
-			for (Modifier mod:Modifier.values()) {
-				lookup.put(mod.stringRep, mod);
-			}
-		}
-		
-		private String stringRep;
-
-		Modifier(String stringRep){
-			this.stringRep = stringRep;
-		}
-		
-		public static Modifier lookup(String s) {
-			return lookup.get(s);
-		}
-	}
 	@JsonProperty
 	private int version;
 	
-	private boolean usergenerated;
+	private boolean userGenerated;
 	
-	private String namespace;
+	private String namespaceName;
+	@JsonProperty
 	private Modifier classModifier;
 	@JsonProperty
 	private String name;
 	
-	public ClassRepresentation(boolean usergenerated, String name) {
+	public ClassRepresentation(boolean userGenerated, String name) {
 		version =1;
-		this.usergenerated = usergenerated;
+		this.userGenerated = userGenerated;
 		this.name = name;
 	}
 
@@ -61,20 +38,20 @@ public class ClassRepresentation extends Documentable{
 		this.version = version;
 	}
 
-	public boolean isUsergenerated() {
-		return usergenerated;
+	public boolean isUserGenerated() {
+		return userGenerated;
 	}
 
-	public void setUsergenerated(boolean usergenerated) {
-		this.usergenerated = usergenerated;
+	public void setUserGenerated(boolean userGenerated) {
+		this.userGenerated = userGenerated;
 	}
 
-	public String getNamespace() {
-		return namespace;
+	public String getNamespaceName() {
+		return namespaceName;
 	}
 
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
+	public void setNamespaceName(String namespaceName) {
+		this.namespaceName = namespaceName;
 	}
 
 	public Modifier getClassModifier() {

@@ -27,7 +27,7 @@ public class TestClassRepresentation {
 	@Test
 	public void test() throws IOException, ProcessingException {
 		ClassRepresentation classRep = new ClassRepresentation(false, "Test");
-		classRep.setTypeComment("A Test Type");
+		classRep.setComment("A Test Type");
 		JsonNode schemaNode = JsonLoader.fromResource("/schema/ClassRepresentation.json");
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode data = mapper.valueToTree(classRep);

@@ -1,7 +1,6 @@
 package org.forwoods.docuwiki.documentable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,7 +11,6 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.SchemaVersion;
 import com.github.fge.jsonschema.cfg.ValidationConfiguration;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
@@ -29,6 +27,7 @@ public class ClassRepresentationTest {
 	@Test
 	public void test() throws IOException, ProcessingException, URISyntaxException {
 		ClassRepresentation classRep = new ClassRepresentation(false, "Test");
+		classRep.setClassModifier(Modifier.PUBLIC);
 		classRep.comment="A test class";
 		//JsonNode schemaNode = JsonLoader.fromResource("/schema/ClassRepresentation.json");
 		URI uri = getClass().getResource("/schema/ClassRepresentation.json").toURI();

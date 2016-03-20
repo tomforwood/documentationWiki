@@ -5,14 +5,12 @@ import java.io.Reader;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
-import org.forwoods.docuwiki.documentable.ClassRepresentation.Modifier;
+import org.forwoods.docuwiki.documentable.Modifier;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpBaseListener;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpLexer;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser;
@@ -21,7 +19,6 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ClassDeclarationC
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.DocCommentBlockContext;
 
 public class ClassRepresentationFactory {
-	
 	
 	public ClassRepresentation createClassRep(Reader reader) throws IOException {
 		BasicCSharpLexer tokenSource = new BasicCSharpLexer(new ANTLRInputStream(reader));
@@ -34,7 +31,7 @@ public class ClassRepresentationFactory {
         });
 		
 		ClassRepresentation rep = new ClassRepresentation();
-		
+		rep.setVersion(2);
 		parser.addParseListener(new ClassListener(rep));
 		parser.compilationUnit();
 		return rep;
@@ -66,11 +63,11 @@ public class ClassRepresentationFactory {
 			for (TerminalNode node:comment.DocComment()) {
 				result.append(trimCommentLine(node.getText()));
 			}
-			return result.toString();
+			return result.toString().trim();
 		}
 		
 		private String trimCommentLine(String commentLine) {
-			return commentLine.substring(3).replace("summary", "").replace("</summary>", "");
+			return commentLine.substring(3).replace("<summary>", "").replace("</summary>", "");
 		}
 
 		@Override

@@ -1,9 +1,10 @@
 package org.forwoods.docuwiki.documentationWiki;
 
-import io.dropwizard.Configuration;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.*;
+
+import io.dropwizard.Configuration;
 
 public class DocumentationWikiConfiguration extends Configuration {
 	@NotEmpty
