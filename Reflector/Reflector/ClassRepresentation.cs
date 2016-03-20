@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 
 namespace Reflector
 {
@@ -15,11 +18,12 @@ namespace Reflector
         {
             PUBLIC, PROTECTED
         }
-
+        
         public int version;
         public bool userGenerated = false;
         public string namespaceName;
         [JsonConverter(typeof(StringEnumConverter))]
+        [BsonRepresentation(BsonType.String)]
         public Modifier classModifier;
         public string name;
         public string fish;
