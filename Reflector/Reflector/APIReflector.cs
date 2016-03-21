@@ -17,8 +17,13 @@ namespace Reflector
         string collectionName = "reflectedClasses";
         public APIReflector()
         {
-            IMongoClient client = new MongoClient();
-            database = client.GetDatabase("docuWiki");
+            MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", "***REMOVED***");
+            var settings = new MongoClientSettings
+            {
+                Credentials = new[] { credential }
+            };
+            IMongoClient client = new MongoClient(settings);
+            database = client.GetDatabase("docuWiki");            
         }
 
         public IEnumerable<ClassRepresentation> reflectAssembly(Assembly assembly)
@@ -28,14 +33,16 @@ namespace Reflector
 
         public ClassRepresentation reflectClass(Type type)
         {
-            ClassRepresentation rep = new ClassRepresentation(type.FullName);
-            rep.classModifier = convert(type.Attributes);
+            ClassRepresentation rep = new ClassRepresentation(type.Name);
+            rep.classModifiers.Add(convert(type.Attributes));
             rep.userGenerated = false;
+            rep.namespaceName = type.Namespace;
             return rep;
         }
 
         private ClassRepresentation.Modifier convert(TypeAttributes attributes)
         {
+            //TODO this isn't right in any way
             if (attributes.HasFlag(TypeAttributes.Public)) return ClassRepresentation.Modifier.PUBLIC;
             return ClassRepresentation.Modifier.PROTECTED;
         }
@@ -44,6 +51,7 @@ namespace Reflector
         {
             JObject json = rep.getJson();
             string jsonText = json.ToString();
+            Debug.WriteLine(jsonText);
             BsonDocument doc = BsonDocument.Parse(jsonText);
             database.GetCollection<BsonDocument>(collectionName).InsertOne(doc);
         }
@@ -56,10 +64,27 @@ namespace Reflector
             Assembly ksp = typeof(GameEvents).Assembly;
 
             APIReflector reflector = new APIReflector();
-            ClassRepresentation rep = reflector.reflectClass(typeof(Part));
-            reflector.persistRep(rep);
+            reflector.clearCollection();
+            int count = 0;
+            foreach (Type type in ksp.GetExportedTypes()) {
+                ClassRepresentation rep = reflector.reflectClass(type);
+                reflector.persistRep(rep);
+                count++;
+            }
+            Debug.WriteLine("inserted =" + count);
+            long totalCount = reflector.database.GetCollection<BsonDocument>(reflector.collectionName).Count(new BsonDocument());
+            Debug.WriteLine("total =" + totalCount);
+            int i = reflector[0];
+        }
 
+        public int this[int i]
+        {
+            get { return 100; }
+        }
 
+        private void clearCollection()
+        {
+            database.DropCollection(collectionName);
         }
     }
 }

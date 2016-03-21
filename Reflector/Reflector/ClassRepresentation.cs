@@ -14,6 +14,7 @@ namespace Reflector
 {
     public class ClassRepresentation
     {
+
         public enum Modifier
         {
             PUBLIC, PROTECTED
@@ -22,9 +23,9 @@ namespace Reflector
         public int version;
         public bool userGenerated = false;
         public string namespaceName;
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("classModifiers", ItemConverterType =typeof(StringEnumConverter))]
         [BsonRepresentation(BsonType.String)]
-        public Modifier classModifier;
+        public List<Modifier> classModifiers = new List<Modifier>();
         public string name;
         public string fish;
 
