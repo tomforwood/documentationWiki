@@ -6,15 +6,12 @@ cd $OPENSHIFT_DATA_DIR
 M2_HOME="$OPENSHIFT_DATA_DIR/.m2"
 export M2_HOME
 
-mkdir -p $M2_HOME
-mkdir -p $M2_HOME/repository
 
-echo $M2_HOME
-
-echo -e  "<settings>\n   <localRepository>$OPENSHIFT_DATA_DIR/.m2/repository</localRepository>\n</settings>\n" > $M2_HOME/settings.xml
-
+echo $JAVA_HOME
+echo $PATH
 
 cd $OPENSHIFT_REPO_DIR/docuwiki
 
+mvn -version
 
-mvn clean package -DskipTests --settings $M2_HOME/settings.xml
+mvn clean package -DskipTests --settings $OPENSHIFT_DATA_DIR/.openshift/settings.xml
