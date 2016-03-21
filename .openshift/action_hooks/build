@@ -11,6 +11,9 @@ export M2_HOME=/usr/share/java/apache-maven-3.0.4
 
 cd $OPENSHIFT_REPO_DIR/docuwiki
 
+sed -i 's/@OPENSHIFT_MONGODB_DB_HOST@/'"$OPENSHIFT_MONGODB_DB_HOST"'/g' documentationWiki/src/main/resources/docuwiki.yml
+sed -i 's/@OPENSHIFT_MONGODB_DB_PORT@/'"$OPENSHIFT_MONGODB_DB_PORT"'/g' documentationWiki/src/main/resources/docuwiki.yml
+
  /usr/share/java/apache-maven-3.0.4/bin/mvn -version
 
  /usr/share/java/apache-maven-3.0.4/bin/mvn clean package -DskipTests --settings $OPENSHIFT_REPO_DIR/.openshift/settings.xml
