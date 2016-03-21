@@ -7,7 +7,8 @@
 		"version":{"type":"integer"},
 		"userGenerated":{"type":"boolean"},
 		"namespaceName":{"type":"string"},
-		"classModifier":{"$ref":"Modifier.json"},
+		"classModifiers":{"type": "array",
+											"items" :{ "$ref":"Modifier.json"}},
 		"name":{"type":"string"},
 		"methodModifier":{"$ref":"Modifier.json"},
 		"comment": {"type":"string"}
