@@ -17,4 +17,4 @@ echo -e  "<settings>\n   <localRepository>$OPENSHIFT_DATA_DIR/.m2/repository</lo
 cd $OPENSHIFT_REPO_DIR
 
 
-mvn clean package -DskipTests
+mvn clean package -DskipTests --settings $M2_HOME/settings.xml
