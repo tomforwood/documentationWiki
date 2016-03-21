@@ -9,6 +9,8 @@ export M2_HOME
 mkdir -p $M2_HOME
 mkdir -p $M2_HOME/repository
 
+echo $M2_HOME
+
 echo -e  "<settings>\n   <localRepository>$OPENSHIFT_DATA_DIR/.m2/repository</localRepository>\n</settings>\n" > $M2_HOME/settings.xml
 
 
