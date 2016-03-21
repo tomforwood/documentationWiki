@@ -1,7 +1,20 @@
 server:
+  type: simple
+  applicationContextPath: /
   rootPath: '/api'
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8080
+    bindHost: 127.9.90.1
+#  applicationContextPath: '/api'
+#  rootPath: '/api'
+#  applicationConnectors:
+#    - type: http
+#      bindHost: 127.9.90.1
+#      port: 8080
   
-mongoSecured : false
+mongoSecured : true
 mongoUsername : docuWikiUser
 mongoPassword : ***REMOVED***
 mongoDatabase : docuWiki

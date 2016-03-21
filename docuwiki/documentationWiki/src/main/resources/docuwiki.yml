@@ -1,9 +1,16 @@
 server:
+  type: simple
+  applicationContextPath: /
   rootPath: '/api'
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8080
+    bindHost: 127.9.90.1
   
 mongoUsername : docuWikiUser
 mongoPassword : ***REMOVED***
 mongoDatabase : docuWiki
 mongoHost : @OPENSHIFT_MONGODB_DB_HOST@
-mongoHost : @OPENSHIFT_MONGODB_DB_PORT@
+mongoPort : @OPENSHIFT_MONGODB_DB_PORT@
 

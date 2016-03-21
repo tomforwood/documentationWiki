@@ -51,7 +51,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
 	    	MongoCredential mongoCred = MongoCredential.createCredential(
 	    			configuration.getMongoUsername(),
 	    			configuration.getMongoDatabase(), 
-	    			configuration.getMongoDatabase().toCharArray());
+	    			configuration.getMongoPassword().toCharArray());
 			List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
 			ServerAddress addr = new ServerAddress(configuration.getMongoHost(), 
 					configuration.getMongoPort());
