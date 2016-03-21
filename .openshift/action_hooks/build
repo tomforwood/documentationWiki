@@ -5,8 +5,8 @@ export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0/jre
 
 cd $OPENSHIFT_DATA_DIR
 
-M2_HOME="$OPENSHIFT_DATA_DIR/.m2"
-export M2_HOME
+export JAVACMD=$JAVA_HOME/bin/java
+export M2_HOME=/usr/share/java/apache-maven-3.0.4
 
 
 cd $OPENSHIFT_REPO_DIR/docuwiki
