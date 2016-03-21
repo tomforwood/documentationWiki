@@ -11,6 +11,8 @@ export M2_HOME
 java -version
 
 echo "in the echoes now"
+echo `whoami`
+echo `echo $JAVA_HOME`
 echo $0
 echo $JAVA_HOME
 echo $PATH
