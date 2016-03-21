@@ -14,7 +14,7 @@ echo $M2_HOME
 echo -e  "<settings>\n   <localRepository>$OPENSHIFT_DATA_DIR/.m2/repository</localRepository>\n</settings>\n" > $M2_HOME/settings.xml
 
 
-cd $OPENSHIFT_REPO_DIR
+cd $OPENSHIFT_REPO_DIR/docuwiki
 
 
 mvn clean package -DskipTests --settings $M2_HOME/settings.xml
