@@ -1,5 +1,9 @@
 server:
   rootPath: '/api'
+  
+mongoUsername : docuWikiUser
+mongoPassword : ***REMOVED***
+mongoDatabase : docuWiki
+mongoHost : @OPENSHIFT_MONGODB_DB_HOST@
+mongoHost : @OPENSHIFT_MONGODB_DB_PORT@
 
-template: Hello, %s!
-defaultName: Stranger

@@ -16,5 +16,5 @@ buildNumber.properties
 /Reflector/.vs/Reflector/v14/.suo
 /Reflector/Reflector.sln
 *.project
-*
 *.classpath
+.settings/

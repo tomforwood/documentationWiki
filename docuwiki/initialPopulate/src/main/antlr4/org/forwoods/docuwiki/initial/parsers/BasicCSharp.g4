@@ -1,8 +1,9 @@
 grammar BasicCSharp;
 
-compilationUnit : '\uFEFF'? region 
-	using+ 
-	classDeclaration;
+compilationUnit : '\uFEFF'? region? 
+	using*
+	(namespace |
+	firstClassThing);
 
 region : RegionStart
 	LINE_COMMENT* '#endregion';
@@ -11,20 +12,38 @@ RegionStart : '#region' ~[\r\n]* ;
 
 using : 'using' qualifiedName ';';
 
+namespace :
+	'namespace' qualifiedName '{'
+	firstClassThing '}';
+
+firstClassThing: 
+	classDeclaration | enumDeclaration | interfaceDeclaration | structDeclaration;
+
+interfaceDeclaration :
+	comment=docCommentBlock
+	classmods=classOrInterfaceModifier*
+	'interface' name=identifier
+	genArgs = typeArgs?
+	classextends=extension?
+	classBody;
+
 classDeclaration :
 	comment=docCommentBlock
-	classmods=classOrInterfaceModifier
-	'class' name=Identifier
+	annotation*
+	classmods=classOrInterfaceModifier*
+	'class' name=identifier
+	genArgs = typeArgs?
 	classextends=extension?
 	classBody;
 
 docCommentBlock : DocComment*;
 	
-classOrInterfaceModifier : ('public'|'protected');
-modifier: classOrInterfaceModifier  | 'static' | 'virtual'| 
-'ref'|'out'|'delegate';
+classOrInterfaceModifier : ('public'|'protected'| 'static' | 'sealed' );
 
-extension : ':' qualifiedName*;
+modifier: classOrInterfaceModifier  | 'virtual'| 
+'ref'|'out'|'delegate'|'override'|'const'|'params'|'private'|'explicit';
+
+extension : ':' type (',' type)*;
 
 classBody : 
 	'{'
@@ -32,68 +51,122 @@ classBody :
 	'}';
 
 memberDeclaration :
-	DocComment*
-	annotation*
-	modifier* 
 	(
 	constructorDeclaration|
 	methodDeclaration|
 	fieldDeclaration|
 	genericMethod|
 	propertyDeclaration|
-	enumDeclaration);
+	enumDeclaration|
+	classDeclaration|
+	arrayLikeProperty| //I dont know what these are called in c#
+	//but they are the things that let you go myList[1]
+	structDeclaration
+	);
 	
-fieldDeclaration :type Identifier ';';
+fieldDeclaration : 
+	DocComment*
+	annotation*
+	modifier* 
+	type identifier 
+	assignment? ';';
 
-methodDeclaration : type Identifier formalParams ';';
+methodDeclaration : 
+	DocComment*
+	annotation*
+	modifier* 
+	type identifier formalParams (';'|propertyBody);
 
 constructorDeclaration :
-	Identifier formalParams ';';
+	DocComment*
+	annotation*
+	modifier* 
+	identifier formalParams ';';
 
 propertyDeclaration :
-	type Identifier IGNOREDBODY;
+	DocComment*
+	annotation*
+	modifier* 
+	type identifier propertyBody;
 	
-genericMethod : type Identifier typeArgs formalParams 
-	('where' Identifier ':' type)? ';';
+arrayLikeProperty :
+	DocComment*
+	annotation*
+	modifier* 
+	type 'this['type identifier ']' propertyBody;
+	
+genericMethod : 
+	DocComment*
+	annotation*
+	modifier* 
+	type identifier typeArgs formalParams 
+	(WHERE identifier ':' type)? ';';
 	
 enumDeclaration :
+	DocComment*
+	annotation*
 	modifier*
-	'enum' Identifier '{' (enumConstant)* '}';
+	'enum' identifier extension? '{' (enumConstant)* '}';
 
-enumConstant : DocComment* Identifier ('=' IntLiteral)? ',';
+enumConstant : DocComment* identifier ('=' IntLiteral)? ','?;
+
+structDeclaration :
+	DocComment*
+	modifier*
+	'struct'
+	identifier typeArgs? classBody ;
+
+assignment : '=' literal;
 
 formalParams : '(' formalParamList ')';
 
 formalParamList : formalParam (',' formalParam)* | ;
 
-formalParam : modifier* type Identifier ( '=' literal)?;
+formalParam : modifier* type identifier ( '=' literal)?;
 
 type:
-	Identifier typeArgs? ('.' Identifier typeArgs? )* ('['']')*
+	identifier typeArgs? ('.' identifier typeArgs? )* ('['']')*
 	| primitiveType ('['']')*;
 
 typeArgs:
 	'<' type (','type)*'>';
 
-qualifiedName :   Identifier ('.' Identifier)* ;
+qualifiedName :   identifier ('.' identifier)* ;
 
-annotation : '[' Identifier ( '(' StringLiteral ')')? ']';
+annotation : '[' identifier 
+	( '(' ( elementValuePairs | literal )? ')' )? ']';
 
-literal : StringLiteral | FPLiteral | BoolLiteral | 'null';
+elementValuePairs
+    :   elementValuePair (',' elementValuePair)*;
+    
+elementValuePair
+    :   (Identifier '=' literal) | enumLiteral;
 
-StringLiteral : '"' ~["]* '"';
+literal : StringLiteral | FPLiteral | IntLiteral | BoolLiteral | 'null' | enumLiteral;
+
+enumLiteral : qualifiedName '.' identifier ('|' enumLiteral)*;
+
+identifier:
+	Identifier | WHERE;//grrr some keywords can be used as identifiers
+	
+propertyBody : '{' (modifier? 'get;')? (modifier? 'set;')? '}';
+
+StringLiteral : '@'? '"' ~["]* '"';
 
 FPLiteral : Digits (
-	('.' Digits) [fF]? |
-		[fF]
+	('.' Digits)('e' IntLiteral )?	[fF]? |//to be a float literal
+		        ('e' IntLiteral ) [fF]? |//it must have either decimals
+		        				[fFcD] //an exponent or a tag
 	);
 
-IntLiteral :  Digits ([lL])?;
+IntLiteral :  '-'? Digits ([lL])?;
 
 BoolLiteral : 'true'|'false';
 
+WHERE :'where';
+
 fragment
-Digits : Digit (Digit)?;
+Digits : Digit (Digit)*;
 
 //these aren't a true part of the source - they have been added    
 EXTERN : 'extern' -> skip ;
@@ -113,11 +186,8 @@ LetterOrDigit
 Digit
     :   [0-9]
     ;
-
-//fragment
-//SemiC : ';';
     
-primitiveType : 'bool'|'float'|'string'|'double'|'int'|'long'|'class';
+primitiveType : 'bool'|'float'|'string'|'double'|'int'|'long'|'class'|'ulong';
 
 WS  :  [ \t\r\n\u000C]+ -> skip
     ;
@@ -132,5 +202,3 @@ COMMENT
 LINE_COMMENT
     :   '//'~'/' ~[\r\n]* -> skip
     ;
-
-IGNOREDBODY : '{' ~[\r\n]* '}';

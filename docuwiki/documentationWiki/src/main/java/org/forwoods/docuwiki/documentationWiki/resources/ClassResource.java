@@ -13,7 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.bson.BsonDocument;
 import org.bson.Document;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentationWiki.api.FQClassName;
@@ -48,15 +47,15 @@ public class ClassResource {
 		System.out.println("Searching for "+name);
 		String namespace=null;
 		String className=null;
-		if (name.indexOf('.')>0) {
-			String[] bits = name.split("\\.");
-			namespace = bits[0];
-			className = bits[bits.length-1];
+		int lastDot = name.lastIndexOf('.');
+		if (lastDot>0) {
+			namespace = name.substring(0, lastDot);
+			className = name.substring(lastDot+1);
 		}
 		else {
 			className = name;
 		}
-		FQClassName fqc = new FQClassName(namespace, className);
+		FQClassName fqc = new FQClassName(namespace, className, FQClassName.ALL);
 		
 		if (!classList.getCachedClasses().contains(fqc)) {
 			//TODO unknown class

@@ -1,0 +1,9 @@
+server:
+  rootPath: '/api'
+  
+mongoSecured : false
+mongoUsername : docuWikiUser
+mongoPassword : ***REMOVED***
+mongoDatabase : docuWiki
+mongoHost : localhost
+

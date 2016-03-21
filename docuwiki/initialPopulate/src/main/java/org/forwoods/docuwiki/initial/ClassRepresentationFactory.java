@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.Modifier;
@@ -17,6 +18,8 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ClassBodyContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ClassDeclarationContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.DocCommentBlockContext;
+import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.GenericMethodContext;
+import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.PropertyDeclarationContext;
 
 public class ClassRepresentationFactory {
 	
@@ -31,9 +34,11 @@ public class ClassRepresentationFactory {
         });
 		
 		ClassRepresentation rep = new ClassRepresentation();
-		rep.setVersion(2);
+		rep.setVersion(1);
 		parser.addParseListener(new ClassListener(rep));
 		parser.compilationUnit();
+		if (rep.getName()==null) return null;//this wasn't a class (it was probably an enum
+		//TODO cope with enums
 		return rep;
 	}
 	private final class ClassListener extends BasicCSharpBaseListener {
@@ -47,13 +52,17 @@ public class ClassRepresentationFactory {
 		public void enterClassDeclaration(ClassDeclarationContext ctx) {
 			
 		}
-		
-		
 
 		@Override
 		public void exitClassDeclaration(ClassDeclarationContext ctx) {
 			rep.setName(ctx.name.getText());
-			rep.setClassModifier(Modifier.lookup(ctx.classmods.getText()));
+			rep.getClassModifiers().clear();
+			if (ctx.classmods!=null) {
+				for (ParseTree pt:ctx.classmods.children) {
+					rep.addClassModifier(Modifier.lookup(pt.getText()));
+				}
+			}
+			
 			rep.setComment(readComment(ctx.comment));
 		}
 

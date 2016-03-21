@@ -1,11 +1,17 @@
 package org.forwoods.docuwiki.documentationWiki;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.bson.Document;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassListResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -30,10 +36,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
 
     @Override
     public void initialize(final Bootstrap<DocumentationWikiConfiguration> bootstrap) {
-
-    	client = new MongoClient();
-    	database = client.getDatabase("docuWiki");
-    	//TODO add shutdown hook to close client or something
+    	
     	
     	AssetsBundle assets = new AssetsBundle("/assets", "/", "index.html");
     	bootstrap.addBundle(assets);
@@ -44,12 +47,31 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     @Override
     public void run(final DocumentationWikiConfiguration configuration,
                     final Environment environment) {
+    	if (configuration.isMongoSecured()) {
+	    	MongoCredential mongoCred = MongoCredential.createCredential(
+	    			configuration.getMongoUsername(),
+	    			configuration.getMongoDatabase(), 
+	    			configuration.getMongoDatabase().toCharArray());
+			List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
+			ServerAddress addr = new ServerAddress(configuration.getMongoHost(), 
+					configuration.getMongoPort());
+			
+			client = new MongoClient(addr, creds);
+    	}
+    	else {
+    		client = new MongoClient();
+    	}
+    	database = client.getDatabase(configuration.getMongoDatabase());
+    	//TODO add shutdown hook to close client or something
+    	
+    	
     	MongoCollection<Document> reflectedClasses = database.getCollection("reflectedClasses");
     	
 		MongoCollection<Document> annotatedClasses = database.getCollection("annotatedClasses");
 		ClassListResource classList = new ClassListResource(reflectedClasses, annotatedClasses);
-        ClassResource resource = new ClassResource(reflectedClasses, annotatedClasses, classList);
-        environment.jersey().register(resource);
+        ClassResource classes = new ClassResource(reflectedClasses, annotatedClasses, classList);
+        environment.jersey().register(classes);
+        environment.jersey().register(classList);
     }
 
 }
