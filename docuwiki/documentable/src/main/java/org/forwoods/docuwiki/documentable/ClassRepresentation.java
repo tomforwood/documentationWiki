@@ -1,10 +1,12 @@
 package org.forwoods.docuwiki.documentable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties("_id")
@@ -16,7 +18,7 @@ public class ClassRepresentation extends Documentable{
 	
 	private String namespaceName;
 	@JsonProperty
-	private Modifier classModifier;
+	private List<Modifier> classModifiers = new ArrayList<>();
 	@JsonProperty
 	private String name;
 	
@@ -54,12 +56,12 @@ public class ClassRepresentation extends Documentable{
 		this.namespaceName = namespaceName;
 	}
 
-	public Modifier getClassModifier() {
-		return classModifier;
+	public List<Modifier> getClassModifiers() {
+		return classModifiers;
 	}
 
-	public void setClassModifier(Modifier classModifier) {
-		this.classModifier = classModifier;
+	public void addClassModifier(Modifier classModifier) {
+		classModifiers.add(classModifier);
 	}
 
 	public String getName() {

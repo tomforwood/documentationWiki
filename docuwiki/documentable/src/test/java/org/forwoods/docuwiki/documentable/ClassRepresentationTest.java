@@ -20,26 +20,25 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
 public class ClassRepresentationTest {
 
+	private Validator valid;
+
 	@Before
 	public void setUp() throws Exception {
+		valid = new Validator();
 	}
 
 	@Test
 	public void test() throws IOException, ProcessingException, URISyntaxException {
 		ClassRepresentation classRep = new ClassRepresentation(false, "Test");
-		classRep.setClassModifier(Modifier.PUBLIC);
+		classRep.addClassModifier(Modifier.PUBLIC);
 		classRep.comment="A test class";
 		//JsonNode schemaNode = JsonLoader.fromResource("/schema/ClassRepresentation.json");
-		URI uri = getClass().getResource("/schema/ClassRepresentation.json").toURI();
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode data = mapper.valueToTree(classRep);
-		System.out.println(data);
-		ValidationConfiguration validationCfg = ValidationConfiguration.newBuilder().setDefaultVersion(SchemaVersion.DRAFTV4).freeze();
-		JsonSchemaFactory factory = JsonSchemaFactory.newBuilder().setValidationConfiguration(validationCfg).freeze();
-		JsonSchema schema = factory.getJsonSchema(uri.toString());
+		
 		System.out.println(data);
 		
-		ProcessingReport report = schema.validate(data);
+		ProcessingReport report = valid.validate(data);
 		System.out.println(report);
 		//report.
 		assertThat(report.isSuccess()).isTrue();

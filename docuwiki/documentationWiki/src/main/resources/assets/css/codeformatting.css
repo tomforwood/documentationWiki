@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+
+pre.comment {
+	color: green;
+	width: 80%;
+	/*display: inline;*/
+}
+
+textarea.comment {
+	color: black;
+	width : 75%;
+}

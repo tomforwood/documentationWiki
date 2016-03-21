@@ -1,0 +1,24 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-2">
+			<!--Sidebar content -->
+
+			DoSearch: <input ng-model="query"> 
+			<select	ng-model="subsetOp" ng-init='subsetOp="ALL"'>
+				<option value="ALL">All</option>
+				<option value="DOCUMENTED">documented</option>
+				<option value="ORPHANED">orphaned</option>
+			</select>
+
+		</div>
+		<div class="col-md-10">
+			<ul>
+				<li ng-repeat="class in classes | filter:query | subset:subsetOp">
+				{{fqName=class.namespace?class.namespace+"."+class.className:class.className;""}}
+				<a href='#/classes/{{fqName}}'>
+				{{fqName}}</a><br>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
