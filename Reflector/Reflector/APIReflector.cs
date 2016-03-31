@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -17,74 +18,172 @@ namespace Reflector
         string collectionName = "reflectedClasses";
         public APIReflector()
         {
-            MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", "***REMOVED***");
+            /*MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", "***REMOVED***");
             var settings = new MongoClientSettings
             {
                 Credentials = new[] { credential }
             };
-            IMongoClient client = new MongoClient(settings);
+            IMongoClient client = new MongoClient(settings);*/
+            IMongoClient client = new MongoClient();
             database = client.GetDatabase("docuWiki");            
         }
 
-        public IEnumerable<ClassRepresentation> reflectAssembly(Assembly assembly)
+        public IEnumerable<TopLevelDocumentable> reflectAssembly(Assembly assembly)
         {
-            return assembly.GetExportedTypes().Select(reflectClass);
+            return assembly.GetExportedTypes().Select(reflectTop);
         }
 
-        public ClassRepresentation reflectClass(Type type)
+        public TopLevelDocumentable reflectTop(Type type)
         {
-            ClassRepresentation rep = new ClassRepresentation(type.Name);
-            rep.classModifiers.Add(convert(type.Attributes));
+            TopLevelDocumentable rep = null;
+            if (type.IsEnum)
+            {
+                rep = new EnumRepresentation(type.FullName);
+                reflectEnum((EnumRepresentation)rep, type);
+            }
+            else if (type.IsClass)
+            {
+                rep = new ClassRepresentation(type.FullName);
+                reflectClass((ClassRepresentation)rep, type);
+            }
+            else
+            {
+                return null;
+            }
+            TypeInfo ti = type.GetTypeInfo();
+
             rep.userGenerated = false;
+
             rep.namespaceName = type.Namespace;
+            convert(rep.modifiers,type);
             return rep;
         }
 
-        private ClassRepresentation.Modifier convert(TypeAttributes attributes)
+        private void reflectClass(ClassRepresentation rep, Type type)
         {
-            //TODO this isn't right in any way
-            if (attributes.HasFlag(TypeAttributes.Public)) return ClassRepresentation.Modifier.PUBLIC;
-            return ClassRepresentation.Modifier.PROTECTED;
+            foreach (FieldInfo field in type.GetFields(BindingFlags.Instance |BindingFlags.Public| BindingFlags.NonPublic)) {
+                if (field.IsPrivate) continue;
+                string name = field.Name;
+                string fieldType = field.FieldType.Name;
+                FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
+                convert(fieldRep.modifiers, field);
+                if (name== "configTabIndent")
+                {
+
+                    Debug.WriteLine(field.Attributes);
+                }
+                if (field.Attributes.ToString().Contains("HasDefault"))
+                {
+                    Debug.WriteLine(field.Attributes);
+                    //Consts will have this set I believe
+                }
+                //object value = field.GetValue(Activator.CreateInstance(type));
+                //fieldRep.assignment = "=" + value;
+                rep.instanceFields.Add(fieldRep);
+
+            }
         }
 
-        private void persistRep(ClassRepresentation rep)
+        private void reflectEnum(EnumRepresentation rep, Type type)
+        {
+            string[] names = type.GetEnumNames();
+            Array values = type.GetEnumValues();
+            Debug.WriteLine(type.GetEnumUnderlyingType().FullName);
+            for (int i=0;i<names.Length;i++)
+            {
+                object o = Convert.ChangeType(values.GetValue(i), type.GetEnumUnderlyingType());
+                string value = o.ToString();
+                EnumRepresentation.EnumConstant ec = new EnumRepresentation.EnumConstant(names[i], value);
+                rep.enumValues.Add(ec);
+            }
+        }
+
+        private void convert(List<Member.Modifier> list, Type type)
+        {
+            if (type.IsPublic) {
+                list.Add(ClassRepresentation.Modifier.PUBLIC);
+            }
+            if (type.IsAbstract)
+            {
+                list.Add(ClassRepresentation.Modifier.ABSTRACT);
+            }
+        }
+        private void convert(List<Member.Modifier> list, FieldInfo type)
+        {
+            if (type.Name=="agent")
+            {
+                Debug.Write("hello");
+            }
+            if (type.IsPublic)
+            {
+                list.Add(ClassRepresentation.Modifier.PUBLIC);
+            }
+            else if (type.IsFamily)
+            {
+                list.Add(ClassRepresentation.Modifier.PROTECTED);
+            }
+        }
+
+
+        private BsonDocument persistRep(TopLevelDocumentable rep)
         {
             JObject json = rep.getJson();
             string jsonText = json.ToString();
             Debug.WriteLine(jsonText);
             BsonDocument doc = BsonDocument.Parse(jsonText);
-            database.GetCollection<BsonDocument>(collectionName).InsertOne(doc);
+            return doc;
         }
 
-
-        static void Main(string[] args)
+        public void reflectClasses()
         {
-            Debug.WriteLine("Hello world");
 
             Assembly ksp = typeof(GameEvents).Assembly;
-
-            APIReflector reflector = new APIReflector();
-            reflector.clearCollection();
+            clearCollection();
             int count = 0;
-            foreach (Type type in ksp.GetExportedTypes()) {
-                ClassRepresentation rep = reflector.reflectClass(type);
-                reflector.persistRep(rep);
-                count++;
-            }
-            Debug.WriteLine("inserted =" + count);
-            long totalCount = reflector.database.GetCollection<BsonDocument>(reflector.collectionName).Count(new BsonDocument());
-            Debug.WriteLine("total =" + totalCount);
-            int i = reflector[0];
-        }
+            int batchSize = 0;
+            List<BsonDocument> reps = new List<BsonDocument>();
+            List<Task> allTasks = new List<Task>();
 
-        public int this[int i]
-        {
-            get { return 100; }
+            foreach (Type type in ksp.GetExportedTypes())
+            {
+                if (batchSize >= 100)
+                {
+                    Task task = database.GetCollection<BsonDocument>(collectionName).InsertManyAsync(reps);
+                    allTasks.Add(task);
+                    batchSize = 0;
+                    reps = new List<BsonDocument>();
+                }
+                Debug.WriteLine("reflecting " + type.FullName);
+                TopLevelDocumentable rep = reflectTop(type);
+                if (rep != null)
+                {
+                    BsonDocument doc = persistRep(rep);
+                    reps.Add(doc);
+                    count++;
+                    batchSize++;
+                }
+            }
+            Task t = database.GetCollection<BsonDocument>(collectionName).InsertManyAsync(reps);
+            allTasks.Add(t);
+
+            Task.WaitAll(allTasks.ToArray());
+
+            Debug.WriteLine("inserted =" + count);
+            long totalCount = database.GetCollection<BsonDocument>(collectionName).Count(new BsonDocument());
+            Debug.WriteLine("total =" + totalCount);
         }
 
         private void clearCollection()
         {
             database.DropCollection(collectionName);
+        }
+
+        static void Main(string[] args)
+        {
+
+            APIReflector reflector = new APIReflector();
+            reflector.reflectClasses();
+            
         }
     }
 }

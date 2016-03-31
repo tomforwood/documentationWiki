@@ -66,8 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FieldRepresentation.cs" />
+    <Compile Include="Member.cs" />
+    <Compile Include="TopLevelDocumentable.cs" />
     <Compile Include="ClassRepresentation.cs" />
     <Compile Include="APIReflector.cs" />
+    <Compile Include="EnumRepresentation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>

@@ -19,7 +19,7 @@ namespace Reflector.Tests
         {
             Type t = typeof(ClassRepresentation);
             APIReflector reflector = new APIReflector();
-            ClassRepresentation rep = reflector.reflectClass(t);
+            ClassRepresentation rep = reflector.reflectTop(t);
             JObject json = rep.getJson();
             Debug.WriteLine(json.ToString());
 
@@ -41,7 +41,7 @@ namespace Reflector.Tests
         {
             Type t = typeof(ClassRepresentation);
             APIReflector reflector = new APIReflector();
-            ClassRepresentation rep = reflector.reflectClass(t);
+            ClassRepresentation rep = reflector.reflectTop(t);
             rep.fish = "fishy";
             JObject json = rep.getJson();
 
