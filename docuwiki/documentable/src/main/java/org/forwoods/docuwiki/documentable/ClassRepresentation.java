@@ -3,6 +3,8 @@ package org.forwoods.docuwiki.documentable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.forwoods.docuwiki.documentable.ClassRepresentation.FieldRepresentation;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -10,66 +12,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties("_id")
-public class ClassRepresentation extends Documentable{
+public class ClassRepresentation extends TopLevelDocumentable{
+
 	@JsonProperty
-	private int version;
-	
-	private boolean userGenerated;
-	
-	private String namespaceName;
-	@JsonProperty
-	private List<Modifier> classModifiers = new ArrayList<>();
-	@JsonProperty
-	private String name;
+	List<FieldRepresentation> instanceFields = new ArrayList<>();
 	
 	public ClassRepresentation(boolean userGenerated, String name) {
-		version =1;
-		this.userGenerated = userGenerated;
-		this.name = name;
+		super("class",userGenerated,name);
 	}
 
 	public ClassRepresentation() {
+		super("class");
 		version = 1;
 	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
-	public boolean isUserGenerated() {
-		return userGenerated;
-	}
-
-	public void setUserGenerated(boolean userGenerated) {
-		this.userGenerated = userGenerated;
-	}
-
-	public String getNamespaceName() {
-		return namespaceName;
-	}
-
-	public void setNamespaceName(String namespaceName) {
-		this.namespaceName = namespaceName;
-	}
-
-	public List<Modifier> getClassModifiers() {
-		return classModifiers;
-	}
-
-	public void addClassModifier(Modifier classModifier) {
-		classModifiers.add(classModifier);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	public void addInstanceField(FieldRepresentation field) {
+		instanceFields.add(field);
 	}
 	
+	public static class FieldRepresentation extends Member {
+		public String assignment;
+		
+		public boolean equals(Object o) {
+			FieldRepresentation other = (FieldRepresentation)o;
+			return name.equals(other.name);
+		}
+	}
+
+	public List<FieldRepresentation> getInstanceFields() {
+		return instanceFields;
+	}
 }

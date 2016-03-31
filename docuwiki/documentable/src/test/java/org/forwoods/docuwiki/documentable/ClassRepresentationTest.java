@@ -30,7 +30,7 @@ public class ClassRepresentationTest {
 	@Test
 	public void test() throws IOException, ProcessingException, URISyntaxException {
 		ClassRepresentation classRep = new ClassRepresentation(false, "Test");
-		classRep.addClassModifier(Modifier.PUBLIC);
+		classRep.addModifier(Modifier.PUBLIC);
 		classRep.comment="A test class";
 		//JsonNode schemaNode = JsonLoader.fromResource("/schema/ClassRepresentation.json");
 		ObjectMapper mapper = new ObjectMapper();

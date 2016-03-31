@@ -1,12 +1,37 @@
-TBD: detail view for <span>{{classFQN}}</span>
-{{fetch(classFQN)}}
+
+		
 
 	<div click-to-edit="mergedClass.comment"></div>
 		
 
 		<br>
 		
-		{{mergedClass.classModifier}} class {{mergedClass.name}}
+		
+		<span ng-repeat="mod in mergedClass.classModifiers">{{mod}}</span>
+		{{mergedClass.objectType}} {{mergedClass.name}}
+		<span ng-repeat="mod in mergedClass.extentions">{{mod}}</span>
+		
+		
+		<div ng-if='mergedClass.objectType=="enum"'>
+			<h3>Enum values</h3>
+			<div ng-repeat="enumValue in mergedClass.enumConsts">
+				<div click-to-edit="enumValue.comment"></div>
+				{{enumValue.name}}{{enumValue.enumValue?"="+enumValue.enumValue:""}}
+			</div>
+		</div>
+		<div ng-if='mergedClass.objectType=="class"'>
+			<h3>instance fields</h3>
+			<div ng-repeat="field in mergedClass.instanceFields">
+				<div click-to-edit="field.comment"></div>
+				<span ng-repeat="mod in field.modifiers">{{mod}}</span>
+				{{field.objectType}} {{field.name}} {{field.assignment?field.assignment:""}}
+			</div>
+		</div>
+		
 		<br><button ng-click='save("Part")'>save</button>
 		{{ PostDataResponse }}
+		
+		
+		<br>
+		{{mergedClass}}
 </div>

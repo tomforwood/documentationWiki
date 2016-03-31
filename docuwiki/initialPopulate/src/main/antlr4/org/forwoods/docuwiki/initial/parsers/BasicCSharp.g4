@@ -10,10 +10,12 @@ region : RegionStart
 
 RegionStart : '#region' ~[\r\n]* ;
 
-using : 'using' qualifiedName ';';
+using : 'using' 
+	useName = qualifiedName ';';
 
 namespace :
-	'namespace' qualifiedName '{'
+	'namespace' 
+	namespaceName = qualifiedName '{'
 	firstClassThing '}';
 
 firstClassThing: 
@@ -21,29 +23,37 @@ firstClassThing:
 
 interfaceDeclaration :
 	comment=docCommentBlock
-	classmods=classOrInterfaceModifier*
+	classmods=cmods
 	'interface' name=identifier
 	genArgs = typeArgs?
-	classextends=extension?
+	extension?
 	classBody;
 
 classDeclaration :
 	comment=docCommentBlock
 	annotation*
-	classmods=classOrInterfaceModifier*
+	classmods=cm
 	'class' name=identifier
 	genArgs = typeArgs?
-	classextends=extension?
+	extension?
 	classBody;
+
+cm: classOrInterfaceModifier*;
 
 docCommentBlock : DocComment*;
 	
-classOrInterfaceModifier : ('public'|'protected'| 'static' | 'sealed' );
+classOrInterfaceModifier : ('public'|'protected'| 'static' | 'sealed' | 'abstract' );
 
 modifier: classOrInterfaceModifier  | 'virtual'| 
 'ref'|'out'|'delegate'|'override'|'const'|'params'|'private'|'explicit';
 
-extension : ':' type (',' type)*;
+modifiers : modifier*;
+
+cmods : classOrInterfaceModifier*;
+
+extension : ':' extended (',' extended)*;
+
+extended: extName = type;
 
 classBody : 
 	'{'
@@ -65,54 +75,62 @@ memberDeclaration :
 	);
 	
 fieldDeclaration : 
-	DocComment*
+	comment = docCommentBlock
 	annotation*
-	modifier* 
-	type identifier 
-	assignment? ';';
+	fieldMods = modifiers 
+	fieldType=type 
+	fieldName = identifier 
+	fieldAssignment = assignment? ';';
 
 methodDeclaration : 
 	DocComment*
 	annotation*
-	modifier* 
+	modifiers 
 	type identifier formalParams (';'|propertyBody);
 
 constructorDeclaration :
 	DocComment*
 	annotation*
-	modifier* 
+	modifiers 
 	identifier formalParams ';';
 
 propertyDeclaration :
 	DocComment*
 	annotation*
-	modifier* 
+	modifiers 
 	type identifier propertyBody;
 	
 arrayLikeProperty :
 	DocComment*
 	annotation*
-	modifier* 
+	modifiers 
 	type 'this['type identifier ']' propertyBody;
 	
 genericMethod : 
 	DocComment*
 	annotation*
-	modifier* 
+	modifiers 
 	type identifier typeArgs formalParams 
 	(WHERE identifier ':' type)? ';';
 	
 enumDeclaration :
-	DocComment*
+	comment = docCommentBlock
 	annotation*
-	modifier*
-	'enum' identifier extension? '{' (enumConstant)* '}';
+	enumMods = cmods
+	'enum' 
+	enumName = identifier 
+	extension? 
+	'{' (enumConstant)* '}';
 
-enumConstant : DocComment* identifier ('=' IntLiteral)? ','?;
+enumConstant : 
+	dockBlock = docCommentBlock 
+	ident = identifier 
+	('=' 
+	intVal = IntLiteral)? ','?;
 
 structDeclaration :
 	DocComment*
-	modifier*
+	cmods
 	'struct'
 	identifier typeArgs? classBody ;
 
@@ -122,7 +140,7 @@ formalParams : '(' formalParamList ')';
 
 formalParamList : formalParam (',' formalParam)* | ;
 
-formalParam : modifier* type identifier ( '=' literal)?;
+formalParam : modifiers type identifier ( '=' literal)?;
 
 type:
 	identifier typeArgs? ('.' identifier typeArgs? )* ('['']')*

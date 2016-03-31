@@ -14,11 +14,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.bson.Document;
+import org.bson.json.JsonMode;
+import org.bson.json.JsonWriterSettings;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
+import org.forwoods.docuwiki.documentable.EnumRepresentation;
+import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.api.FQClassName;
 import org.forwoods.docuwiki.documentationWiki.api.MergedClass;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoCollection;
 
@@ -43,19 +49,14 @@ public class ClassResource {
 	
 	@GET
 	@Path("/{id}")
-	public MergedClass getClass(@PathParam("id") String name) {
+	public MergedClass<? extends TopLevelDocumentable> getClass(@PathParam("id") String name) {
 		System.out.println("Searching for "+name);
 		String namespace=null;
-		String className=null;
 		int lastDot = name.lastIndexOf('.');
 		if (lastDot>0) {
 			namespace = name.substring(0, lastDot);
-			className = name.substring(lastDot+1);
 		}
-		else {
-			className = name;
-		}
-		FQClassName fqc = new FQClassName(namespace, className, FQClassName.ALL);
+		FQClassName fqc = new FQClassName(namespace, name, FQClassName.ALL);
 		
 		if (!classList.getCachedClasses().contains(fqc)) {
 			//TODO unknown class
@@ -63,42 +64,71 @@ public class ClassResource {
 		}
 		
 		
-		String reflectedJson = loadClasses(className, reflectedClasses);
+		String reflectedJson = loadClasses(name, reflectedClasses);
 
-		String annotatedJson = loadClasses(className, annotatedClasses);
+		String annotatedJson = loadClasses(name, annotatedClasses);
 		//TODO deal with one or other being null
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			ClassRepresentation reflected = mapper.readValue(reflectedJson, ClassRepresentation.class);
-			ClassRepresentation annotated = mapper.readValue(annotatedJson, ClassRepresentation.class);
-			return new MergedClass(reflected, annotated);
+			TopLevelDocumentable reflected = read(mapper, reflectedJson);
+			TopLevelDocumentable annotated = read(mapper, annotatedJson);
+			return MergedClass.createMergedClass(reflected, annotated);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;		
 	}
 
+	private TopLevelDocumentable read(ObjectMapper mapper, String json) throws JsonParseException, JsonMappingException, IOException {
+		Document doc = Document.parse(json);
+		String objectType = doc.getString("objectType");
+		Class<? extends TopLevelDocumentable> c=null;
+		if (objectType.equals("class")) {
+			c= ClassRepresentation.class;
+		}
+		if (objectType.equals("enum")) {
+			c= EnumRepresentation.class;
+		}
+		return mapper.readValue(json, c);
+	}
+
 	private String loadClasses(String className, MongoCollection<Document> collection) {
 		//TODO include namespace in query
 		Document reflectedDoc = collection.find(eq("name",className)).sort(descending("version")).first();
-		System.out.println(reflectedDoc.toJson());
-		String reflectedJson = reflectedDoc.toJson();
+		
+		JsonWriterSettings settings = new JsonWriterSettings(JsonMode.STRICT);
+		String reflectedJson = reflectedDoc.toJson(settings);
+		System.out.println(reflectedJson);
 		return reflectedJson;
 	}
 	
 	@POST
-	public void save(MergedClass mergedClass) {
+	public void save(MergedClass<?> mergedClass) {
 		String name = mergedClass.getName();
-		ClassRepresentation oldAnnotated = loadOld(name);
+		TopLevelDocumentable oldAnnotated=null;
+		if (mergedClass.getObjectType().equals("class")) {
+			ClassRepresentation classRep=loadOld(name, ClassRepresentation.class);
+			
+			if (classRep==null) {
+				classRep = new ClassRepresentation();
+				classRep.setVersion(0);//will get incremented to 1
+			}
+			oldAnnotated = classRep;
+		}
+		else if (mergedClass.getObjectType().equals("enum")) {
+			EnumRepresentation enumRep=loadOld(name, EnumRepresentation.class);
+			
+			if (enumRep==null) {
+				enumRep = new EnumRepresentation();
+				enumRep.setVersion(0);//will get incremented to 1
+			}
+			oldAnnotated = enumRep;
+		}
 		System.out.println(mergedClass);
-		if (oldAnnotated==null) {
-			oldAnnotated = new ClassRepresentation();
-		}
-		else {
-			oldAnnotated.setVersion(oldAnnotated.getVersion()+1);
-		}
 		
+		oldAnnotated.setVersion(oldAnnotated.getVersion()+1);
+		oldAnnotated.setUserGenerated(true);
 		oldAnnotated.setComment(sanitizeUserText(mergedClass.getComment()));
 		
 		try {
@@ -115,15 +145,16 @@ public class ClassResource {
 		
 	}
 
-	private ClassRepresentation loadOld(String name) {
-		ClassRepresentation oldAnnotated=null;
+	private <T extends TopLevelDocumentable> T loadOld(String name, Class<T> clazz) {
+		//TODO is this a duplicate of other load methods?
+		T oldAnnotated=null;
 		Document annotatedDoc = annotatedClasses.find(eq("name",name)).sort(descending("version")).first();
 		if (annotatedDoc!=null) {
 			String annotatedJson = annotatedDoc.toJson();
 			
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				oldAnnotated = mapper.readValue(annotatedJson, ClassRepresentation.class);
+				oldAnnotated = mapper.readValue(annotatedJson, clazz);
 			}catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -24,12 +24,12 @@ public class ClassListResourceTest {
 	private ClassListResource classList;
 	@Before
 	public void setUp() throws Exception {
-		/*client = new MongoClient();
+		client = new MongoClient();
     	MongoDatabase database = client.getDatabase("docuWiki");
     	MongoCollection<Document> reflectedClasses = database.getCollection("reflectedClasses");
     	
 		MongoCollection<Document> annotatedClasses = database.getCollection("annotatedClasses");
-		classList = new ClassListResource(reflectedClasses, annotatedClasses);*/
+		classList = new ClassListResource(reflectedClasses, annotatedClasses);
         
 		
 	}
@@ -37,11 +37,11 @@ public class ClassListResourceTest {
 	@Test
 	public void test() {
 		//TODO read from file instead of mongo
-		/*Collection<FQClassName> classes = classList.getClassList();
+		Collection<FQClassName> classes = classList.getClassList();
 		Condition<Integer> allCondition = new Condition<>(Predicate.isEqual(FQClassName.ALL),"type");
 		List<FQClassName> collect = classes.stream().filter(fqcn->fqcn.getSubset()==FQClassName.ALL).collect(Collectors.toList());
 		assertThat(classes).extracting(fqcn->fqcn.getSubset())
-			.areAtLeastOne(allCondition);*/
+			.areAtLeastOne(allCondition);
 	}
 	
 	@After

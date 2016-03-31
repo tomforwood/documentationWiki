@@ -6,6 +6,9 @@ public class Documentable {
 	@JsonProperty
 	protected
 	String comment;
+	
+	@JsonProperty
+	protected boolean isOrphaned=false;
 
 	public String getComment() {
 		return comment;
@@ -13,6 +16,14 @@ public class Documentable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public boolean getIsOrphaned() {
+		return isOrphaned;
+	}
+
+	public void setOrphaned(boolean isOrphaned) {
+		this.isOrphaned = isOrphaned;
 	}
 	
 	

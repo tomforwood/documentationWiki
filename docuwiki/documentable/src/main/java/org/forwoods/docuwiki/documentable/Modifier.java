@@ -5,9 +5,11 @@ import java.util.Map;
 
 public enum Modifier{
 	PUBLIC("public"),
-	PRIVATE("private"),
+	PROTECTED("protected"),
 	STATIC("static"),
-	SEALED("sealed");
+	SEALED("sealed"),
+	CONSTANT("const"),
+	ABSTRACT("abstract");
 
 	static Map<String, Modifier> lookup = new HashMap<>();
 	
