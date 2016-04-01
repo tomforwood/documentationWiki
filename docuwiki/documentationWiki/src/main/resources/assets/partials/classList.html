@@ -14,9 +14,7 @@
 		<div class="col-md-10">
 			<ul>
 				<li ng-repeat="class in classes | filter:query | subset:subsetOp">
-				{{fqName=class.className;""}}
-				<a href='#/classes/{{fqName}}'>
-				{{fqName}}</a><br>
+				{{class.className|classLinkFilter}}
 				</li>
 			</ul>
 		</div>

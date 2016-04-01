@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Reflector
 {
-    public class FieldRepresentation : Member
+    public class PropertyRepresentation : Member
     {
-        public FieldRepresentation(ObjectType type, String name) :
+        public bool setter;
+        public bool getter;
+        public PropertyRepresentation(ObjectType type, String name) :
             base(type, name)
         { }
-
-        public string assignment;
     }
 }

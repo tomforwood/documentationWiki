@@ -25,6 +25,7 @@ public class TopLevelListener extends DocumentableListener {
 		parser.addParseListener(new ClassListener(stack));
 		parser.addParseListener(new EnumListener(stack));
 		parser.addParseListener(new FieldListener(stack));
+		parser.addParseListener(new PropertyListener(stack));
 	}
 
 	public TopLevelDocumentable getRep() {

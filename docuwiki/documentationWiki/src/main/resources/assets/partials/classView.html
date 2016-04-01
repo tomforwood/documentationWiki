@@ -8,23 +8,60 @@
 		
 		
 		<span ng-repeat="mod in mergedClass.classModifiers">{{mod}}</span>
-		{{mergedClass.objectType}} {{mergedClass.name}}
+		{{mergedClass.objectType|objectType}}
+		{{mergedClass.name}}
 		<span ng-repeat="mod in mergedClass.extentions">{{mod}}</span>
 		
 		
-		<div ng-if='mergedClass.objectType=="enum"'>
+		<div ng-if='mergedClass.objectType.typeName=="enum"'>
 			<h3>Enum values</h3>
 			<div ng-repeat="enumValue in mergedClass.enumConsts">
 				<div click-to-edit="enumValue.comment"></div>
 				{{enumValue.name}}{{enumValue.enumValue?"="+enumValue.enumValue:""}}
 			</div>
 		</div>
-		<div ng-if='mergedClass.objectType=="class"'>
-			<h3>instance fields</h3>
+		
+		<div ng-if='mergedClass.objectType.typeName=="class"'>
+			<h3>Static fields</h3>
+			<div ng-repeat="field in mergedClass.staticFields">
+				<div click-to-edit="field.comment"></div>
+				<div ng-class="{orphaned: field.isOrphaned}">
+				<span ng-repeat="mod in field.modifiers">{{mod}} </span>
+				<span ng-bind-html="field.objectType|objectType"></span> 
+				{{field.name}} {{field.assignment?field.assignment:""}}
+				</div>
+			</div>
+		
+			<h3>Instance fields</h3>
 			<div ng-repeat="field in mergedClass.instanceFields">
 				<div click-to-edit="field.comment"></div>
-				<span ng-repeat="mod in field.modifiers">{{mod}}</span>
-				{{field.objectType}} {{field.name}} {{field.assignment?field.assignment:""}}
+				<div ng-class="{orphaned: field.isOrphaned}">
+				<span ng-repeat="mod in field.modifiers">{{mod}} </span>
+				<span ng-bind-html="field.objectType|objectType"></span> 
+				{{field.name}} {{field.assignment?field.assignment:""}}
+				</div>
+			</div>
+		</div>
+		
+		<div ng-if='mergedClass.objectType.typeName=="class"'>
+			<h3>Static Properties</h3>
+			<div ng-repeat="prop in mergedClass.staticProperties">
+				<div click-to-edit="prop.comment"></div>
+				<div ng-class="{orphaned: prop.isOrphaned}">
+				<span ng-repeat="mod in prop.modifiers">{{mod}} </span>
+				<span ng-bind-html="prop.objectType|objectType"></span> 
+				{{prop.name}} { {{prop.getter?"get;":""}} {{prop.setter?"set;":""}} }
+				</div>
+			</div>
+		
+			<h3>Instance Properties</h3>
+			<div ng-repeat="prop in mergedClass.instanceProperties">
+				<div click-to-edit="prop.comment"></div>
+				<div ng-class="{orphaned: prop.isOrphaned}">
+				<span ng-repeat="mod in prop.modifiers">{{mod}} </span>
+				<span ng-bind-html="prop.objectType|objectType"></span> 
+				{{prop.name}} { {{prop.getter?"get;":""}} {{prop.setter?"set;":""}} }
+				</div>
 			</div>
 		</div>
 		

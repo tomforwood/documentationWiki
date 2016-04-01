@@ -67,12 +67,17 @@ public class ClassResource {
 		String reflectedJson = loadClasses(name, reflectedClasses);
 
 		String annotatedJson = loadClasses(name, annotatedClasses);
-		//TODO deal with one or other being null
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			TopLevelDocumentable reflected = read(mapper, reflectedJson);
-			TopLevelDocumentable annotated = read(mapper, annotatedJson);
+			TopLevelDocumentable reflected=null;
+			if (reflectedJson!=null) {
+				reflected = read(mapper, reflectedJson);
+			}
+			TopLevelDocumentable annotated=null;
+			if (annotatedJson!=null) {
+				annotated = read(mapper, annotatedJson);
+			}
 			return MergedClass.createMergedClass(reflected, annotated);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -82,7 +87,8 @@ public class ClassResource {
 
 	private TopLevelDocumentable read(ObjectMapper mapper, String json) throws JsonParseException, JsonMappingException, IOException {
 		Document doc = Document.parse(json);
-		String objectType = doc.getString("objectType");
+		System.out.println(json);
+		String objectType = ((Document)doc.get("objectType")).getString("typeName");
 		Class<? extends TopLevelDocumentable> c=null;
 		if (objectType.equals("class")) {
 			c= ClassRepresentation.class;
@@ -95,10 +101,10 @@ public class ClassResource {
 
 	private String loadClasses(String className, MongoCollection<Document> collection) {
 		//TODO include namespace in query
-		Document reflectedDoc = collection.find(eq("name",className)).sort(descending("version")).first();
-		
+		Document retrievedDoc = collection.find(eq("name",className)).sort(descending("version")).first();
+		if (retrievedDoc==null) return null;
 		JsonWriterSettings settings = new JsonWriterSettings(JsonMode.STRICT);
-		String reflectedJson = reflectedDoc.toJson(settings);
+		String reflectedJson = retrievedDoc.toJson(settings);
 		System.out.println(reflectedJson);
 		return reflectedJson;
 	}

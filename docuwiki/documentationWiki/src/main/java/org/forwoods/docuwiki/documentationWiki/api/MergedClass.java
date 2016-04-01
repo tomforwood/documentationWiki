@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.ClassRepresentation.FieldRepresentation;
+import org.forwoods.docuwiki.documentable.ClassRepresentation.PropertyRepresentation;
 import org.forwoods.docuwiki.documentable.Documentable;
 import org.forwoods.docuwiki.documentable.EnumRepresentation;
 import org.forwoods.docuwiki.documentable.EnumRepresentation.EnumConstant;
 import org.forwoods.docuwiki.documentable.Modifier;
+import org.forwoods.docuwiki.documentable.ObjectType;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,11 +23,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	@JsonProperty
 	private String namespace;
 	@JsonProperty
-	private String objectType;
+	private ObjectType objectType;
 	@JsonProperty
 	private List<Modifier> classModifiers;
 	@JsonProperty
-	private String name;
+	private String name;	
+	@JsonProperty
+	List<ObjectType> varargs;
 	@JsonProperty
 	private List<String> extensions;
 	
@@ -34,6 +38,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	
 	@JsonProperty
 	private List<FieldRepresentation> instanceFields;
+	@JsonProperty
+	private List<FieldRepresentation> staticFields;
+	
+	@JsonProperty
+	private List<PropertyRepresentation> instanceProperties;
+	@JsonProperty
+	private List<PropertyRepresentation> staticProperties;
 	
 	
 	public MergedClass() {
@@ -45,12 +56,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 	
 	public static <T extends TopLevelDocumentable> MergedClass<T> createMergedClass(T reflected, T annotated) {
+		
 		MergedClass<T> mergedClass = new MergedClass<>(reflected, annotated);
 		
-		if (reflected.getObjectType().equals("class")) {
+		if (reflected.getObjectType().getTypeName().equals("class")) {
 			mergeClass(reflected, annotated, mergedClass);
 		}
-		else if (reflected.getObjectType().equals("enum")) {
+		else if (reflected.getObjectType().getTypeName().equals("enum")) {
 			mergeEnum(reflected, annotated, mergedClass);
 		}
 		mergedClass.objectType = reflected.getObjectType();
@@ -62,25 +74,60 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 
 	private static <T extends TopLevelDocumentable> void mergeClass(T reflected, T annotated, MergedClass<T> mergedClass) {
-		mergedClass.instanceFields = new ArrayList<>();
 		ClassRepresentation refClass = (ClassRepresentation) reflected;
 		ClassRepresentation annClass = (ClassRepresentation) annotated;
 		
-		for (FieldRepresentation field : refClass.getInstanceFields()) {
+		mergedClass.instanceFields = new ArrayList<>();
+		List<FieldRepresentation> refInst = refClass==null?new ArrayList<>():refClass.getInstanceFields();
+		List<FieldRepresentation> annInst = annClass==null?new ArrayList<>():annClass.getInstanceFields();
+		mergeFields(mergedClass.instanceFields, refInst, annInst);
+		
+		mergedClass.staticFields = new ArrayList<>();
+		List<FieldRepresentation> refStat = refClass==null?new ArrayList<>():refClass.getStaticFields();
+		List<FieldRepresentation> annStat = annClass==null?new ArrayList<>():annClass.getStaticFields();
+		mergeFields(mergedClass.staticFields, refStat, annStat);
+		
+		mergedClass.instanceFields.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
+		mergedClass.staticFields.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
+		
+		mergedClass.instanceProperties = new ArrayList<>();
+		List<PropertyRepresentation> refInstProps = refClass==null?new ArrayList<>():refClass.getInstanceProperties();
+		List<PropertyRepresentation> annInstProps = annClass==null?new ArrayList<>():annClass.getInstanceProperties();
+		mergeProperties(mergedClass.instanceProperties, refInstProps, annInstProps);
+		
+		mergedClass.staticProperties = new ArrayList<>();
+		List<PropertyRepresentation> refStatProps = refClass==null?new ArrayList<>():refClass.getStaticProperties();
+		List<PropertyRepresentation> annStatProps = annClass==null?new ArrayList<>():annClass.getStaticProperties();
+		mergeProperties(mergedClass.staticProperties, refStatProps, annStatProps);
+		
+		mergedClass.instanceFields.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
+		mergedClass.staticFields.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
+
+		
+		if (refClass!=null) {
+			mergedClass.varargs = refClass.getVarargs();
+		}
+		
+		
+	}
+
+	private static void mergeFields(List<FieldRepresentation> fields,
+			List<FieldRepresentation> refInst, List<FieldRepresentation> annInst) {
+		for (FieldRepresentation field : refInst) {
 			FieldRepresentation result = new FieldRepresentation();
 			result.setName(field.getName());
 			result.setObjectType(field.getObjectType());
 			result.getModifiers().addAll(field.getModifiers());
-			int match = annClass.getInstanceFields().indexOf(field);
+			int match = annInst.indexOf(field);
 			if (match>=0) {
-				FieldRepresentation annField = annClass.getInstanceFields().remove(match);
+				FieldRepresentation annField = annInst.remove(match);
 				result.setComment(annField.getComment());
-				//TODO reflected can't have defaults but annotated ones correct?
+				//TODO reflected can't have defaults but annotated ones can?
 				result.assignment=annField.assignment;
 			}
-			mergedClass.instanceFields.add(result);			
+			fields.add(result);			
 		}
-		for (FieldRepresentation annField:annClass.getInstanceFields()){
+		for (FieldRepresentation annField:annInst){
 			FieldRepresentation result = new FieldRepresentation();
 			result.getModifiers().addAll(annField.getModifiers());
 			result.setName(annField.getName());
@@ -88,7 +135,34 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			result.setComment(annField.getComment());
 			result.setOrphaned(true);
 			result.assignment=annField.assignment;
-			mergedClass.instanceFields.add(result);
+			fields.add(result);
+		}
+	}
+	
+	private static void mergeProperties(List<PropertyRepresentation> fields,
+			List<PropertyRepresentation> refInst, List<PropertyRepresentation> annInst) {
+		for (PropertyRepresentation prop : refInst) {
+			PropertyRepresentation result = new PropertyRepresentation();
+			result.setName(prop.getName());
+			result.setObjectType(prop.getObjectType());
+			result.getModifiers().addAll(prop.getModifiers());
+			result.getter=prop.getter;
+			result.setter=prop.setter;
+			int match = annInst.indexOf(prop);
+			if (match>=0) {
+				PropertyRepresentation annProp = annInst.remove(match);
+				result.setComment(annProp.getComment());
+			}
+			fields.add(result);			
+		}
+		for (PropertyRepresentation annProp:annInst){
+			PropertyRepresentation result = new PropertyRepresentation();
+			result.getModifiers().addAll(annProp.getModifiers());
+			result.setName(annProp.getName());
+			result.setObjectType(annProp.getObjectType());
+			result.setComment(annProp.getComment());
+			result.setOrphaned(true);
+			fields.add(result);
 		}
 	}
 
@@ -118,21 +192,22 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 	
 	private void populateAnnotated(A annotated) {
-		pupulateEither(annotated);
+		if (annotated==null)return;
+		populateEither(annotated);
 		setComment(annotated.getComment());
 	}
 
-	private void pupulateEither(A annotated) {
-		annotatedVersion= annotated.getVersion();
-		namespace = annotated.getNamespaceName();
-		classModifiers = annotated.getModifiers();
-		name = annotated.getName();
-		extensions = annotated.getExtensions();
+	private void populateEither(A either) {
+		annotatedVersion= either.getVersion();
+		namespace = either.getNamespaceName();
+		classModifiers = either.getModifiers();
+		name = either.getName();
+		extensions = either.getExtensions();
 	}
 	
 	private void populateReflected(A reflected) {
-		pupulateEither(reflected);
-		name = reflected.getName();
+		if (reflected==null)return;
+		populateEither(reflected);
 	}
 
 	public int getReflectedVersion() {
@@ -155,11 +230,11 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		return name;
 	}
 
-	public String getObjectType() {
+	public ObjectType getObjectType() {
 		return objectType;
 	}
 
-	public void setObjectType(String objectType) {
+	public void setObjectType(ObjectType objectType) {
 		this.objectType = objectType;
 	}
 

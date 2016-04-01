@@ -7,6 +7,7 @@ import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.ClassRepresentation.FieldRepresentation;
 import org.forwoods.docuwiki.documentable.Documentable;
 import org.forwoods.docuwiki.documentable.Modifier;
+import org.forwoods.docuwiki.documentable.ObjectType;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.FieldDeclarationContext;
 
 public class FieldListener extends DocumentableListener {
@@ -25,7 +26,7 @@ public class FieldListener extends DocumentableListener {
 				member.addModifier(Modifier.lookup(pt.getText()));
 			}
 		}
-		member.setObjectType(ctx.fieldType.getText());
+		member.setObjectType(new ObjectType(ctx.fieldType.getText()));
 		
 		if (ctx.fieldAssignment!=null) {
 			member.assignment=ctx.fieldAssignment.getText();
@@ -35,8 +36,12 @@ public class FieldListener extends DocumentableListener {
 		if (peek==null) return;
 		if (peek instanceof ClassRepresentation) {
 			ClassRepresentation rep = (ClassRepresentation) peek;
-			//TODO check for static modifier
-			rep.addInstanceField(member);
+			if (member.getModifiers().contains(Modifier.STATIC)) {
+				rep.addStaticField(member);
+			}
+			else {
+				rep.addInstanceField(member);
+			}
 		}
 		
 	}

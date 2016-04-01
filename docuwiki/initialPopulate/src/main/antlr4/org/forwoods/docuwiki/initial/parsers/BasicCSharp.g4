@@ -95,10 +95,11 @@ constructorDeclaration :
 	identifier formalParams ';';
 
 propertyDeclaration :
-	DocComment*
+	comment = docCommentBlock
 	annotation*
-	modifiers 
-	type identifier propertyBody;
+	propMods=modifiers 
+	propType=type 
+	propName=identifier propertyBody;
 	
 arrayLikeProperty :
 	DocComment*
@@ -143,7 +144,10 @@ formalParamList : formalParam (',' formalParam)* | ;
 formalParam : modifiers type identifier ( '=' literal)?;
 
 type:
-	identifier typeArgs? ('.' identifier typeArgs? )* ('['']')*
+	identifier 
+	typeargs = typeArgs? 
+	('.' identifier typeArgs? )* 
+	('['']')*
 	| primitiveType ('['']')*;
 
 typeArgs:
@@ -167,7 +171,9 @@ enumLiteral : qualifiedName '.' identifier ('|' enumLiteral)*;
 identifier:
 	Identifier | WHERE;//grrr some keywords can be used as identifiers
 	
-propertyBody : '{' (modifier? 'get;')? (modifier? 'set;')? '}';
+propertyBody : '{' ( 
+	propget='get;')? ( 
+	propset='set;')? '}';
 
 StringLiteral : '@'? '"' ~["]* '"';
 

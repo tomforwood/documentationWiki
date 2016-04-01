@@ -25,7 +25,5 @@ public class Documentable {
 	public void setOrphaned(boolean isOrphaned) {
 		this.isOrphaned = isOrphaned;
 	}
-	
-	
 
 }

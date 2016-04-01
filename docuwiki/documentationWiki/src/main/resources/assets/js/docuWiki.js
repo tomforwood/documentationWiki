@@ -1,4 +1,4 @@
-var docuWikiApp = angular.module('docuWikiApp',['ngRoute','docuWikiServices']);
+var docuWikiApp = angular.module('docuWikiApp',['ngSanitize','ngRoute','docuWikiServices']);
 
 docuWikiApp.config(['$routeProvider',
     function($routeProvider){
@@ -44,4 +44,17 @@ docuWikiApp.directive("clickToEdit", function() {
 	        };
 	    }
 	};
-	});
+});
+
+docuWikiApp.filter('classLinkFilter', ['ClassList','$sce',function(ClassList, $sanitize) {
+	var classList = ClassList.query();
+	console.log($sanitize)
+	return function(input) {
+		var contains=false;
+		for (i=0;i<classList.length;i++){
+			contains |=classList[i].className==input;
+		}
+		if (contains) return $sanitize.trustAsHtml('<a href="#/classes/'+input+'">'+input+'</a>');
+		return input.split(".").pop();
+	};
+}]);

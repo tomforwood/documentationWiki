@@ -12,7 +12,7 @@ namespace Reflector
         [JsonProperty("enumValues")]
         public List<EnumConstant> enumValues = new List<EnumConstant>();
         public EnumRepresentation(String name) :
-            base("enum", name)
+            base(new ObjectType("enum"), name)
         {
 
         }

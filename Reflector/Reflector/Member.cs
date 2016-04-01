@@ -15,11 +15,14 @@ namespace Reflector
     {
         public enum Modifier
         {
-            PUBLIC, PROTECTED,
-            ABSTRACT
+            PRIVATE=0,
+            PROTECTED=1,
+            PUBLIC=2,
+            ABSTRACT=4,
+            STATIC=8,
         }
 
-        public string objectType;
+        public ObjectType objectType;
 
         [JsonProperty("modifiers", ItemConverterType = typeof(StringEnumConverter))]
         [BsonRepresentation(BsonType.String)]
@@ -27,7 +30,7 @@ namespace Reflector
 
         public string name;
 
-        public Member(string objectType, string name)
+        public Member(ObjectType objectType, string name)
         {
             this.objectType = objectType;
             this.name = name;

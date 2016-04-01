@@ -20,11 +20,11 @@ public abstract class TopLevelDocumentable extends Member {
 	@JsonProperty
 	protected List<String> extensions = new ArrayList<>();
 
-	public TopLevelDocumentable(String type) {
+	public TopLevelDocumentable(ObjectType type) {
 		this.objectType = type;
 		version =1;
 	}
-	public TopLevelDocumentable(String type, boolean userGenerated, String name) {
+	public TopLevelDocumentable(ObjectType type, boolean userGenerated, String name) {
 		this(type);
 		this.userGenerated = userGenerated;
 		this.name = name;

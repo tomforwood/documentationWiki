@@ -35,6 +35,14 @@ namespace Reflector
 
         public TopLevelDocumentable reflectTop(Type type)
         {
+            if (type.IsGenericType)
+            {
+                Debug.WriteLine("Generic type found");
+                foreach (Type arg in type.GetGenericArguments())
+                {
+                    Debug.WriteLine(arg.ToString());
+                }
+            }
             TopLevelDocumentable rep = null;
             if (type.IsEnum)
             {
@@ -43,9 +51,12 @@ namespace Reflector
             }
             else if (type.IsClass)
             {
-                rep = new ClassRepresentation(type.FullName);
+                ObjectType ot = ObjectType.toObjectType(type);
+                rep = new ClassRepresentation(ot.typeName);
+                ((ClassRepresentation)rep).varargs = ot.varargs;
                 reflectClass((ClassRepresentation)rep, type);
             }
+
             else
             {
                 return null;
@@ -61,26 +72,67 @@ namespace Reflector
 
         private void reflectClass(ClassRepresentation rep, Type type)
         {
-            foreach (FieldInfo field in type.GetFields(BindingFlags.Instance |BindingFlags.Public| BindingFlags.NonPublic)) {
+
+            foreach (FieldInfo field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
                 if (field.IsPrivate) continue;
                 string name = field.Name;
-                string fieldType = field.FieldType.Name;
+                ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
                 FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
                 convert(fieldRep.modifiers, field);
-                if (name== "configTabIndent")
-                {
-
-                    Debug.WriteLine(field.Attributes);
-                }
-                if (field.Attributes.ToString().Contains("HasDefault"))
-                {
-                    Debug.WriteLine(field.Attributes);
-                    //Consts will have this set I believe
-                }
-                //object value = field.GetValue(Activator.CreateInstance(type));
-                //fieldRep.assignment = "=" + value;
                 rep.instanceFields.Add(fieldRep);
+            }
 
+            foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                if (field.IsPrivate) continue;
+                string name = field.Name;
+                ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
+                FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
+                convert(fieldRep.modifiers, field);
+                fieldRep.modifiers.Add(Member.Modifier.STATIC);
+                rep.staticFields.Add(fieldRep);
+            }
+
+            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                string name = property.Name;
+                ObjectType propType = ObjectType.toObjectType(property.PropertyType);
+                PropertyRepresentation proprep = new PropertyRepresentation(propType, name);
+                if (property.Name == "GameTime")
+                {
+                    Console.WriteLine(property);
+                }
+                proprep.modifiers.Add(convert(property.GetGetMethod(true)));
+                if (proprep.modifiers.Contains(Member.Modifier.PRIVATE)) continue;
+                proprep.modifiers.Add(Member.Modifier.STATIC);
+                if (convert(property.GetGetMethod(true))>=Member.Modifier.PROTECTED)
+                {
+                    proprep.getter = true;
+                }
+                if (convert(property.GetSetMethod(true)) >= Member.Modifier.PROTECTED)
+                {
+                    proprep.setter = true;
+                }
+                rep.staticProperties.Add(proprep);
+            }
+
+            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                string name = property.Name;
+                ObjectType propType = ObjectType.toObjectType(property.PropertyType);
+                PropertyRepresentation proprep = new PropertyRepresentation(propType, name);
+                proprep.modifiers.Add(convert(property.GetGetMethod(true)));
+                if (proprep.modifiers.Contains(Member.Modifier.PRIVATE)) continue;
+                if (property.GetGetMethod(true)!=null)
+                {
+                    proprep.getter = true;
+                }
+                if (property.GetSetMethod(true) != null)
+                {
+                    proprep.setter = true;
+                }
+                rep.instanceProperties.Add(proprep);
             }
         }
 
@@ -88,7 +140,6 @@ namespace Reflector
         {
             string[] names = type.GetEnumNames();
             Array values = type.GetEnumValues();
-            Debug.WriteLine(type.GetEnumUnderlyingType().FullName);
             for (int i=0;i<names.Length;i++)
             {
                 object o = Convert.ChangeType(values.GetValue(i), type.GetEnumUnderlyingType());
@@ -101,27 +152,38 @@ namespace Reflector
         private void convert(List<Member.Modifier> list, Type type)
         {
             if (type.IsPublic) {
-                list.Add(ClassRepresentation.Modifier.PUBLIC);
+                list.Add(Member.Modifier.PUBLIC);
             }
             if (type.IsAbstract)
             {
-                list.Add(ClassRepresentation.Modifier.ABSTRACT);
+                list.Add(Member.Modifier.ABSTRACT);
             }
         }
+
         private void convert(List<Member.Modifier> list, FieldInfo type)
         {
-            if (type.Name=="agent")
-            {
-                Debug.Write("hello");
-            }
             if (type.IsPublic)
             {
-                list.Add(ClassRepresentation.Modifier.PUBLIC);
+                list.Add(Member.Modifier.PUBLIC);
             }
             else if (type.IsFamily)
             {
-                list.Add(ClassRepresentation.Modifier.PROTECTED);
+                list.Add(Member.Modifier.PROTECTED);
             }
+        }
+
+        private Member.Modifier convert(MethodInfo type)
+        {
+            if (type == null) return ClassRepresentation.Modifier.PRIVATE;
+            if (type.IsPublic)
+            {
+                return Member.Modifier.PUBLIC;
+            }
+            else if (type.IsPrivate)
+            {
+                return Member.Modifier.PRIVATE;
+            }
+            else return Member.Modifier.PROTECTED;
         }
 
 
@@ -129,7 +191,7 @@ namespace Reflector
         {
             JObject json = rep.getJson();
             string jsonText = json.ToString();
-            Debug.WriteLine(jsonText);
+            //Debug.WriteLine(jsonText);
             BsonDocument doc = BsonDocument.Parse(jsonText);
             return doc;
         }

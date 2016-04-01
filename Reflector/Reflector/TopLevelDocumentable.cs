@@ -17,7 +17,7 @@ namespace Reflector
 
         public string namespaceName;
 
-        public TopLevelDocumentable(string objectType, string name) :
+        public TopLevelDocumentable(ObjectType objectType, string name) :
             base(objectType,name)
         {
             version = 1;

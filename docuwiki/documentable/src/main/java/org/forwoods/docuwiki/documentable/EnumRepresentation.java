@@ -8,11 +8,11 @@ public class EnumRepresentation extends TopLevelDocumentable {
 	List<EnumConstant> enumValues = new ArrayList<>();
 	
 	public EnumRepresentation(boolean userGenerated, String name) {
-		super("enum",userGenerated,name);
+		super(new ObjectType("enum"),userGenerated,name);
 	}
 
 	public EnumRepresentation() {
-		super("enum");
+		super(new ObjectType("enum"));
 		version = 1;
 	}
 	

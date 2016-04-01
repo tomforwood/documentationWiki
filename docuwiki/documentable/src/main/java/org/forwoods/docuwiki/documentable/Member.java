@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Member extends Documentable {
 
 	@JsonProperty
-	protected String objectType;
+	protected ObjectType objectType;
 	@JsonProperty
 	protected List<Modifier> modifiers = new ArrayList<>();
 	@JsonProperty
 	protected String name;
 	
 	
-	public String getObjectType() {
+	public ObjectType getObjectType() {
 		return objectType;
 	}
 
@@ -35,7 +35,7 @@ public class Member extends Documentable {
 		this.name = name;
 	}
 
-	public void setObjectType(String objectType) {
+	public void setObjectType(ObjectType objectType) {
 		this.objectType = objectType;
 	}
 	

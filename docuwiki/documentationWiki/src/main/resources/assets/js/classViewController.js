@@ -21,3 +21,18 @@ docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', '$routeParams',
 		}*/
     }]
 );
+
+docuWikiApp.filter('objectType', ['$filter',function($filter) {
+	return function(input) {
+		if (!input) return "";
+		var out = $filter('classLinkFilter')(input.typeName);
+		if (input.varargs) {
+			out+="<";
+			for (i=0;i<input.varargs.length;i++) {
+				out+=$filter('objectType')(input.varargs[i]);
+			}
+			out+=">"
+		}
+		return out;
+	};
+}]);
