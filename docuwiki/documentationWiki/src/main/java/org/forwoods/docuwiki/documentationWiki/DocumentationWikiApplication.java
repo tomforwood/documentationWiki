@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import org.bson.Document;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassListResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
+import org.forwoods.docuwiki.documentationWiki.resources.ClassUsesResource;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mongodb.MongoClient;
@@ -70,8 +71,10 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
 		MongoCollection<Document> annotatedClasses = database.getCollection("annotatedClasses");
 		ClassListResource classList = new ClassListResource(reflectedClasses, annotatedClasses);
         ClassResource classes = new ClassResource(reflectedClasses, annotatedClasses, classList);
+        ClassUsesResource uses = new ClassUsesResource(reflectedClasses);
         environment.jersey().register(classes);
         environment.jersey().register(classList);
+        environment.jersey().register(uses);
     }
 
 }

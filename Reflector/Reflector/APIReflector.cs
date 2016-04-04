@@ -18,13 +18,13 @@ namespace Reflector
         string collectionName = "reflectedClasses";
         public APIReflector()
         {
-            /*MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", "***REMOVED***");
+            MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", "***REMOVED***");
             var settings = new MongoClientSettings
             {
                 Credentials = new[] { credential }
             };
-            IMongoClient client = new MongoClient(settings);*/
-            IMongoClient client = new MongoClient();
+            IMongoClient client = new MongoClient(settings);
+            //IMongoClient client = new MongoClient();
             database = client.GetDatabase("docuWiki");            
         }
 
@@ -145,6 +145,8 @@ namespace Reflector
                 if (batchSize >= 100)
                 {
                     Task task = database.GetCollection<BsonDocument>(collectionName).InsertManyAsync(reps);
+                    task.ContinueWith(tasking=> { Debug.WriteLine("Completed a batch"); return ""; });
+                    Debug.WriteLine("Persisting batch");
                     allTasks.Add(task);
                     batchSize = 0;
                     reps = new List<BsonDocument>();

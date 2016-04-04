@@ -20,6 +20,7 @@ public class Member extends Documentable {
 	protected String inheritedFrom;
 	
 	
+	
 	public ObjectType getObjectType() {
 		return objectType;
 	}

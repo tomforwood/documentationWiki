@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -29,6 +30,8 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -47,7 +50,18 @@ public class InitialPopulate {
 	public InitialPopulate() throws URISyntaxException, ProcessingException {
 		//TODO password should be env var or command line
 		
-		mongo = new MongoClient();
+		MongoCredential mongoCred = MongoCredential.createCredential(
+    			"docuWikiUser",
+    			"docuWiki", 
+    			"***REMOVED***".toCharArray());
+		List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
+		ServerAddress addr = new ServerAddress("127.0.0.1", 
+				27017);
+		
+		mongo = new MongoClient(addr, creds);
+		
+		
+		/*mongo = new MongoClient();*/
 		database = mongo.getDatabase("docuWiki");
 		
 		MongoCollection<Document> collection = database.getCollection("reflectedClasses");

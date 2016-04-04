@@ -4,14 +4,28 @@ docuWikiApp.config(function($stateProvider, $urlRouterProvider){
 	$urlRouterProvider.otherwise('/about');	
 	
 	$stateProvider
+		.state('about',{
+			url: '/about',
+			templateUrl: 'partials/about.html'
+		})
 		.state('classes',{
 			url: '/classes',
 			templateUrl: 'partials/classes.html'
 		})
 		.state('classes.details',{
 			url: '/:classname',
+			templateUrl: 'partials/classTop.html',
+			abstract: true				
+		})
+		.state('classes.details.class',{
+			url: '',
 			templateUrl: 'partials/classDetails.html',
 			controller: 'classViewCtrl'
+		})
+		.state('classes.details.uses',{
+			url: '/:classname/uses',
+			templateUrl: 'partials/classUses.html',
+			controller: 'classUsesCtrl'
 		})
 });
 

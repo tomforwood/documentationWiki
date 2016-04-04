@@ -4,7 +4,7 @@
 <span ng-repeat="mod in mergedClass.classModifiers">{{mod}} </span>
 {{mergedClass.objectType|objectType}}
 {{mergedClass.name}}:
-<span ng-repeat="extend in mergedClass.extensions"><span ng-bind-html="extend|classLinkFilter"></span></span>
+<span ng-repeat="extend in mergedClass.extensions"><span ng-bind-html="extend|classLinkFilter"> </span></span>
 
 <div ng-if='mergedClass.objectType.typeName=="enum"'>
 	<h3>Enum values</h3>

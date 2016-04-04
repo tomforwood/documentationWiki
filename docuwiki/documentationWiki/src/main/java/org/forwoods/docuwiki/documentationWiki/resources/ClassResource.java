@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,7 +16,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.bson.Document;
 import org.bson.json.JsonMode;
@@ -58,8 +55,8 @@ public class ClassResource {
 	
 	@GET
 	@Path("/{id}")
-	public MergedClass<? extends TopLevelDocumentable> getClass(@PathParam("id") String name) {
-		System.out.println("Searching for "+name);
+	public MergedClass<? extends TopLevelDocumentable> 
+			getClass(@PathParam("id") String name) {
 		String namespace=null;
 		int lastDot = name.lastIndexOf('.');
 		if (lastDot>0) {
@@ -123,7 +120,6 @@ public class ClassResource {
 		if (retrievedDoc==null) return null;
 		JsonWriterSettings settings = new JsonWriterSettings(JsonMode.STRICT);
 		String reflectedJson = retrievedDoc.toJson(settings);
-		System.out.println(reflectedJson);
 		return reflectedJson;
 	}
 	
@@ -148,7 +144,6 @@ public class ClassResource {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.writeValueAsString(toSave);
 			String json = mapper.writeValueAsString(toSave);
-			System.out.println(json);
 			Document document = Document.parse(json);
 			annotatedClasses.insertOne(document);
 			URI created = new URI("/api/class/"+toSave.getName());

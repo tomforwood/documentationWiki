@@ -64,4 +64,8 @@ table td:nth-child(1) {
 	overflow-y: scroll;
 	float:left;
 }
+
+.classNav {
+	background-color:#333;
+	color:#FFF;
 }

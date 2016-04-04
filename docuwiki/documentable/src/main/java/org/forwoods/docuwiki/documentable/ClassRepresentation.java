@@ -2,6 +2,7 @@ package org.forwoods.docuwiki.documentable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.forwoods.docuwiki.documentable.ClassRepresentation.MethodRepresentation;
 
@@ -130,6 +131,21 @@ public class ClassRepresentation extends TopLevelDocumentable{
 				hash=31*hash + m.getObjectType().typeName.hashCode();
 			}
 			return hash;
+		}
+		
+		public String toString() {
+			StringBuilder builder = new StringBuilder();
+			builder.append(objectType);
+			builder.append(' ');
+			builder.append(name);
+			builder.append('(');
+			StringJoiner joiner = new StringJoiner(", ");
+			for (Member m:parameters) {
+				joiner.add(m.objectType.toString());
+			}
+			builder.append(joiner.toString());
+			builder.append(')');
+			return builder.toString();
 		}
 	}
 

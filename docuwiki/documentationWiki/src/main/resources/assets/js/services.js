@@ -15,3 +15,9 @@ docuWikiServices.factory('ClassList', [ '$resource', function($resource) {
 		}
 	});
 } ]);
+
+docuWikiServices.factory('ClassUses', [ '$resource', function($resource) {
+	return $resource('api/class/uses/:classid', {}, {
+		query : {method:'GET', params:{classid:'class'}, isArray:false}
+	});
+} ]);

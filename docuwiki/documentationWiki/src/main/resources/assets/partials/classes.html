@@ -21,7 +21,7 @@
 				<li ng-repeat="class in classes | filter:query | subset:subsetOp">
 					<span ng-if="!(class.namespace==null || prev.ns.startsWith(class.namespace))">{{class.namespace}}<br></span>
 					{{prev.ns=class.namespace;""}}
-					<a ui-sref='.details({"classname":class.className})'>
+					<a ui-sref='.details.class({"classname":class.className})'>
 					<span ng-bind-html="class.className|indenter"></span></a></li>
 			</ul>
 		</div>

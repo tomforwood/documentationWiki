@@ -3,6 +3,7 @@ package org.forwoods.docuwiki.documentable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,6 +30,9 @@ public class ObjectType {
 	}
 	
 	public ObjectType(String name) {
+		if (name.endsWith("ContractParameter")) {
+			System.out.println("k");
+		}
 		typeName = name;
 	}
 	
@@ -59,6 +63,20 @@ public class ObjectType {
 		if (localName.equals(otherName)) return true;
 		if (otherName.equals(classNameMap.get(localName))) return true;
 		return false;
-		
+	}
+	
+	public String toString(){
+		StringBuilder builder = new StringBuilder();
+		builder.append(typeName);
+		if (varargs!=null && !varargs.isEmpty()) {
+			builder.append('<');
+			StringJoiner joiner = new StringJoiner(",");
+			for (ObjectType ot:varargs) {
+				joiner.add(ot.toString());
+			}
+			builder.append(joiner);
+			builder.append('>');
+		}
+		return builder.toString();
 	}
 }
