@@ -2,18 +2,22 @@ package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.forwoods.docuwiki.documentable.Documentable;
+import org.forwoods.docuwiki.documentable.Member;
+import org.forwoods.docuwiki.documentable.Modifier;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpBaseListener;
+import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.CmodsContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.DocCommentBlockContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ExtendedContext;
+import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ModifiersContext;
 
-public class DocumentableListener extends BasicCSharpBaseListener {
+public class MemberListener extends BasicCSharpBaseListener {
 	
-	Deque<Documentable> stack;
+	Deque<Member> stack;
 
-	public DocumentableListener(Deque<Documentable> stack) {
+	public MemberListener(Deque<Member> stack) {
 		this.stack = stack;
 	}
 
@@ -34,6 +38,28 @@ public class DocumentableListener extends BasicCSharpBaseListener {
 		TopLevelDocumentable rep = (TopLevelDocumentable)stack.peek();
 		rep.addExtension(ctx.extName.getText());
 		//TODO this is run by every listerer and duplicates
+	}
+
+	protected void readMods(ModifiersContext mods, Member member) {
+		if (mods!=null && mods.children!=null) {
+			for (ParseTree pt:mods.children) {
+				member.addModifier(Modifier.lookup(pt.getText()));
+			}
+		}
+	}
+
+
+	protected void readMods(CmodsContext mods, Member member) {
+		if (mods!=null && mods.children!=null) {
+			for (ParseTree pt:mods.children) {
+				member.addModifier(Modifier.lookup(pt.getText()));
+			}
+		}
+	}
+
+	protected String link(String typeName) {
+		return typeName;
+		//TODO linking
 	}
 
 }

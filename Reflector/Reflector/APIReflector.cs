@@ -33,7 +33,16 @@ namespace Reflector
             return assembly.GetExportedTypes().Select(reflectTop);
         }
 
-        public TopLevelDocumentable reflectTop(Type type)
+        public static TopLevelDocumentable reflectTop(Type type)
+        {
+            if (type.IsNested)
+            {
+                return null;
+            }
+            return reflectTopOrNested(type);
+        }
+
+        public static TopLevelDocumentable reflectTopOrNested(Type type)
         {
             if (type.IsGenericType)
             {
@@ -54,7 +63,23 @@ namespace Reflector
                 ObjectType ot = ObjectType.toObjectType(type);
                 rep = new ClassRepresentation(ot.typeName);
                 ((ClassRepresentation)rep).varargs = ot.varargs;
-                reflectClass((ClassRepresentation)rep, type);
+                new ClassReflector().reflectClass((ClassRepresentation)rep, type);
+            }
+            else if (type.IsInterface)
+            {
+                ObjectType ot = ObjectType.toObjectType(type);
+                rep = new ClassRepresentation(ot.typeName);
+                rep.objectType.typeName = "interface";
+                ((ClassRepresentation)rep).varargs = ot.varargs;
+                new ClassReflector().reflectClass((ClassRepresentation)rep, type);
+            }
+            else if (type.IsValueType)
+            {
+                ObjectType ot = ObjectType.toObjectType(type);
+                rep = new ClassRepresentation(ot.typeName);
+                rep.objectType.typeName = "struct";
+                ((ClassRepresentation)rep).varargs = ot.varargs;
+                new ClassReflector().reflectClass((ClassRepresentation)rep, type);
             }
 
             else
@@ -66,77 +91,12 @@ namespace Reflector
             rep.userGenerated = false;
 
             rep.namespaceName = type.Namespace;
-            convert(rep.modifiers,type);
+            convert(rep.modifiers, type);
             return rep;
         }
+        
 
-        private void reflectClass(ClassRepresentation rep, Type type)
-        {
-
-            foreach (FieldInfo field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                if (field.IsPrivate) continue;
-                string name = field.Name;
-                ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
-                FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
-                convert(fieldRep.modifiers, field);
-                rep.instanceFields.Add(fieldRep);
-            }
-
-            foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                if (field.IsPrivate) continue;
-                string name = field.Name;
-                ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
-                FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
-                convert(fieldRep.modifiers, field);
-                fieldRep.modifiers.Add(Member.Modifier.STATIC);
-                rep.staticFields.Add(fieldRep);
-            }
-
-            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                string name = property.Name;
-                ObjectType propType = ObjectType.toObjectType(property.PropertyType);
-                PropertyRepresentation proprep = new PropertyRepresentation(propType, name);
-                if (property.Name == "GameTime")
-                {
-                    Console.WriteLine(property);
-                }
-                proprep.modifiers.Add(convert(property.GetGetMethod(true)));
-                if (proprep.modifiers.Contains(Member.Modifier.PRIVATE)) continue;
-                proprep.modifiers.Add(Member.Modifier.STATIC);
-                if (convert(property.GetGetMethod(true))>=Member.Modifier.PROTECTED)
-                {
-                    proprep.getter = true;
-                }
-                if (convert(property.GetSetMethod(true)) >= Member.Modifier.PROTECTED)
-                {
-                    proprep.setter = true;
-                }
-                rep.staticProperties.Add(proprep);
-            }
-
-            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-            {
-                string name = property.Name;
-                ObjectType propType = ObjectType.toObjectType(property.PropertyType);
-                PropertyRepresentation proprep = new PropertyRepresentation(propType, name);
-                proprep.modifiers.Add(convert(property.GetGetMethod(true)));
-                if (proprep.modifiers.Contains(Member.Modifier.PRIVATE)) continue;
-                if (property.GetGetMethod(true)!=null)
-                {
-                    proprep.getter = true;
-                }
-                if (property.GetSetMethod(true) != null)
-                {
-                    proprep.setter = true;
-                }
-                rep.instanceProperties.Add(proprep);
-            }
-        }
-
-        private void reflectEnum(EnumRepresentation rep, Type type)
+        private static void reflectEnum(EnumRepresentation rep, Type type)
         {
             string[] names = type.GetEnumNames();
             Array values = type.GetEnumValues();
@@ -149,41 +109,15 @@ namespace Reflector
             }
         }
 
-        private void convert(List<Member.Modifier> list, Type type)
+        private static void convert(List<Member.Modifier> list, Type type)
         {
             if (type.IsPublic) {
                 list.Add(Member.Modifier.PUBLIC);
             }
-            if (type.IsAbstract)
+            if (type.IsAbstract && !type.IsInterface)
             {
                 list.Add(Member.Modifier.ABSTRACT);
             }
-        }
-
-        private void convert(List<Member.Modifier> list, FieldInfo type)
-        {
-            if (type.IsPublic)
-            {
-                list.Add(Member.Modifier.PUBLIC);
-            }
-            else if (type.IsFamily)
-            {
-                list.Add(Member.Modifier.PROTECTED);
-            }
-        }
-
-        private Member.Modifier convert(MethodInfo type)
-        {
-            if (type == null) return ClassRepresentation.Modifier.PRIVATE;
-            if (type.IsPublic)
-            {
-                return Member.Modifier.PUBLIC;
-            }
-            else if (type.IsPrivate)
-            {
-                return Member.Modifier.PRIVATE;
-            }
-            else return Member.Modifier.PROTECTED;
         }
 
 

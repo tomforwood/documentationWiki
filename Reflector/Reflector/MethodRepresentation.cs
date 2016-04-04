@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Reflector
 {
-    public class FieldRepresentation : Member
+    public class MethodRepresentation : Member
     {
 
-        public string assignment;
+        public List<Member> parameters = new List<Member>();
 
-
-        public FieldRepresentation(ObjectType type, String name) :
+        public MethodRepresentation(ObjectType type, String name) :
             base(type, name)
         { }
     }

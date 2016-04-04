@@ -9,7 +9,8 @@ public enum Modifier{
 	STATIC("static"),
 	SEALED("sealed"),
 	CONSTANT("const"),
-	ABSTRACT("abstract");
+	ABSTRACT("abstract"),
+	VIRTUAL("virtual");
 
 	static Map<String, Modifier> lookup = new HashMap<>();
 	

@@ -1,5 +1,9 @@
 package org.forwoods.docuwiki.initial;
 
+import static com.mongodb.client.model.Projections.excludeId;
+import static com.mongodb.client.model.Projections.fields;
+import static com.mongodb.client.model.Projections.include;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -34,6 +39,8 @@ public class InitialPopulate {
 	private String collectionName= "annotatedClasses";
 	private Validator validator;
 	private MongoClient mongo;
+	
+	public static List<String> readClasses = new ArrayList<>();
 
 
 	@SuppressWarnings("deprecation")
@@ -42,6 +49,13 @@ public class InitialPopulate {
 		
 		mongo = new MongoClient();
 		database = mongo.getDatabase("docuWiki");
+		
+		MongoCollection<Document> collection = database.getCollection("reflectedClasses");
+		Consumer<String> add = name->readClasses.add(name);
+		collection.find().projection(fields(include("name"), excludeId()))
+		.map(doc->doc.getString("name")).forEach(add);
+		
+		
 		validator = new Validator();
 	}
 	

@@ -20,6 +20,8 @@ namespace Reflector
             PUBLIC=2,
             ABSTRACT=4,
             STATIC=8,
+            CONSTANT = 16,
+            VIRTUAL = 32,
         }
 
         public ObjectType objectType;
@@ -29,6 +31,11 @@ namespace Reflector
         public List<Modifier> modifiers = new List<Modifier>();
 
         public string name;
+
+        public List<string> annotations = new List<string>();
+        //TODO annotations have rich structure
+
+        public string inheritedFrom;
 
         public Member(ObjectType objectType, string name)
         {

@@ -18,6 +18,15 @@ namespace Reflector
         public List<PropertyRepresentation> instanceProperties = new List<PropertyRepresentation>();
         public List<PropertyRepresentation> staticProperties = new List<PropertyRepresentation>();
 
+        public List<MethodRepresentation> instanceMethods = new List<MethodRepresentation>();
+        public List<MethodRepresentation> staticMethods = new List<MethodRepresentation>();
+
+        public List<MethodRepresentation> constructors = new List<MethodRepresentation>();
+
+        public List<string> extensions = new List<string>();
+
+        public List<TopLevelDocumentable> nested = new List<TopLevelDocumentable>();
+
         public ClassRepresentation(String name) :
             base(new ObjectType("class"), name)
         {

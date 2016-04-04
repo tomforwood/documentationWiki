@@ -2,16 +2,17 @@ package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
 
-import org.forwoods.docuwiki.documentable.ClassRepresentation.PropertyRepresentation;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
+import org.forwoods.docuwiki.documentable.ClassRepresentation.PropertyRepresentation;
 import org.forwoods.docuwiki.documentable.Documentable;
+import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentable.Modifier;
+import org.forwoods.docuwiki.documentable.ObjectType;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.PropertyDeclarationContext;
 
-public class PropertyListener extends DocumentableListener {
+public class PropertyListener extends MemberListener {
 
-	public PropertyListener(Deque<Documentable> stack) {
+	public PropertyListener(Deque<Member> stack) {
 		super(stack);
 	}
 
@@ -20,12 +21,10 @@ public class PropertyListener extends DocumentableListener {
 		PropertyRepresentation member = new PropertyRepresentation();
 		member.setComment(readComment(ctx.comment));
 		member.setName(ctx.propName.getText());
-		if (ctx.propMods!=null && ctx.propMods.children!=null) {
-			for (ParseTree pt:ctx.propMods.children) {
-				member.addModifier(Modifier.lookup(pt.getText()));
-			}
-		}
+
+		readMods(ctx.propMods,member); 
 		
+		member.setObjectType(new ObjectType(ctx.propType.getText()));
 		//I don't really need any of the rest
 		
 		Documentable peek = stack.peek();

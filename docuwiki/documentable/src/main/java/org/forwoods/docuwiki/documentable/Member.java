@@ -3,8 +3,11 @@ package org.forwoods.docuwiki.documentable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class Member extends Documentable {
 
 	@JsonProperty
@@ -13,6 +16,8 @@ public class Member extends Documentable {
 	protected List<Modifier> modifiers = new ArrayList<>();
 	@JsonProperty
 	protected String name;
+	@JsonProperty
+	protected String inheritedFrom;
 	
 	
 	public ObjectType getObjectType() {
@@ -38,7 +43,12 @@ public class Member extends Documentable {
 	public void setObjectType(ObjectType objectType) {
 		this.objectType = objectType;
 	}
-	
-	
 
+	public String getInheritedFrom() {
+		return inheritedFrom;
+	}
+
+	public void setInheritedFrom(String inherited) {
+		this.inheritedFrom = inherited;
+	}
 }

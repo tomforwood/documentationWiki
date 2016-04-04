@@ -1,21 +1,46 @@
 <!doctype html>
-<html ng-app="docuWikiApp">
+<html >
 <head>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+
 <script src="js/services.js"></script>
 <script src="js/docuWiki.js"></script>
 <script src="js/classListController.js"></script>
 <script src="js/classViewController.js"></script>
 
-<link
-	href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
-	rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <link rel="stylesheet" href="css/codeformatting.css">
 </head>
-<body>
-	<div ng-view></div>
+<body ng-app="docuWikiApp">
+	<!-- NAVIGATION -->
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" ui-sref="#">Kerbal API Reference</a>
+    </div>
+    <ul class="nav navbar-nav">
+        <li><a ui-sref="classes">Classes</a></li>
+        <li><a ui-sref="about">About</a></li>
+    </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div>
+
+    <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
+    <div ui-view></div>
+
+</div>
+
 </body>
 </html>

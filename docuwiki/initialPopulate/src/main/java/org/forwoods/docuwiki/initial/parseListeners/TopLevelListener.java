@@ -15,7 +15,7 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.NamespaceContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.StructDeclarationContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.UsingContext;
 
-public class TopLevelListener extends DocumentableListener {
+public class TopLevelListener extends MemberListener {
 	
 	TopLevelDocumentable topItem;
 	List<String> usings = new ArrayList<>();
@@ -26,6 +26,8 @@ public class TopLevelListener extends DocumentableListener {
 		parser.addParseListener(new EnumListener(stack));
 		parser.addParseListener(new FieldListener(stack));
 		parser.addParseListener(new PropertyListener(stack));
+		parser.addParseListener(new MethodListener(stack));
+		parser.addParseListener(new ConstructorListener(stack));
 	}
 
 	public TopLevelDocumentable getRep() {
@@ -38,7 +40,10 @@ public class TopLevelListener extends DocumentableListener {
 		if (stack.isEmpty()) {
 			topItem = rep;
 		}
-		System.out.println("pushing");
+		else {
+			ClassRepresentation parent = (ClassRepresentation) stack.peek();
+			parent.addNested(rep);
+		}
 		stack.push(rep);
 	}
 
@@ -48,23 +53,42 @@ public class TopLevelListener extends DocumentableListener {
 		if (stack.isEmpty()) {
 			topItem = rep;
 		}
-		System.out.println("pushing");
 		stack.push(rep);
 	}
 
 	@Override
 	public void enterStructDeclaration(StructDeclarationContext ctx) {
-		// TODO Auto-generated method stub
+		ClassRepresentation rep = new ClassRepresentation();
+		rep.getObjectType().setTypeName("struct");
+		if (stack.isEmpty()) {
+			topItem = rep;
+		}
+		else {
+			ClassRepresentation parent = (ClassRepresentation) stack.peek();
+			parent.addNested(rep);
+		}
+		stack.push(rep);
 	}
 	
 	@Override
 	public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
-		// TODO Auto-generated method stub
+		ClassRepresentation rep = new ClassRepresentation();
+		rep.getObjectType().setTypeName("interface");
+		if (stack.isEmpty()) {
+			topItem = rep;
+		}
+		else {
+			ClassRepresentation parent = (ClassRepresentation) stack.peek();
+			parent.addNested(rep);
+		}
+		stack.push(rep);
 	}
 
 	@Override
 	public void exitNamespace(NamespaceContext ctx) {
-		topItem.setNamespaceName(ctx.namespaceName.getText());
+		String ns = ctx.namespaceName.getText();
+		topItem.setNamespaceName(ns);
+		topItem.setName(ns+"."+topItem.getName());
 	}
 
 	@Override

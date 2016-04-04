@@ -66,8 +66,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassReflector.cs" />
     <Compile Include="FieldRepresentation.cs" />
     <Compile Include="Member.cs" />
+    <Compile Include="MethodRepresentation.cs" />
     <Compile Include="PropertyRepresentation.cs" />
     <Compile Include="TopLevelDocumentable.cs" />
     <Compile Include="ClassRepresentation.cs" />

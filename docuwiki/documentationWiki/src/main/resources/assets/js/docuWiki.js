@@ -1,17 +1,19 @@
-var docuWikiApp = angular.module('docuWikiApp',['ngSanitize','ngRoute','docuWikiServices']);
+var docuWikiApp = angular.module('docuWikiApp',['ngSanitize','docuWikiServices','ui.router']);
 
-docuWikiApp.config(['$routeProvider',
-    function($routeProvider){
-		$routeProvider.when('/classList',{
-			templateUrl:'partials/classList.html',
-			controller:'classListCtrl'
-		}).
-		when('/classes/:classname', {
-			templateUrl:'partials/classView.html',
-			controller:'classViewCtrl'
-		}).
-		otherwise({redirectTo: '/classList'});
-}]);
+docuWikiApp.config(function($stateProvider, $urlRouterProvider){
+	$urlRouterProvider.otherwise('/about');	
+	
+	$stateProvider
+		.state('classes',{
+			url: '/classes',
+			templateUrl: 'partials/classes.html'
+		})
+		.state('classes.details',{
+			url: '/:classname',
+			templateUrl: 'partials/classDetails.html',
+			controller: 'classViewCtrl'
+		})
+});
 
 
 docuWikiApp.directive("clickToEdit", function() {
@@ -48,13 +50,19 @@ docuWikiApp.directive("clickToEdit", function() {
 
 docuWikiApp.filter('classLinkFilter', ['ClassList','$sce',function(ClassList, $sanitize) {
 	var classList = ClassList.query();
-	console.log($sanitize)
 	return function(input) {
 		var contains=false;
-		for (i=0;i<classList.length;i++){
-			contains |=classList[i].className==input;
+		//Remove subclasses e.g Administation+StrategyWrapper from the lookup
+		var topClass = input;
+		var plusPos= input.indexOf("+");
+		if (plusPos>=0) {
+			topClass = input.substr(0,plusPos);
 		}
-		if (contains) return $sanitize.trustAsHtml('<a href="#/classes/'+input+'">'+input+'</a>');
+		
+		for (i=0;i<classList.length;i++){
+			contains |=classList[i].className==topClass;
+		}
+		if (contains) return $sanitize.trustAsHtml('<a href="#/classes/'+topClass+'">'+input.replace("+",".")+'</a>');
 		return input.split(".").pop();
 	};
 }]);

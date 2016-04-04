@@ -3,22 +3,20 @@
  */
 //var classController = angular.module('docuWikiApp',['docuWikiServices']);
 
-docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', '$routeParams',
-    function($scope, Class, $routeParams) {
-		$scope.classFQN=$routeParams.classname
-		$scope.mergedClass = Class.get({classid:$routeParams.classname}, function(classData){
+docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', '$stateParams',
+    function($scope, Class, $stateParams) {
+		$scope.classFQN=$stateParams.classname
+		$scope.mergedClass = Class.get({classid:$stateParams.classname}, function(classData){
 					
 				});
 		
-		$scope.save =  function() {Class.save($scope.mergedClass, function(){})};
-			/*function(classname) {
-			$http.post("/api/class/", $scope.mergedClass).then(function(response){
-				$scope.PostDataResponse = response;
-			}, function(errorresponse) {
-				$scope.PostDataResponse = errorresponse;
-			});
-			return classname;
-		}*/
+		$scope.save =  function() {Class.save($scope.mergedClass, function(mergedClass){
+			console.log(mergedClass.name);
+			$scope.mergedClass = Class.get({classid:mergedClass.name});
+		}, function(error) {
+			console.log("an error");
+			$scope.PostDataResponse = error;
+		})};
     }]
 );
 
@@ -28,11 +26,31 @@ docuWikiApp.filter('objectType', ['$filter',function($filter) {
 		var out = $filter('classLinkFilter')(input.typeName);
 		if (input.varargs) {
 			out+="<";
-			for (i=0;i<input.varargs.length;i++) {
+			for (var i=0;i<input.varargs.length;i++) {
 				out+=$filter('objectType')(input.varargs[i]);
+				if (i<input.varargs.length-1) out+=",";
 			}
 			out+=">"
 		}
+
 		return out;
+	};
+}]);
+
+docuWikiApp.filter('inhertitedFilter', ['ClassList','$sce',function(ClassList, $sanitize) {
+	var classList = ClassList.query();
+	return function(input) {
+		var contains=false;
+		var topClass = input.inheritedFrom;
+		var dotPos= topClass.indexOf(".");
+		if (dotPos>=0) {
+			topClass = topClass.substr(0,dotPos);
+		}
+		
+		for (i=0;i<classList.length;i++){
+			contains |=classList[i].className==topClass;
+		}
+		if (contains) return $sanitize.trustAsHtml('<a href="#/classes/'+topClass+'">'+input.name+'</a>');
+		return input.name;
 	};
 }]);

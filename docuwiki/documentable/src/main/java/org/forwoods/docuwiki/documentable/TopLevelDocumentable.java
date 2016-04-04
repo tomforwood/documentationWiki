@@ -6,10 +6,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties("_id")
+
 public abstract class TopLevelDocumentable extends Member {
 
 	@JsonProperty
@@ -52,7 +54,6 @@ public abstract class TopLevelDocumentable extends Member {
 
 	public void setNamespaceName(String namespaceName) {
 		this.namespaceName = namespaceName;
-		name = namespaceName + "."+name;
 	}
 	
 	public List<String> getExtensions() {

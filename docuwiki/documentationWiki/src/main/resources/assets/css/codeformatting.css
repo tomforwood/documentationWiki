@@ -1,10 +1,24 @@
 @CHARSET "ISO-8859-1";
 
+.inline {
+	display: inline;
+}
 
-pre.comment {
+.comment {
 	color: green;
 	width: 80%;
-	/*display: inline;*/
+	white-space: pre-wrap;
+	
+    padding: 9.5px;
+    margin: 0 0 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+table pre.comment {
+	color: green;
+	width: 95%;
 }
 
 textarea.comment {
@@ -14,4 +28,40 @@ textarea.comment {
 
 .orphaned {
 	text-decoration: line-through;
+}
+
+table {
+	width: 100%;
+}
+
+table td {
+	padding:5px;
+	border-bottom:1px solid black
+}
+
+table td:last-child {
+	width: 100%;
+}
+
+table td:nth-child(1) {
+
+}
+
+.modifiers {
+	width:2em;
+	background-color:#F9F9FF
+}
+.type {
+	max-width:8em;
+	word-wrap:break-word;
+}
+
+.memberName {
+	max-width:16em;
+}
+
+.vertscroll {
+	overflow-y: scroll;
+	float:left;
+}
 }

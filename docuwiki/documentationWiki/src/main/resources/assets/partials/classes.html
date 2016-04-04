@@ -1,0 +1,33 @@
+<div layout="row">
+	<md-sidenav class="md-sidenav-left col-md-3" md-is-locked-open='true'>
+		<div ng-controller="classListCtrl">
+			<div class="row">
+				<div class="col-sm-6">
+					<!--Sidebar content -->
+		
+					Search: <input ng-model="query">
+		
+				</div>
+				<div class="col-sm-6">
+					<select ng-model="subsetOp" ng-init='subsetOp="ALL"'>
+						<option value="ALL">All</option>
+						<option value="DOCUMENTED">documented</option>
+						<option value="ORPHANED">orphaned</option>
+					</select>
+				</div>
+			</div>
+			<ul>
+				{{prev.ns=""}}
+				<li ng-repeat="class in classes | filter:query | subset:subsetOp">
+					<span ng-if="!(class.namespace==null || prev.ns.startsWith(class.namespace))">{{class.namespace}}<br></span>
+					{{prev.ns=class.namespace;""}}
+					<a ui-sref='.details({"classname":class.className})'>
+					<span ng-bind-html="class.className|indenter"></span></a></li>
+			</ul>
+		</div>
+	</md-sidenav>
+
+	<md-content class="col-md-9">
+	<div ui-view>Pick a class to view its content</div>
+	</md-content>
+</div>

@@ -22,3 +22,15 @@ docuWikiApp.filter('subset', function() {
 		return filtered;
 	};
 });
+
+docuWikiApp.filter('indenter', ['$sce',function($sce) {
+	return function(input) {
+		var strings= input.split(".");
+		var out="";
+		for (var i=0;i<strings.length-1;i++) {
+			out=out+"&mdash;";
+		}
+		out = out+strings.pop();
+		return $sce.trustAsHtml(out);
+	};
+}]);

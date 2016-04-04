@@ -1,7 +1,7 @@
 <div class="click-to-edit"> 
     <span ng-hide="view.editorEnabled">
-    	<pre class="comment">{{value}}</pre> 
-        <a ng-click="enableEditor()">Edit</a> 
+    	<div class="comment" ng-click="enableEditor()">{{value}}</div> 
+        <!-- a ng-click="enableEditor()">Editarooney</a--> 
     </span> 
     <div ng-show="view.editorEnabled"> 
         <textarea class="comment" ng-model="view.editableValue"></textarea><br> 

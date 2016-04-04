@@ -2,17 +2,17 @@ package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.ClassRepresentation.FieldRepresentation;
 import org.forwoods.docuwiki.documentable.Documentable;
+import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentable.Modifier;
 import org.forwoods.docuwiki.documentable.ObjectType;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.FieldDeclarationContext;
 
-public class FieldListener extends DocumentableListener {
+public class FieldListener extends MemberListener {
 
-	public FieldListener(Deque<Documentable> stack) {
+	public FieldListener(Deque<Member> stack) {
 		super(stack);
 	}
 
@@ -21,11 +21,7 @@ public class FieldListener extends DocumentableListener {
 		FieldRepresentation member = new FieldRepresentation();
 		member.setComment(readComment(ctx.comment));
 		member.setName(ctx.fieldName.getText());
-		if (ctx.fieldMods!=null) {
-			for (ParseTree pt:ctx.fieldMods.children) {
-				member.addModifier(Modifier.lookup(pt.getText()));
-			}
-		}
+		readMods(ctx.fieldMods,member);
 		member.setObjectType(new ObjectType(ctx.fieldType.getText()));
 		
 		if (ctx.fieldAssignment!=null) {
@@ -36,7 +32,8 @@ public class FieldListener extends DocumentableListener {
 		if (peek==null) return;
 		if (peek instanceof ClassRepresentation) {
 			ClassRepresentation rep = (ClassRepresentation) peek;
-			if (member.getModifiers().contains(Modifier.STATIC)) {
+			if (member.getModifiers().contains(Modifier.STATIC) ||
+					member.getModifiers().contains(Modifier.CONSTANT)) {
 				rep.addStaticField(member);
 			}
 			else {

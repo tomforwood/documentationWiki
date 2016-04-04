@@ -1,7 +1,10 @@
 package org.forwoods.docuwiki.documentable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class Documentable {
 	@JsonProperty
 	protected
@@ -22,7 +25,7 @@ public class Documentable {
 		return isOrphaned;
 	}
 
-	public void setOrphaned(boolean isOrphaned) {
+	public void setIsOrphaned(boolean isOrphaned) {
 		this.isOrphaned = isOrphaned;
 	}
 

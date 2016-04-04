@@ -32,7 +32,7 @@ public class DocumentableFactory {
 		parser.compilationUnit();
 		TopLevelDocumentable rep = listener.getRep();
 		List<String> usings = listener.getUsings();
-		if (rep==null) return null;//this wasn't a class/enum (e.g. interface or struct)
+		//if (rep==null) return null;
 		//TODO
 		
 		rep.setVersion(1);

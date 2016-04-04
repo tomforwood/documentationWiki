@@ -1,7 +1,7 @@
 grammar BasicCSharp;
 
 compilationUnit : '\uFEFF'? region? 
-	using*
+	cuUsings=usings
 	(namespace |
 	firstClassThing);
 
@@ -9,6 +9,8 @@ region : RegionStart
 	LINE_COMMENT* '#endregion';
 
 RegionStart : '#region' ~[\r\n]* ;
+
+usings : using*;
 
 using : 'using' 
 	useName = qualifiedName ';';
@@ -31,14 +33,12 @@ interfaceDeclaration :
 
 classDeclaration :
 	comment=docCommentBlock
-	annotation*
-	classmods=cm
+	annotations
+	classmods=cmods
 	'class' name=identifier
 	genArgs = typeArgs?
 	extension?
 	classBody;
-
-cm: classOrInterfaceModifier*;
 
 docCommentBlock : DocComment*;
 	
@@ -76,47 +76,51 @@ memberDeclaration :
 	
 fieldDeclaration : 
 	comment = docCommentBlock
-	annotation*
+	annotations
 	fieldMods = modifiers 
 	fieldType=type 
 	fieldName = identifier 
 	fieldAssignment = assignment? ';';
 
 methodDeclaration : 
-	DocComment*
-	annotation*
-	modifiers 
-	type identifier formalParams (';'|propertyBody);
+	comment = docCommentBlock
+	annotations
+	methodMods = modifiers 
+	methodType = type 
+	methodName = identifier 
+	methodParams = formalParams 
+	(';'|propertyBody);
 
 constructorDeclaration :
-	DocComment*
-	annotation*
-	modifiers 
-	identifier formalParams ';';
+	comment = docCommentBlock
+	annotations
+	consMods = modifiers 
+	identifier 
+	consParams = formalParams ';';
 
 propertyDeclaration :
 	comment = docCommentBlock
-	annotation*
+	annotations
 	propMods=modifiers 
 	propType=type 
 	propName=identifier propertyBody;
 	
 arrayLikeProperty :
 	DocComment*
-	annotation*
+	annotations
 	modifiers 
 	type 'this['type identifier ']' propertyBody;
 	
 genericMethod : 
 	DocComment*
-	annotation*
+	annotations
 	modifiers 
 	type identifier typeArgs formalParams 
 	(WHERE identifier ':' type)? ';';
 	
 enumDeclaration :
 	comment = docCommentBlock
-	annotation*
+	annotations
 	enumMods = cmods
 	'enum' 
 	enumName = identifier 
@@ -130,18 +134,22 @@ enumConstant :
 	intVal = IntLiteral)? ','?;
 
 structDeclaration :
-	DocComment*
-	cmods
+	comment = docCommentBlock 
+	classmods=cmods
 	'struct'
-	identifier typeArgs? classBody ;
+	name = identifier typeArgs? classBody ;
 
 assignment : '=' literal;
 
-formalParams : '(' formalParamList ')';
+formalParams : '(' 
+	paramList=formalParamList 
+	')';
 
 formalParamList : formalParam (',' formalParam)* | ;
 
-formalParam : modifiers type identifier ( '=' literal)?;
+formalParam : modifiers 
+	paramType = type 
+	paramName = identifier ( '=' literal)?;
 
 type:
 	identifier 
@@ -154,6 +162,8 @@ typeArgs:
 	'<' type (','type)*'>';
 
 qualifiedName :   identifier ('.' identifier)* ;
+
+annotations :annotation*;
 
 annotation : '[' identifier 
 	( '(' ( elementValuePairs | literal )? ')' )? ']';
