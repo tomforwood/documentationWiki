@@ -50,7 +50,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
                     final Environment environment) {
     	if (configuration.isMongoSecured()) {
     		
-    		String password = System.getProperty("MONGO_PASS");
+    		String password = System.getenv("MONGO_PASS");
     		
 	    	MongoCredential mongoCred = MongoCredential.createCredential(
 	    			configuration.getMongoUsername(),
