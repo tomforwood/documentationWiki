@@ -374,4 +374,12 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	public List<String> getExtensions() {
 		return extensions;
 	}
+
+	public List<MethodRepresentation> getConstructors() {
+		return constructors;
+	}
+
+	public List<MergedClass<?>> getNested() {
+		return nested;
+	}
 }

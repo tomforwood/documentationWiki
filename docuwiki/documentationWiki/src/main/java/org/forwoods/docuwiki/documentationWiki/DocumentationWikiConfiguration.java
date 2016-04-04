@@ -12,9 +12,6 @@ public class DocumentationWikiConfiguration extends Configuration {
 	
 	@NotEmpty
     private String mongoUsername;
-
-    @NotEmpty
-    private String mongoPassword;
     
     @NotEmpty
     private String mongoDatabase;
@@ -48,16 +45,6 @@ public class DocumentationWikiConfiguration extends Configuration {
     @JsonProperty
     public void setMongoUsername(String mongoUsername) {
         this.mongoUsername = mongoUsername;
-    }
-
-    @JsonProperty
-    public String getMongoPassword() {
-        return mongoPassword;
-    }
-
-    @JsonProperty
-    public void setMongoPassword(String mongoPassword) {
-        this.mongoPassword = mongoPassword;
     }
 
 	public String getMongoDatabase() {

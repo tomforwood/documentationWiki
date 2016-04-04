@@ -9,7 +9,6 @@ server:
     bindHost: 127.9.90.1
   
 mongoUsername : docuWikiUser
-mongoPassword : ***REMOVED***
 mongoDatabase : docuWiki
 mongoHost : @OPENSHIFT_MONGODB_DB_HOST@
 mongoPort : @OPENSHIFT_MONGODB_DB_PORT@

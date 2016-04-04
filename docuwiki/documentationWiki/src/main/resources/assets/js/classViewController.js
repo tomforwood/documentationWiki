@@ -42,7 +42,7 @@ docuWikiApp.filter('inhertitedFilter', ['ClassList','$sce',function(ClassList, $
 	return function(input) {
 		var contains=false;
 		var topClass = input.inheritedFrom;
-		var dotPos= topClass.indexOf(".");
+		var dotPos= topClass.indexOf("+");
 		if (dotPos>=0) {
 			topClass = topClass.substr(0,dotPos);
 		}

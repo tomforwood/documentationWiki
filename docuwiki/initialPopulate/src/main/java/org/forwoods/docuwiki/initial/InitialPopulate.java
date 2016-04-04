@@ -50,10 +50,12 @@ public class InitialPopulate {
 	public InitialPopulate() throws URISyntaxException, ProcessingException {
 		//TODO password should be env var or command line
 		
+		String password = System.getProperty("MONGO_PASS");
+		
 		MongoCredential mongoCred = MongoCredential.createCredential(
     			"docuWikiUser",
     			"docuWiki", 
-    			"***REMOVED***".toCharArray());
+    			password.toCharArray());
 		List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
 		ServerAddress addr = new ServerAddress("127.0.0.1", 
 				27017);

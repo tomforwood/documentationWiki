@@ -16,9 +16,9 @@ namespace Reflector
     {
         protected IMongoDatabase database;
         string collectionName = "reflectedClasses";
-        public APIReflector()
+        public APIReflector(string password)
         {
-            MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", "***REMOVED***");
+            MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", password);
             var settings = new MongoClientSettings
             {
                 Credentials = new[] { credential }
@@ -179,7 +179,7 @@ namespace Reflector
         static void Main(string[] args)
         {
 
-            APIReflector reflector = new APIReflector();
+            APIReflector reflector = new APIReflector(args[0]);
             reflector.reflectClasses();
             
         }

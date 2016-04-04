@@ -7,4 +7,3 @@
 <div ng-repeat="use in classUses.usesParameters | orderBy: 'usingClassName'">
 	<a ui-sref='classes.details.class({"classname":use.usingClassName})'>{{use.usingClassName}}.{{use.usingMember}}</a>
 </div>
-{{classUses}}

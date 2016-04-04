@@ -6,6 +6,8 @@ import static com.mongodb.client.model.Sorts.descending;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -22,6 +24,7 @@ import org.bson.json.JsonMode;
 import org.bson.json.JsonWriterSettings;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.EnumRepresentation;
+import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentable.TopLevelDeserializer;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.api.FQClassName;
@@ -123,6 +126,7 @@ public class ClassResource {
 		return reflectedJson;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@POST
 	public Response save(MergedClass<?> mergedClass) {
 		TopLevelDocumentable toSave=null;
@@ -130,15 +134,9 @@ public class ClassResource {
 			toSave = saveClass((MergedClass<ClassRepresentation>) mergedClass);
 			
 		}
-		/*else if (mergedClass.getObjectType().getTypeName().equals("enum")) {
-			EnumRepresentation enumRep=loadOld(name, EnumRepresentation.class);
-			
-			if (enumRep==null) {
-				enumRep = new EnumRepresentation();
-				enumRep.setVersion(0);//will get incremented to 1
-			}
-			oldAnnotated = enumRep;
-		}*/
+		else if (mergedClass.getObjectType().getTypeName().equals("enum")) {
+			toSave = saveEnum((MergedClass<EnumRepresentation>)mergedClass);
+		}
 		
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -156,6 +154,20 @@ public class ClassResource {
 		return Response.serverError().entity("Server Error saving class").type("text/plain").build();
 		
 	}
+	
+	private TopLevelDocumentable saveEnum(MergedClass<EnumRepresentation> mergedClass) {
+		EnumRepresentation enumRep = new EnumRepresentation();
+		enumRep.setComment(commentTrim(mergedClass.getComment()));
+		enumRep.setName(mergedClass.getName());
+		enumRep.setUserGenerated(true);
+		enumRep.setVersion(mergedClass.getAnnotatedVersion()+1);
+		mergedClass.getEnumConsts().stream()
+			.peek(ec->ec.setComment(commentTrim(ec.getComment())))
+			.filter(ec->ec.getComment()!=null)
+			.collect(Collectors.toCollection(()->enumRep.getEnumValues()));
+
+		return enumRep;
+	}
 
 	private TopLevelDocumentable saveClass(MergedClass<ClassRepresentation> mergedClass) {
 		//TODO look up latest version number
@@ -169,61 +181,51 @@ public class ClassResource {
 		classRep.setVersion(mergedClass.getAnnotatedVersion()+1);
 		classRep.getModifiers().addAll(mergedClass.getClassModifiers());
 		classRep.getExtensions().addAll(mergedClass.getExtensions());
+		classRep.setUserGenerated(true);
 		
 		//copy all instance fields that have non-empty comments to the new rep
-		mergedClass.getInstanceFields().stream()
-			.peek(fr->fr.setComment(commentTrim(fr.getComment())))
-			.filter(fr->fr.getComment()!=null)
-			.collect(Collectors.toCollection(()->classRep.getInstanceFields()));
+		compactify(mergedClass.getInstanceFields(),classRep.getInstanceFields());
 		
 		//copy all static fields that have non-empty comments to the new rep
-		mergedClass.getStaticFields().stream()
-			.peek(fr->fr.setComment(commentTrim(fr.getComment())))
-			.filter(fr->fr.getComment()!=null)
-			.collect(Collectors.toCollection(()->classRep.getStaticFields()));
+		compactify(mergedClass.getStaticFields(), classRep.getStaticFields());
 		
 		//copy all instance properties that have non-empty comments to the new rep
-		mergedClass.getInstanceProperties().stream()
-			.peek(fr->fr.setComment(commentTrim(fr.getComment())))
-			.filter(fr->fr.getComment()!=null)
-			.collect(Collectors.toCollection(()->classRep.getInstanceProperties()));
+		compactify(mergedClass.getInstanceProperties(), classRep.getInstanceProperties());
 		
 		//copy all static properties that have non-empty comments to the new rep
-		mergedClass.getStaticProperties().stream()
-			.peek(fr->fr.setComment(commentTrim(fr.getComment())))
-			.filter(fr->fr.getComment()!=null)
-			.collect(Collectors.toCollection(()->classRep.getStaticProperties()));
+		compactify(mergedClass.getStaticProperties(), classRep.getStaticProperties());
 		
 		//copy all instance Methods that have non-empty comments to the new rep
-		mergedClass.getInstanceMethods().stream()
-			.peek(fr->fr.setComment(commentTrim(fr.getComment())))
-			.filter(fr->fr.getComment()!=null)
-			.collect(Collectors.toCollection(()->classRep.getInstanceMethods()));
+		compactify(mergedClass.getInstanceMethods(), classRep.getInstanceMethods());
 		
 		//copy all static Methods that have non-empty comments to the new rep
-		mergedClass.getStaticMethods().stream()
-			.peek(fr->fr.setComment(commentTrim(fr.getComment())))
-			.filter(fr->fr.getComment()!=null)
-			.collect(Collectors.toCollection(()->classRep.getStaticMethods()));
+		compactify(mergedClass.getStaticMethods(), classRep.getStaticMethods());
+		
+		//contructors
+		compactify(mergedClass.getConstructors(), classRep.getConstructors());
+		
+		compactifyNested(mergedClass.getNested(), classRep.getNested());
 		
 		return classRep;
 	}
-
-	private <T extends TopLevelDocumentable> T loadOld(String name, Class<T> clazz) {
-		//TODO is this a duplicate of other load methods?
-		T oldAnnotated=null;
-		Document annotatedDoc = annotatedClasses.find(eq("name",name)).sort(descending("version")).first();
-		if (annotatedDoc!=null) {
-			String annotatedJson = annotatedDoc.toJson();
-			
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				oldAnnotated = mapper.readValue(annotatedJson, clazz);
-			}catch (IOException e) {
-				e.printStackTrace();
+	
+	@SuppressWarnings("unchecked")
+	private void compactifyNested(List<MergedClass<?>> nested, List<TopLevelDocumentable> out) {
+		for (MergedClass<?> mergedClass: nested) {
+			if (mergedClass.getObjectType().getTypeName().equals("class")) {
+				out.add(saveClass((MergedClass<ClassRepresentation>) mergedClass));
+				
+			}
+			else if (mergedClass.getObjectType().getTypeName().equals("enum")) {
+				out.add(saveEnum((MergedClass<EnumRepresentation>)mergedClass));
 			}
 		}
-		return oldAnnotated;
+	}
+
+	private <M extends Member> void compactify(Collection<M> members, Collection<M> output) {
+		members.stream().peek(mem->mem.setComment(commentTrim(mem.getComment())))
+		.filter(mem->mem.getComment()!=null)
+		.collect(Collectors.toCollection(()->output));
 	}
 	
 	private String commentTrim(String rawComment) {
@@ -231,11 +233,6 @@ public class ClassResource {
 		String stripped = rawComment.replaceFirst("\\s+$", "");
 		if (stripped.length()==0) return null;
 		return stripped;		
-	}
-	
-	private String sanitizeUserText(String userText) {
-		//TODO this probably needs more
-		return userText.replace('<', '[').replace('>', ']');
 	}
 	
 

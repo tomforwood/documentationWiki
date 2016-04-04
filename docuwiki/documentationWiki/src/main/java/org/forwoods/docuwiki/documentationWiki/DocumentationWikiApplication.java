@@ -49,10 +49,13 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     public void run(final DocumentationWikiConfiguration configuration,
                     final Environment environment) {
     	if (configuration.isMongoSecured()) {
+    		
+    		String password = System.getProperty("MONGO_PASS");
+    		
 	    	MongoCredential mongoCred = MongoCredential.createCredential(
 	    			configuration.getMongoUsername(),
 	    			configuration.getMongoDatabase(), 
-	    			configuration.getMongoPassword().toCharArray());
+	    			password.toCharArray());
 			List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
 			ServerAddress addr = new ServerAddress(configuration.getMongoHost(), 
 					configuration.getMongoPort());
