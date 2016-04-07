@@ -1,8 +1,8 @@
-var docuWikiApp = angular.module('docuWikiApp',['ngSanitize','docuWikiServices','ui.router']);
+var docuWikiApp = angular.module('docuWikiApp',['ngSanitize','docuWikiServices','ui.router','ui.router.state']);
 
-docuWikiApp.config(function($stateProvider, $urlRouterProvider){
+docuWikiApp.config(function($stateProvider, $urlRouterProvider, $uiViewScrollProvider){
 	$urlRouterProvider.otherwise('/about');	
-	
+	$uiViewScrollProvider.useAnchorScroll();
 	$stateProvider
 		.state('about',{
 			url: '/about',
@@ -13,7 +13,7 @@ docuWikiApp.config(function($stateProvider, $urlRouterProvider){
 			templateUrl: 'partials/classes.html'
 		})
 		.state('classes.details',{
-			url: '/:classname',
+			url: '/:classname?scrollTo',
 			templateUrl: 'partials/classTop.html',
 			abstract: true				
 		})
@@ -29,8 +29,29 @@ docuWikiApp.config(function($stateProvider, $urlRouterProvider){
 		})
 });
 
+docuWikiApp.directive("autoHeight", function ($timeout) {
+    return {
+        restrict: "EAC",
+        link: function($scope, element) {
+            if(element[0].scrollHeight < 30){
+                element[0].style.height = 30;
+            }else{
+                element[0].style.height = (element[0].scrollHeight) + "px";
+            }
 
-docuWikiApp.directive("clickToEdit", function() {
+            var resize = function() {
+              return element[0].style.height = "" + element[0].scrollHeight + "px";
+            };
+            $scope.resize=resize;
+
+            element.on("blur keyup change", resize);
+            $timeout(resize, 0)
+        }
+    };
+});
+
+
+docuWikiApp.directive("clickToEdit", function($timeout) {
 
 	return {
 	    restrict: "A",
@@ -48,6 +69,7 @@ docuWikiApp.directive("clickToEdit", function() {
 	        $scope.enableEditor = function() {
 	            $scope.view.editorEnabled = true;
 	            $scope.view.editableValue = $scope.value;
+	            $timeout($scope.resize, 0);
 	        };
 
 	        $scope.disableEditor = function() {
@@ -62,21 +84,52 @@ docuWikiApp.directive("clickToEdit", function() {
 	};
 });
 
-docuWikiApp.filter('classLinkFilter', ['ClassList','$sce',function(ClassList, $sanitize) {
-	var classList = ClassList.query();
-	return function(input) {
+docuWikiApp.filter('classLinkFilter', ['$sce',function($sanitize) {
+	return function(input, classList) {
 		var contains=false;
 		//Remove subclasses e.g Administation+StrategyWrapper from the lookup
 		var topClass = input;
 		var plusPos= input.indexOf("+");
+		var nestedScroll="";
 		if (plusPos>=0) {
 			topClass = input.substr(0,plusPos);
+			nestedScroll = "?scrollTo="+input.substr(plusPos+1)+"N";
 		}
-		
+		//console.log(topClass);
 		for (i=0;i<classList.length;i++){
 			contains |=classList[i].className==topClass;
 		}
-		if (contains) return $sanitize.trustAsHtml('<a href="#/classes/'+topClass+'">'+input.replace("+",".")+'</a>');
+		//console.log(contains);
+		if (contains) {
+			return '<a href="#/classes/'
+					+topClass+nestedScroll+'">'+input.replace("+",".")+'</a>';
+		}
 		return input.split(".").pop();
 	};
 }]);
+
+docuWikiApp.filter('markupify', ['$sce',function($sanitize) {
+	var substitutions = new Map();
+	substitutions.set(/<see cref="([a-zA-z.]*)"\/>/,
+			'<a href="#/classes/$1">$1</a>');
+	//substitutions.set('<','fish');
+	return function(input) {
+		if (!input) return input;
+		for (var [key, value] of substitutions.entries()){
+			input=input.replace(key,
+				value);
+		}
+		return input;
+	};
+}]);
+
+docuWikiApp.run(function($rootScope, $location, $anchorScroll, $stateParams, $timeout) {
+	$rootScope.$on('$stateChangeSuccess', function(newRoute, oldRoute) {
+		//TODO Is there an event I can use for this instead of a timer?
+		if ($stateParams.scrollTo) {
+			$timeout(function(){
+				$anchorScroll($stateParams.scrollTo);  
+			},700);
+		}
+	});
+});

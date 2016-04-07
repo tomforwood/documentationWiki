@@ -1,12 +1,14 @@
 package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
+import java.util.List;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentable.Modifier;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
+import org.forwoods.docuwiki.initial.InitialPopulate;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpBaseListener;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.CmodsContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.DocCommentBlockContext;
@@ -16,9 +18,11 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ModifiersContext;
 public class MemberListener extends BasicCSharpBaseListener {
 	
 	Deque<Member> stack;
+	List<String> usings;
 
-	public MemberListener(Deque<Member> stack) {
+	public MemberListener(Deque<Member> stack, List<String> usings) {
 		this.stack = stack;
+		this.usings = usings;
 	}
 
 	protected String readComment(DocCommentBlockContext comment) {
@@ -58,8 +62,18 @@ public class MemberListener extends BasicCSharpBaseListener {
 	}
 
 	protected String link(String typeName) {
+		if (InitialPopulate.readClasses.contains(typeName)) {
+			return typeName;
+		}
+
+		for (String using:usings) {
+			//try each using as a prefix
+			String resolved = using+"."+typeName;
+			if (InitialPopulate.readClasses.contains(resolved)) {
+				return resolved;
+			}
+		}
 		return typeName;
-		//TODO linking
 	}
 
 }

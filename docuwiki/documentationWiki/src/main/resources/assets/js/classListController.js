@@ -27,8 +27,11 @@ docuWikiApp.filter('indenter', ['$sce',function($sce) {
 	return function(input) {
 		var strings= input.split(".");
 		var out="";
-		for (var i=0;i<strings.length-1;i++) {
-			out=out+"&mdash;";
+		/*for (var i=0;i<strings.length-1;i++) {
+			out=out+"&ndash;";
+		}*/
+		if (strings.length>1) {
+			out=out+"&ndash;";
 		}
 		out = out+strings.pop();
 		return $sce.trustAsHtml(out);

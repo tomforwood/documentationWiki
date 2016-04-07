@@ -1,6 +1,7 @@
 package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
+import java.util.List;
 
 import org.forwoods.docuwiki.documentable.EnumRepresentation;
 import org.forwoods.docuwiki.documentable.EnumRepresentation.EnumConstant;
@@ -10,8 +11,8 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.EnumDeclarationCo
 
 public class EnumListener extends MemberListener {
 	
-	public EnumListener(Deque<Member> stack) {
-		super(stack);
+	public EnumListener(Deque<Member> stack, List<String> usings) {
+		super(stack, usings);
 	}
 
 	@Override

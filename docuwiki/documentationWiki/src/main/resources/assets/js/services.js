@@ -11,7 +11,8 @@ docuWikiServices.factory('ClassList', [ '$resource', function($resource) {
 	return $resource('api/classList/', {}, {
 		query : {
 			method : 'GET',
-			isArray : true
+			isArray : true, 
+			cache:true
 		}
 	});
 } ]);

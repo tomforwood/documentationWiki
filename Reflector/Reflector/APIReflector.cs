@@ -23,6 +23,7 @@ namespace Reflector
             {
                 Credentials = new[] { credential }
             };
+            settings.Server = new MongoServerAddress("localhost",27018);
             IMongoClient client = new MongoClient(settings);
             //IMongoClient client = new MongoClient();
             database = client.GetDatabase("docuWiki");            
@@ -178,8 +179,12 @@ namespace Reflector
 
         static void Main(string[] args)
         {
-
-            APIReflector reflector = new APIReflector(args[0]);
+            string password = "";
+            if (args.Length>=1)
+            {
+                password = args[0];
+            }
+            APIReflector reflector = new APIReflector(password);
             reflector.reflectClasses();
             
         }

@@ -161,6 +161,7 @@ public class ClassResource {
 		enumRep.setName(mergedClass.getName());
 		enumRep.setUserGenerated(true);
 		enumRep.setVersion(mergedClass.getAnnotatedVersion()+1);
+		enumRep.setObjectType(mergedClass.getObjectType());
 		mergedClass.getEnumConsts().stream()
 			.peek(ec->ec.setComment(commentTrim(ec.getComment())))
 			.filter(ec->ec.getComment()!=null)

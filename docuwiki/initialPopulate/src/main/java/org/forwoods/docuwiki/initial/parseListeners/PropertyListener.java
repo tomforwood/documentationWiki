@@ -1,6 +1,7 @@
 package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
+import java.util.List;
 
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.ClassRepresentation.PropertyRepresentation;
@@ -12,8 +13,8 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.PropertyDeclarati
 
 public class PropertyListener extends MemberListener {
 
-	public PropertyListener(Deque<Member> stack) {
-		super(stack);
+	public PropertyListener(Deque<Member> stack, List<String> usings) {
+		super(stack, usings);
 	}
 
 	@Override

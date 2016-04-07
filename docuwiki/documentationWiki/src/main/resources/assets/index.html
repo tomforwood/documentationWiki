@@ -1,5 +1,5 @@
 <!doctype html>
-<html >
+<html style="height: 100%;">
 <head>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.js"></script>
@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <link rel="stylesheet" href="css/codeformatting.css">
 </head>
-<body ng-app="docuWikiApp">
+<body class="content" ng-app="docuWikiApp">
 	<!-- NAVIGATION -->
 <nav class="navbar navbar-inverse" role="navigation">
     <div class="navbar-header">
@@ -36,10 +36,10 @@
 </nav>
 
 <!-- MAIN CONTENT -->
-<div>
+<div style="height: 90%;">
 
     <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
-    <div ui-view></div>
+    <div class="content" ui-view></div>
 
 </div>
 

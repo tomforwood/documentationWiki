@@ -18,6 +18,7 @@ public abstract class TopLevelDocumentable extends Member {
 	protected int version;
 	@JsonProperty
 	protected boolean userGenerated;
+	@JsonProperty
 	protected String namespaceName;
 	@JsonProperty
 	protected List<String> extensions = new ArrayList<>();

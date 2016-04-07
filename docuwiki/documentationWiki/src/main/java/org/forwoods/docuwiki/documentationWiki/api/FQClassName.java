@@ -64,11 +64,6 @@ public class FQClassName implements Comparable<FQClassName> {
 				return false;
 		} else if (!className.equals(other.className))
 			return false;
-		if (namespace == null) {
-			if (other.namespace != null)
-				return false;
-		} else if (!namespace.equals(other.namespace))
-			return false;
 		return true;
 	}
 

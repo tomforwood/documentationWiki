@@ -1,7 +1,7 @@
-<div layout="row">
-	<md-sidenav class="md-sidenav-left col-md-3" md-is-locked-open='true'>
-		<div ng-controller="classListCtrl">
-			<div class="row">
+<div layout="row" class="content">
+	<md-sidenav class="md-sidenav-left col-md-3 col-sm-3" md-is-locked-open='true'>
+		<div ng-controller="classListCtrl" class="content">
+			<div class="row" class="content">
 				<div class="col-sm-6">
 					<!--Sidebar content -->
 		
@@ -16,18 +16,20 @@
 					</select>
 				</div>
 			</div>
-			<ul>
+			<div class="classList">
+			<ul class="classList">
 				{{prev.ns=""}}
-				<li ng-repeat="class in classes | filter:query | subset:subsetOp">
-					<span ng-if="!(class.namespace==null || prev.ns.startsWith(class.namespace))">{{class.namespace}}<br></span>
+				<li class="classList" ng-repeat="class in classes | filter:query | subset:subsetOp">
+					<span ng-if="!(class.namespace==null || prev.ns.startsWith(class.namespace))"><i>{{class.namespace}}</i><br></span>
 					{{prev.ns=class.namespace;""}}
 					<a ui-sref='.details.class({"classname":class.className})'>
 					<span ng-bind-html="class.className|indenter"></span></a></li>
 			</ul>
+			</div>
 		</div>
 	</md-sidenav>
 
-	<md-content class="col-md-9">
+	<md-content class="mainview col-md-9 col-sm-9"">
 	<div ui-view>Pick a class to view its content</div>
 	</md-content>
 </div>

@@ -18,16 +18,15 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.UsingContext;
 public class TopLevelListener extends MemberListener {
 	
 	TopLevelDocumentable topItem;
-	List<String> usings = new ArrayList<>();
 	
 	public TopLevelListener(BasicCSharpParser parser) {
-		super(new LinkedList<>());
-		parser.addParseListener(new ClassListener(stack));
-		parser.addParseListener(new EnumListener(stack));
-		parser.addParseListener(new FieldListener(stack));
-		parser.addParseListener(new PropertyListener(stack));
-		parser.addParseListener(new MethodListener(stack));
-		parser.addParseListener(new ConstructorListener(stack));
+		super(new LinkedList<>(), new ArrayList<>());
+		parser.addParseListener(new ClassListener(stack, usings));
+		parser.addParseListener(new EnumListener(stack, usings));
+		parser.addParseListener(new FieldListener(stack, usings));
+		parser.addParseListener(new PropertyListener(stack, usings));
+		parser.addParseListener(new MethodListener(stack, usings));
+		parser.addParseListener(new ConstructorListener(stack, usings));
 	}
 
 	public TopLevelDocumentable getRep() {

@@ -16,6 +16,10 @@ namespace Reflector
             if (parent!=null && parent != typeof(Object)) {
                 rep.extensions.Add(parent.FullName);
             }
+            if (type.Name== "BTButton")
+            {
+                Debug.WriteLine("button2");
+            }
             foreach (Type t in type.GetInterfaces())
             {
                 rep.extensions.Add(t.FullName);
@@ -53,10 +57,10 @@ namespace Reflector
 
         private void reflectConstructors(ClassRepresentation rep, Type type)
         {
-            foreach (ConstructorInfo cons in type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic))
+            foreach (ConstructorInfo cons in type.GetConstructors(BindingFlags.Instance|BindingFlags.Public | BindingFlags.NonPublic))
             {
-                if (cons.IsPrivate || cons.IsAssembly || cons.IsSpecialName) continue;
-                string name = cons.Name;
+                if (cons.IsPrivate || cons.IsAssembly) continue;
+                string name = "*constructor*";
                 ObjectType returnType = ObjectType.toObjectType(type);
                 MethodRepresentation methodRep = new MethodRepresentation(returnType, name);
                 methodRep.modifiers.Add(convert(cons));

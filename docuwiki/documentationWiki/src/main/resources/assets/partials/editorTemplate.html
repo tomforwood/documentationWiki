@@ -1,10 +1,9 @@
 <div class="click-to-edit"> 
     <span ng-hide="view.editorEnabled">
-    	<div class="comment" ng-click="enableEditor()">{{value}}</div> 
-        <!-- a ng-click="enableEditor()">Editarooney</a--> 
+    	<div class="comment" ng-click="enableEditor()"><span ng-bind-html="value|markupify"></span></div> 
     </span> 
     <div ng-show="view.editorEnabled"> 
-        <textarea class="comment" ng-model="view.editableValue"></textarea><br> 
+        <textarea auto-height class="comment" ng-model="view.editableValue"></textarea><br> 
         <a ng-click="save()">done</a> 
          or  
         <a ng-click="disableEditor()">cancel</a>. 

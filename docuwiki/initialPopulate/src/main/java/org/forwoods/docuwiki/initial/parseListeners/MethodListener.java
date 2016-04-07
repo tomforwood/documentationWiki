@@ -1,6 +1,7 @@
 package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
+import java.util.List;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
@@ -13,8 +14,8 @@ import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.FormalParamContex
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.MethodDeclarationContext;
 
 public class MethodListener extends MemberListener {
-	public MethodListener(Deque<Member> stack) {
-		super(stack);
+	public MethodListener(Deque<Member> stack, List<String> usings) {
+		super(stack, usings);
 	}
 
 	@Override

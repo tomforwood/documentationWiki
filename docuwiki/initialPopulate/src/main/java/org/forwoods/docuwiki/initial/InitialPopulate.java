@@ -45,25 +45,25 @@ public class InitialPopulate {
 	
 	public static List<String> readClasses = new ArrayList<>();
 
-
-	@SuppressWarnings("deprecation")
 	public InitialPopulate() throws URISyntaxException, ProcessingException {
 		//TODO password should be env var or command line
 		
 		String password = System.getProperty("MONGO_PASS");
+		if (password!=null) {
+			MongoCredential mongoCred = MongoCredential.createCredential(
+	    			"docuWikiUser",
+	    			"docuWiki", 
+	    			password.toCharArray());
+			List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
+			ServerAddress addr = new ServerAddress("127.0.0.1", 
+					27018);
+			
+			mongo = new MongoClient(addr, creds);
+		}
 		
-		MongoCredential mongoCred = MongoCredential.createCredential(
-    			"docuWikiUser",
-    			"docuWiki", 
-    			password.toCharArray());
-		List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
-		ServerAddress addr = new ServerAddress("127.0.0.1", 
-				27017);
-		
-		mongo = new MongoClient(addr, creds);
-		
-		
-		/*mongo = new MongoClient();*/
+		else {
+			mongo = new MongoClient();
+		}
 		database = mongo.getDatabase("docuWiki");
 		
 		MongoCollection<Document> collection = database.getCollection("reflectedClasses");
@@ -133,6 +133,6 @@ public class InitialPopulate {
 	public static void main(String[] args) throws IOException, URISyntaxException, ProcessingException {
 		InitialPopulate pop = new InitialPopulate();
 		pop.convertAll();
-		//pop.mongo.close();
+		pop.mongo.close();
 	}
 }
