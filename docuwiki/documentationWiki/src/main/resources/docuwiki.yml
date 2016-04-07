@@ -10,6 +10,6 @@ server:
   
 mongoUsername : docuWikiUser
 mongoDatabase : docuWiki
-mongoHost : 127.0.0.1
-mongoPort : 27017
+mongoHost : @OPENSHIFT_MONGODB_DB_HOST@
+mongoPort : @OPENSHIFT_MONGODB_DB_PORT@
 
