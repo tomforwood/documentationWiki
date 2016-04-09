@@ -12,11 +12,7 @@
 				"PUBLIC"
 			],
 
-			"name": "id",
-			"annotations": 
-			[
-				
-			]
+			"name": "id"
 		},
 
 		{
@@ -30,11 +26,7 @@
 				"PUBLIC"
 			],
 
-			"name": "originalPosition",
-			"annotations": 
-			[
-				
-			]
+			"name": "originalPosition"
 		},
 
 		{
@@ -48,11 +40,7 @@
 				"PUBLIC"
 			],
 
-			"name": "originalOrientation",
-			"annotations": 
-			[
-				
-			]
+			"name": "originalOrientation"
 		},
 
 		{
@@ -66,11 +54,7 @@
 				"PUBLIC"
 			],
 
-			"name": "originalSecondaryAxis",
-			"annotations": 
-			[
-				
-			]
+			"name": "originalSecondaryAxis"
 		},
 
 		{
@@ -84,11 +68,7 @@
 				"PUBLIC"
 			],
 
-			"name": "position",
-			"annotations": 
-			[
-				
-			]
+			"name": "position"
 		},
 
 		{
@@ -102,11 +82,7 @@
 				"PUBLIC"
 			],
 
-			"name": "orientation",
-			"annotations": 
-			[
-				
-			]
+			"name": "orientation"
 		},
 
 		{
@@ -120,11 +96,7 @@
 				"PUBLIC"
 			],
 
-			"name": "secondaryAxis",
-			"annotations": 
-			[
-				
-			]
+			"name": "secondaryAxis"
 		},
 
 		{
@@ -138,11 +110,7 @@
 				"PUBLIC"
 			],
 
-			"name": "size",
-			"annotations": 
-			[
-				
-			]
+			"name": "size"
 		},
 
 		{
@@ -156,11 +124,7 @@
 				"PUBLIC"
 			],
 
-			"name": "radius",
-			"annotations": 
-			[
-				
-			]
+			"name": "radius"
 		},
 
 		{
@@ -174,11 +138,7 @@
 				"PUBLIC"
 			],
 
-			"name": "breakingForce",
-			"annotations": 
-			[
-				
-			]
+			"name": "breakingForce"
 		},
 
 		{
@@ -192,11 +152,7 @@
 				"PUBLIC"
 			],
 
-			"name": "breakingTorque",
-			"annotations": 
-			[
-				
-			]
+			"name": "breakingTorque"
 		},
 
 		{
@@ -210,11 +166,7 @@
 				"PUBLIC"
 			],
 
-			"name": "offset",
-			"annotations": 
-			[
-				
-			]
+			"name": "offset"
 		},
 
 		{
@@ -228,11 +180,7 @@
 				"PUBLIC"
 			],
 
-			"name": "owner",
-			"annotations": 
-			[
-				
-			]
+			"name": "owner"
 		},
 
 		{
@@ -246,11 +194,7 @@
 				"PUBLIC"
 			],
 
-			"name": "attachedPart",
-			"annotations": 
-			[
-				
-			]
+			"name": "attachedPart"
 		},
 
 		{
@@ -264,11 +208,7 @@
 				"PUBLIC"
 			],
 
-			"name": "icon",
-			"annotations": 
-			[
-				
-			]
+			"name": "icon"
 		},
 
 		{
@@ -282,11 +222,7 @@
 				"PUBLIC"
 			],
 
-			"name": "attachMethod",
-			"annotations": 
-			[
-				
-			]
+			"name": "attachMethod"
 		},
 
 		{
@@ -300,11 +236,7 @@
 				"PUBLIC"
 			],
 
-			"name": "nodeType",
-			"annotations": 
-			[
-				
-			]
+			"name": "nodeType"
 		},
 
 		{
@@ -318,11 +250,7 @@
 				"PUBLIC"
 			],
 
-			"name": "requestGate",
-			"annotations": 
-			[
-				
-			]
+			"name": "requestGate"
 		},
 
 		{
@@ -336,11 +264,7 @@
 				"PUBLIC"
 			],
 
-			"name": "ResourceXFeed",
-			"annotations": 
-			[
-				
-			]
+			"name": "ResourceXFeed"
 		},
 
 		{
@@ -354,11 +278,7 @@
 				"PUBLIC"
 			],
 
-			"name": "contactArea",
-			"annotations": 
-			[
-				
-			]
+			"name": "contactArea"
 		},
 
 		{
@@ -372,11 +292,7 @@
 				"PUBLIC"
 			],
 
-			"name": "nodeTransform",
-			"annotations": 
-			[
-				
-			]
+			"name": "nodeTransform"
 		},
 
 		{
@@ -390,11 +306,7 @@
 				"PUBLIC"
 			],
 
-			"name": "attachedPartId",
-			"annotations": 
-			[
-				
-			]
+			"name": "attachedPartId"
 		}
 	],
 
@@ -436,7 +348,7 @@
 					],
 
 					"name": "parts",
-					"annotations": 
+					"attributes": 
 					[
 						
 					]
@@ -453,11 +365,7 @@
 				"PUBLIC"
 			],
 
-			"name": "FindAttachedPart",
-			"annotations": 
-			[
-				
-			]
+			"name": "FindAttachedPart"
 		},
 
 		{
@@ -476,11 +384,7 @@
 				"PUBLIC"
 			],
 
-			"name": "FindOpposingNode",
-			"annotations": 
-			[
-				
-			]
+			"name": "FindOpposingNode"
 		},
 
 		{
@@ -501,9 +405,9 @@
 			],
 
 			"name": "ToString",
-			"annotations": 
+			"attributes": 
 			[
-				
+				"[__DynamicallyInvokable]"
 			],
 
 			"inheritedFrom": "System.Object"
@@ -524,7 +428,7 @@
 					],
 
 					"name": "obj",
-					"annotations": 
+					"attributes": 
 					[
 						
 					]
@@ -543,9 +447,9 @@
 			],
 
 			"name": "Equals",
-			"annotations": 
+			"attributes": 
 			[
-				
+				"[__DynamicallyInvokable]"
 			],
 
 			"inheritedFrom": "System.Object"
@@ -569,9 +473,9 @@
 			],
 
 			"name": "GetHashCode",
-			"annotations": 
+			"attributes": 
 			[
-				
+				"[__DynamicallyInvokable]"
 			],
 
 			"inheritedFrom": "System.Object"
@@ -594,9 +498,10 @@
 			],
 
 			"name": "GetType",
-			"annotations": 
+			"attributes": 
 			[
-				
+				"[SecuritySafeCritical]",
+				"[__DynamicallyInvokable]"
 			],
 
 			"inheritedFrom": "System.Object"
@@ -620,9 +525,11 @@
 			],
 
 			"name": "Finalize",
-			"annotations": 
+			"attributes": 
 			[
-				
+				"[__DynamicallyInvokable]",
+				"[NonVersionable]",
+				"[ReliabilityContract(3, 2)]"
 			],
 
 			"inheritedFrom": "System.Object"
@@ -645,9 +552,10 @@
 			],
 
 			"name": "MemberwiseClone",
-			"annotations": 
+			"attributes": 
 			[
-				
+				"[SecuritySafeCritical]",
+				"[__DynamicallyInvokable]"
 			],
 
 			"inheritedFrom": "System.Object"
@@ -677,11 +585,7 @@
 				"PUBLIC"
 			],
 
-			"name": "*constructor*",
-			"annotations": 
-			[
-				
-			]
+			"name": "*constructor*"
 		},
 
 		{
@@ -699,7 +603,7 @@
 					],
 
 					"name": "id",
-					"annotations": 
+					"attributes": 
 					[
 						
 					]
@@ -717,7 +621,7 @@
 					],
 
 					"name": "transform",
-					"annotations": 
+					"attributes": 
 					[
 						
 					]
@@ -735,7 +639,7 @@
 					],
 
 					"name": "size",
-					"annotations": 
+					"attributes": 
 					[
 						
 					]
@@ -753,7 +657,7 @@
 					],
 
 					"name": "attachMethod",
-					"annotations": 
+					"attributes": 
 					[
 						
 					]
@@ -770,11 +674,7 @@
 				"PUBLIC"
 			],
 
-			"name": "*constructor*",
-			"annotations": 
-			[
-				
-			]
+			"name": "*constructor*"
 		}
 	],
 
@@ -817,7 +717,7 @@
 			],
 
 			"name": "AttachNode+NodeType",
-			"annotations": 
+			"attributes": 
 			[
 				
 			]
@@ -837,8 +737,8 @@
 	],
 
 	"name": "AttachNode",
-	"annotations": 
+	"attributes": 
 	[
-		
+		"[Serializable]"
 	]
 }
