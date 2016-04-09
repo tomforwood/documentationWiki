@@ -12,7 +12,7 @@ public class Documentable {
 	protected
 	String comment;
 	@JsonProperty
-	protected List<String> annotations;
+	protected List<String> attributes;
 	
 	@JsonProperty
 	protected boolean isOrphaned=false;
@@ -33,8 +33,12 @@ public class Documentable {
 		this.isOrphaned = isOrphaned;
 	}
 
-	public List<String> getAnnotations() {
-		return annotations;
+	public List<String> getAttributes() {
+		return attributes;
+	}
+	
+	public void setAttributes(List<String> attributes) {
+		this.attributes = attributes;
 	}
 	
 	

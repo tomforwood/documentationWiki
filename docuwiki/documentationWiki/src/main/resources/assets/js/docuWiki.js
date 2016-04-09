@@ -1,5 +1,6 @@
 var docuWikiApp = angular.module('docuWikiApp',['ngSanitize','docuWikiServices','ui.router','ui.router.state']);
 
+
 docuWikiApp.config(function($stateProvider, $urlRouterProvider, $uiViewScrollProvider){
 	$urlRouterProvider.otherwise('/about');	
 	$uiViewScrollProvider.useAnchorScroll();
@@ -95,11 +96,14 @@ docuWikiApp.filter('classLinkFilter', ['$sce',function($sanitize) {
 			topClass = input.substr(0,plusPos);
 			nestedScroll = "?scrollTo="+input.substr(plusPos+1)+"N";
 		}
-		//console.log(topClass);
+
 		for (i=0;i<classList.length;i++){
-			contains |=classList[i].className==topClass;
+			if (classList[i].className==topClass)  {
+				contains =true;
+				break;
+			}
 		}
-		//console.log(contains);
+
 		if (contains) {
 			return '<a href="#/classes/'
 					+topClass+nestedScroll+'">'+input.replace("+",".")+'</a>';
@@ -109,15 +113,15 @@ docuWikiApp.filter('classLinkFilter', ['$sce',function($sanitize) {
 }]);
 
 docuWikiApp.filter('markupify', ['$sce',function($sanitize) {
-	var substitutions = new Map();
-	substitutions.set(/<see cref="([a-zA-z.]*)"\/>/,
-			'<a href="#/classes/$1">$1</a>');
-	//substitutions.set('<','fish');
+	var substitutions = [{
+		key:/<see cref="([a-zA-z.]*)"\/>/, 
+		value:'<a href="#/classes/$1">$1</a>'}];
+
 	return function(input) {
 		if (!input) return input;
-		for (var [key, value] of substitutions.entries()){
-			input=input.replace(key,
-				value);
+		for (var i=0;i<substitutions.length;i++){
+			var entry = substitutions[i];
+			input=input.replace(entry.key,entry.value);
 		}
 		return input;
 	};

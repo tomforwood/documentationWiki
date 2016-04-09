@@ -32,8 +32,8 @@ namespace Reflector
 
         public string name;
 
-        public List<string> annotations = new List<string>();
-        //TODO annotations have rich structure
+        public List<string> attributes = new List<string>();
+        //TODO attributes have rich structure
 
         public string inheritedFrom;
 

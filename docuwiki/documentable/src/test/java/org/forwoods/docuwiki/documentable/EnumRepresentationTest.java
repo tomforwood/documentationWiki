@@ -46,14 +46,9 @@ public class EnumRepresentationTest {
 		
 		EnumRepresentation readValue = mapper.readValue(data.toString(), EnumRepresentation.class);
 		
-		/*BsonDocument doc = BsonDocument.parse(data.toString());
+		BsonDocument doc = BsonDocument.parse(data.toString());
 		
-		String bsonText = doc.toString();
 		
-		BasicBSONDecoder decoder = new BasicBSONDecoder();
-		JSONCallback callback = new JSONCallback();
-		int readObject = decoder.decode(bsonText.getBytes(), callback);
-		Object o = callback.get();*/
 		assertThat(readValue).isEqualTo(enumRep);
 		
 	}

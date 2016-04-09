@@ -73,6 +73,11 @@ table td:nth-child(1) {
 	max-width:16em;
 }
 
+.attribute {
+	color: gray;
+	font-size: small;
+}
+
 .vertscroll {
 	overflow-y: scroll;
 	float:left;

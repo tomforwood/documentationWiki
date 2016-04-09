@@ -1,4 +1,4 @@
-docuWikiApp.controller('classListCtrl', ['$scope', 'ClassList', function($scope, ClassList){
+angular.module('docuWikiApp').controller('classListCtrl', ['$scope', 'ClassList', function($scope, ClassList){
 	$scope.classes =ClassList.query();
 }]);
 
@@ -23,7 +23,7 @@ docuWikiApp.filter('subset', function() {
 	};
 });
 
-docuWikiApp.filter('indenter', ['$sce',function($sce) {
+docuWikiApp.filter('indenter', [function() {
 	return function(input) {
 		var strings= input.split(".");
 		var out="";
@@ -34,6 +34,6 @@ docuWikiApp.filter('indenter', ['$sce',function($sce) {
 			out=out+"&ndash;";
 		}
 		out = out+strings.pop();
-		return $sce.trustAsHtml(out);
+		return out;
 	};
 }]);

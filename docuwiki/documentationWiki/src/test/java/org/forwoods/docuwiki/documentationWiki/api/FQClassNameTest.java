@@ -38,7 +38,21 @@ public class FQClassNameTest {
 
 		assertThat(allValues).extracting(fqcn->fqcn.subset).contains(1,2,3);
 		assertThat(allKeys).extracting(fqcn->fqcn.subset).contains(1,2,3);
+
+	}
+	@Test
+	public void testCompareTo() {
+		FQClassName f1 = new FQClassName("test", "test1", FQClassName.REFLECTED);
+		FQClassName f2 = new FQClassName("test", "test1", FQClassName.ANNOTATED);
 		
+		assertThat(f1).isEqualByComparingTo(f2);
+		
+		FQClassName f3 = new FQClassName(null, "test1", FQClassName.ANNOTATED);
+		FQClassName f4 = new FQClassName(null, "test2", FQClassName.ANNOTATED);
+		
+		assertThat(f3).isLessThan(f4);
+		
+		assertThat(f3).hasToString("FQClassName [namespace=null, className=test1, subset=2]");
 		
 	}
 

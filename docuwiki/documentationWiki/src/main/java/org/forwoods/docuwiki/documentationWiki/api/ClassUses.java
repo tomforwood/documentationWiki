@@ -14,6 +14,9 @@ public class ClassUses {
 	
 	@JsonProperty
 	List<ClassUse> usesParameters = new ArrayList<>();
+	
+	@JsonProperty
+	List<ClassUse> usesAttributes = new ArrayList<>();
 		
 	public ClassUses(String name) {
 		className = name;
@@ -44,4 +47,14 @@ public class ClassUses {
 	public void setUsesParameters(List<ClassUse> usesParameters) {
 		this.usesParameters = usesParameters;
 	}
+
+	public List<ClassUse> getUsesAttributes() {
+		return usesAttributes;
+	}
+
+	public void setUsesAttributes(List<ClassUse> usesAttributes) {
+		this.usesAttributes = usesAttributes;
+	}
+	
+	
 }

@@ -60,8 +60,13 @@ public class ObjectType {
 	public boolean typeNameEquals(ObjectType other) {
 		String localName = typeName.replace('+', '.');
 		String otherName = other.typeName.replace('+', '.');
+		
+		localName=localName.replace("System.", "");
+		otherName=otherName.replace("System.", "");
+		
 		if (localName.equals(otherName)) return true;
 		if (otherName.equals(classNameMap.get(localName))) return true;
+		
 		return false;
 	}
 	

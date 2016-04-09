@@ -25,11 +25,8 @@ namespace Reflector
                 rep.extensions.Add(t.FullName);
             }
 
-            //TODO I don't understand c# attributes properly
-            /*foreach (Attribute a in type.GetCustomAttributes(false))
-            {
-                rep.annotations.Add(a.ToString());
-            }*/
+
+            rep.attributes = getAttributes(type);
 
             reflectFields(rep, type);
             reflectProperties(rep, type);
@@ -64,6 +61,7 @@ namespace Reflector
                 ObjectType returnType = ObjectType.toObjectType(type);
                 MethodRepresentation methodRep = new MethodRepresentation(returnType, name);
                 methodRep.modifiers.Add(convert(cons));
+                methodRep.attributes = getAttributes(cons);
                 foreach (ParameterInfo param in cons.GetParameters())
                 {
                     ObjectType paramType = ObjectType.toObjectType(param.ParameterType);
@@ -97,22 +95,23 @@ namespace Reflector
         {
             string name = property.Name;
             ObjectType propType = ObjectType.toObjectType(property.PropertyType);
-            PropertyRepresentation proprep = new PropertyRepresentation(propType, name);
+            PropertyRepresentation propRep = new PropertyRepresentation(propType, name);
+            propRep.attributes = getAttributes(property);
             if (property.DeclaringType != property.ReflectedType)
             {
-                proprep.inheritedFrom = property.DeclaringType.FullName;
+                propRep.inheritedFrom = property.DeclaringType.FullName;
             }
-            proprep.modifiers.Add(convert(property.GetGetMethod(true)));
-            if (proprep.modifiers.Contains(Member.Modifier.PRIVATE)) return null;
+            propRep.modifiers.Add(convert(property.GetGetMethod(true)));
+            if (propRep.modifiers.Contains(Member.Modifier.PRIVATE)) return null;
             if (convert(property.GetGetMethod(true)) >= Member.Modifier.PROTECTED)
             {
-                proprep.getter = true;
+                propRep.getter = true;
             }
             if (convert(property.GetSetMethod(true)) >= Member.Modifier.PROTECTED)
             {
-                proprep.setter = true;
+                propRep.setter = true;
             }
-            return proprep;
+            return propRep;
         }
 
         private void reflectFields(ClassRepresentation rep, Type type)
@@ -123,6 +122,7 @@ namespace Reflector
                 string name = field.Name;
                 ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
                 FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
+                fieldRep.attributes = getAttributes(field);
                 if (field.DeclaringType != field.ReflectedType)
                 {
                     fieldRep.inheritedFrom = field.DeclaringType.FullName;
@@ -134,9 +134,14 @@ namespace Reflector
             foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 if (field.IsPrivate || field.IsAssembly) continue;
+                if (field.Name == "OnFlyByWire")
+                {
+                    getAttributes(field);
+                }
                 string name = field.Name;
                 ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
                 FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
+                fieldRep.attributes = getAttributes(field);
                 if (field.DeclaringType != field.ReflectedType)
                 {
                     fieldRep.inheritedFrom = field.DeclaringType.FullName;
@@ -157,6 +162,40 @@ namespace Reflector
 
                 rep.staticFields.Add(fieldRep);
             }
+        }
+
+        private static List<String> getAttributes(MemberInfo field)
+        {
+            List<string> result = new List<string>();
+            foreach (CustomAttributeData att in field.GetCustomAttributesData())
+            {
+                StringBuilder builder = new StringBuilder();
+                builder.Append("[")
+                    .Append(att.AttributeType.Name.Replace("Attribute", ""));
+                String consArgs = String.Join(", ", att.ConstructorArguments.Select(arg => arg.Value.ToString()));
+                String namedArgs = String.Join(", ", att.NamedArguments.Select(arg => arg.ToString()));
+
+                if (consArgs.Length>0 || namedArgs.Length>0)
+                {
+                    builder.Append("(");
+                    if (consArgs.Length>0)
+                    {
+                        builder.Append(consArgs);
+                        if (namedArgs.Length>0)
+                        {
+                            builder.Append(", ");
+                        }
+                    }
+                    if (namedArgs.Length > 0)
+                    {
+                        builder.Append(namedArgs);
+                    }
+                    builder.Append(")");
+                }
+                builder.Append("]");
+                result.Add(builder.ToString());
+            }
+            return result.Count() == 0 ? null : result;
         }
 
         private void reflectMethods(ClassRepresentation rep, Type type)
@@ -188,6 +227,7 @@ namespace Reflector
                 methodRep.inheritedFrom = method.DeclaringType.FullName;
             }
             methodRep.modifiers.Add(convert(method));
+            methodRep.attributes = getAttributes(method);
             if (method.IsVirtual) methodRep.modifiers.Add(Member.Modifier.VIRTUAL);
             foreach (ParameterInfo param in method.GetParameters()) {
                 ObjectType paramType = ObjectType.toObjectType(param.ParameterType);

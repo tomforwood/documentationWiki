@@ -1,9 +1,14 @@
 <h4>Members of type {{classUses.className}}</h4>
 <div ng-repeat="use in classUses.usesReturns | orderBy: 'usingClassName'">
-	<a ui-sref='classes.details.class({"classname":use.usingClassName})'>{{use.usingClassName}}.{{use.usingMember}}</a>
+	<a href='#/classes/{{use.usingClassName}}?scrollTo={{use.usingMember}}{{use.useType}}'>{{use.usingClassName}}.{{use.usingMember}}</a>
 </div>
 
 <h4>Methods with parameters of type {{classUses.className}}</h4>
 <div ng-repeat="use in classUses.usesParameters | orderBy: 'usingClassName'">
-	<a ui-sref='classes.details.class({"classname":use.usingClassName})'>{{use.usingClassName}}.{{use.usingMember}}</a>
+	<a href='#/classes/{{use.usingClassName}}?scrollTo={{use.usingMember}}{{use.useType}}'>{{use.usingClassName}}.{{use.usingMember}}</a>
+</div>
+
+<h4>Members annotated with type {{classUses.className}}</h4>
+<div ng-repeat="use in classUses.usesAttributes | orderBy: 'usingClassName'">
+	<a href='#/classes/{{use.usingClassName}}?scrollTo={{use.usingMember}}{{use.useType}}'>{{use.usingClassName}}.{{use.usingMember}}</a>
 </div>

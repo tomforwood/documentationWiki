@@ -1,0 +1,844 @@
+{
+	"instanceFields": 
+	[
+		{
+			"objectType": 
+			{
+				"typeName": "System.String"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "id",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "originalPosition",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "originalOrientation",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "originalSecondaryAxis",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "position",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "orientation",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "secondaryAxis",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.Int32"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "size",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.Single"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "radius",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.Single"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "breakingForce",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.Single"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "breakingTorque",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "offset",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "Part"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "owner",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "Part"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "attachedPart",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.GameObject"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "icon",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "AttachNodeMethod"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "attachMethod",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "AttachNode+NodeType"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "nodeType",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.Boolean"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "requestGate",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.Boolean"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "ResourceXFeed",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.Single"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "contactArea",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Transform"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "nodeTransform",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"objectType": 
+			{
+				"typeName": "System.UInt32"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "attachedPartId",
+			"annotations": 
+			[
+				
+			]
+		}
+	],
+
+	"staticFields": 
+	[
+		
+	],
+
+	"instanceProperties": 
+	[
+		
+	],
+
+	"staticProperties": 
+	[
+		
+	],
+
+	"instanceMethods": 
+	[
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Collections.Generic.List",
+						"varargs": 
+						[
+							{
+								"typeName": "Part"
+							}
+						]
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "parts",
+					"annotations": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "FindAttachedPart",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "AttachNode"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "FindOpposingNode",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.String"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "ToString",
+			"annotations": 
+			[
+				
+			],
+
+			"inheritedFrom": "System.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "obj",
+					"annotations": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Boolean"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "Equals",
+			"annotations": 
+			[
+				
+			],
+
+			"inheritedFrom": "System.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Int32"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "GetHashCode",
+			"annotations": 
+			[
+				
+			],
+
+			"inheritedFrom": "System.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Type"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetType",
+			"annotations": 
+			[
+				
+			],
+
+			"inheritedFrom": "System.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PROTECTED",
+				"VIRTUAL"
+			],
+
+			"name": "Finalize",
+			"annotations": 
+			[
+				
+			],
+
+			"inheritedFrom": "System.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Object"
+			},
+
+			"modifiers": 
+			[
+				"PROTECTED"
+			],
+
+			"name": "MemberwiseClone",
+			"annotations": 
+			[
+				
+			],
+
+			"inheritedFrom": "System.Object"
+		}
+	],
+
+	"staticMethods": 
+	[
+		
+	],
+
+	"constructors": 
+	[
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "AttachNode"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "*constructor*",
+			"annotations": 
+			[
+				
+			]
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.String"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "id",
+					"annotations": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.Transform"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "transform",
+					"annotations": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "System.Int32"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "size",
+					"annotations": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "AttachNodeMethod"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "attachMethod",
+					"annotations": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "AttachNode"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "*constructor*",
+			"annotations": 
+			[
+				
+			]
+		}
+	],
+
+	"extensions": 
+	[
+		
+	],
+
+	"nested": 
+	[
+		{
+			"enumValues": 
+			[
+				{
+					"name": "Stack",
+					"enumValue": "0"
+				},
+
+				{
+					"name": "Surface",
+					"enumValue": "1"
+				},
+
+				{
+					"name": "Dock",
+					"enumValue": "2"
+				}
+			],
+
+			"version": 1,
+			"userGenerated": false,
+			"objectType": 
+			{
+				"typeName": "enum"
+			},
+
+			"modifiers": 
+			[
+				
+			],
+
+			"name": "AttachNode+NodeType",
+			"annotations": 
+			[
+				
+			]
+		}
+	],
+
+	"version": 1,
+	"userGenerated": false,
+	"objectType": 
+	{
+		"typeName": "class"
+	},
+
+	"modifiers": 
+	[
+		"PUBLIC"
+	],
+
+	"name": "AttachNode",
+	"annotations": 
+	[
+		
+	]
+}

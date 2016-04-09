@@ -17,15 +17,13 @@ docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', 'ClassList', '$state
 			console.log("an error");
 			$scope.PostDataResponse = error;
 		})};
+		
     }]
 );
 
 docuWikiApp.filter('objectType', ['$filter',function($filter) {
 	return function(input, classList) {
 		if (!input) return "";
-		if (!classList) {
-			console.log("console undefined input is"+input);
-		}
 		var out = $filter('classLinkFilter')(input.typeName,classList);
 		if (input.varargs) {
 			out+="<";
@@ -40,7 +38,7 @@ docuWikiApp.filter('objectType', ['$filter',function($filter) {
 	};
 }]);
 
-docuWikiApp.filter('inhertitedFilter', ['$sce',function($sanitize) {
+docuWikiApp.filter('inhertitedFilter', [function() {
 	return function(input,typeEnding, classList) {
 		var contains=false;
 		var topClass = input.inheritedFrom;
@@ -50,15 +48,19 @@ docuWikiApp.filter('inhertitedFilter', ['$sce',function($sanitize) {
 		}
 		
 		for (i=0;i<classList.length;i++){
-			contains |=classList[i].className==topClass;
+			if (classList[i].className==topClass)  {
+				contains =true;
+				break;
+			}
 		}
-		if (contains) return $sanitize.trustAsHtml('<a href="#/classes/'
-				+topClass+'?scrollTo='+input.name+typeEnding+'">'+input.name+'</a>');
+		
+		if (contains) return '<a href="#/classes/'
+				+topClass+'?scrollTo='+input.name+typeEnding+'">'+input.name+'</a>';
 		return input.name;
 	};
 }]);
 
-docuWikiApp.filter('methodFilter', ['$filter','$sce',function($filter,$sanitize) {
+docuWikiApp.filter('methodFilter', ['$filter',function($filter) {
 	return function(method, classList) {
 		var methodSig = method.name+"(&#8203;"//invisible space as line break hint
 		var i=0;
@@ -70,6 +72,6 @@ docuWikiApp.filter('methodFilter', ['$filter','$sce',function($filter,$sanitize)
 			first=false;
 		}
 		methodSig+=")";
-		return $sanitize.trustAsHtml(methodSig);
+		return methodSig;
 	};
 }]);

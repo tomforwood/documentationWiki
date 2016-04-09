@@ -110,7 +110,7 @@ public abstract class TopLevelDocumentable extends Member {
 		if (objectType == null) {
 			if (other.objectType != null)
 				return false;
-		} else if (!objectType.equals(other.objectType))
+		} else if (!objectType.typeNameEquals(other.objectType))
 			return false;
 		if (userGenerated != other.userGenerated)
 			return false;

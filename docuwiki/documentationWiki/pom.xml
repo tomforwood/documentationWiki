@@ -47,7 +47,6 @@
 		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-assets</artifactId>
-			<version>${dropwizard.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.fge</groupId>
@@ -58,6 +57,38 @@
 			<groupId>org.forwoods.docuwiki</groupId>
 			<artifactId>documentable</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jasmine</artifactId>
+		    <version>2.4.1</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>angular-mocks</artifactId>
+		    <version>1.5.3</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>angular-sanitize</artifactId>
+		    <version>1.5.3</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>angular-resource</artifactId>
+		    <version>1.5.3</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>angular-ui-router</artifactId>
+		    <version>0.2.18</version>
+		    <scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -137,6 +168,37 @@
 						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.searls</groupId>
+				<artifactId>jasmine-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<preloadSources>
+						<source>/webjars/angular/1.5.3/angular.js</source>
+				    	<source>/webjars/angular-mocks/1.5.3/angular-mocks.js</source>
+				    	<source>/webjars/angular-sanitize/1.5.3/angular-sanitize.js</source>
+				    	<source>/webjars/angular-resource/1.5.3/angular-resource.js</source>
+				    	<source>/webjars/angular-ui-router/0.2.18/angular-ui-router.js</source>
+					</preloadSources>
+					<phantomjs>
+						<version>2.1.1</version>
+					</phantomjs>
+					<jsSrcDir>${project.basedir}/src/main/resources/assets/js</jsSrcDir>
+					<jsTestSrcDir>${project.basedir}/src/test/resources/static/js</jsTestSrcDir>
+					<sourceIncludes>
+						<include>services.js</include>
+						<include>docuWiki.js</include>
+						<include>*.js</include>
+					</sourceIncludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
 						</goals>
 					</execution>
 				</executions>

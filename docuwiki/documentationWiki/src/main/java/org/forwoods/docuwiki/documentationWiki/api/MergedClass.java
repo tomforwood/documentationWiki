@@ -55,6 +55,9 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	@JsonProperty
 	private List<MethodRepresentation> constructors;
 	
+	@JsonProperty 
+	private List<String> attributes;
+	
 	@JsonProperty
 	private List<MergedClass<?>> nested;
 	
@@ -87,7 +90,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		return mergedClass;
 	}
 
-	private static <T extends TopLevelDocumentable> void mergeClass(T reflected, T annotated, MergedClass<T> mergedClass) {
+	protected static <T extends TopLevelDocumentable> void mergeClass(T reflected, T annotated, MergedClass<T> mergedClass) {
 		ClassRepresentation refClass = (ClassRepresentation) reflected;
 		ClassRepresentation annClass = (ClassRepresentation) annotated;
 		
@@ -142,6 +145,8 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		List<TopLevelDocumentable> annNested = annClass==null?new ArrayList<>():annClass.getNested();
 		mergeNested(mergedClass.nested, refNested, annNested);
 		
+		mergedClass.attributes = refClass==null?null:refClass.getAttributes();
+		
 		if (refClass!=null) {
 			mergedClass.varargs = refClass.getVarargs();
 		}
@@ -149,7 +154,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		
 	}
 
-	private static void mergeNested(List<MergedClass<?>> nested, List<TopLevelDocumentable> refNested,
+	protected static void mergeNested(List<MergedClass<?>> nested, List<TopLevelDocumentable> refNested,
 			List<TopLevelDocumentable> annNested) {
 		for (TopLevelDocumentable tld: refNested) {
 			String name = tld.getName();
@@ -172,7 +177,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		
 	}
 
-	private static void mergeMethods(List<MethodRepresentation> mergedMethods,
+	protected static void mergeMethods(List<MethodRepresentation> mergedMethods,
 			List<MethodRepresentation> refMethods, List<MethodRepresentation> annMethods) {
 		for (MethodRepresentation method: refMethods) {
 			MethodRepresentation result = new MethodRepresentation();
@@ -181,6 +186,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			result.parameters = method.parameters;
 			result.getModifiers().addAll(method.getModifiers());
 			result.setInheritedFrom(method.getInheritedFrom());
+			result.setAttributes(method.getAttributes());
 			int match = annMethods.indexOf(method);
 			if (match>=0) {
 				MethodRepresentation annMethod = annMethods.remove(match);
@@ -201,7 +207,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		
 	}
 
-	private static void mergeFields(List<FieldRepresentation> fields,
+	protected static void mergeFields(List<FieldRepresentation> fields,
 			List<FieldRepresentation> refFields, List<FieldRepresentation> annFields) {
 		for (FieldRepresentation field : refFields) {
 			FieldRepresentation result = new FieldRepresentation();
@@ -209,6 +215,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			result.setObjectType(field.getObjectType());
 			result.getModifiers().addAll(field.getModifiers());
 			result.setInheritedFrom(field.getInheritedFrom());
+			result.setAttributes(field.getAttributes());
 			result.assignment = field.assignment;
 			int match = annFields.indexOf(field);
 			if (match>=0) {
@@ -230,7 +237,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		}
 	}
 	
-	private static void mergeProperties(List<PropertyRepresentation> fields,
+	protected static void mergeProperties(List<PropertyRepresentation> fields,
 			List<PropertyRepresentation> refInst, List<PropertyRepresentation> annInst) {
 		for (PropertyRepresentation prop : refInst) {
 			PropertyRepresentation result = new PropertyRepresentation();
@@ -240,6 +247,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			result.getter=prop.getter;
 			result.setter=prop.setter;
 			result.setInheritedFrom(prop.getInheritedFrom());
+			result.setAttributes(prop.getAttributes());
 			int match = annInst.indexOf(prop);
 			if (match>=0) {
 				PropertyRepresentation annProp = annInst.remove(match);
@@ -258,30 +266,32 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		}
 	}
 
-	private static <T extends TopLevelDocumentable> void mergeEnum(T reflected, T annotated,
+	protected static <T extends TopLevelDocumentable> void mergeEnum(T reflected, T annotated,
 			MergedClass<T> mergedClass) {
 		mergedClass.enumConsts = new ArrayList<>();
 		EnumRepresentation refEnum = (EnumRepresentation) reflected;
 		EnumRepresentation annEnum = (EnumRepresentation) annotated;
-		List<EnumConstant> enumValues = annEnum==null?new ArrayList<>():annEnum.getEnumValues();
-		for (EnumConstant refConst:refEnum.getEnumValues()) {
+		List<EnumConstant> annEnumValues = annEnum==null?new ArrayList<>():annEnum.getEnumValues();
+		List<EnumConstant> refEnumValues = refEnum==null?new ArrayList<>():refEnum.getEnumValues();
+		for (EnumConstant refConst:refEnumValues) {
 			EnumConstant result = new EnumConstant(refConst.getName());
 			result.setEnumValue(refConst.getEnumValue());
 			
-			int match = enumValues.indexOf(refConst);
+			int match = annEnumValues.indexOf(refConst);
 			if (match>=0) {
-				EnumConstant annConst = enumValues.remove(match);
+				EnumConstant annConst = annEnumValues.remove(match);
 				result.setComment(annConst.getComment());
 			}
 			mergedClass.enumConsts.add(result);
 		}
-		for (EnumConstant annConst:enumValues){
+		for (EnumConstant annConst:annEnumValues){
 			EnumConstant result = new EnumConstant(annConst.getName());
 			result.setEnumValue(annConst.getEnumValue());
 			result.setComment(annConst.getComment());
 			result.setIsOrphaned(true);
 			mergedClass.enumConsts.add(result);
 		}
+		mergedClass.attributes = refEnum==null?null:refEnum.getAttributes();
 	}
 	
 	private void populateAnnotated(A annotated) {
@@ -289,6 +299,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		populateEither(annotated);
 		annotatedVersion= annotated.getVersion();
 		setComment(annotated.getComment());
+		isOrphaned=true;
 	}
 
 	private void populateEither(A either) {
@@ -302,6 +313,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		if (reflected==null)return;
 		reflectedVersion = reflected.getVersion();
 		populateEither(reflected);
+		isOrphaned=false;
 	}
 
 	public int getReflectedVersion() {

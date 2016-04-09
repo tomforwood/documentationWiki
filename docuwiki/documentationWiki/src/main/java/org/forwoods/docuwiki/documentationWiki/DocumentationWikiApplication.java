@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bson.Document;
+import org.forwoods.docuwiki.documentationWiki.db.MongoManaged;
+import org.forwoods.docuwiki.documentationWiki.health.MongoHealthCheck;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassListResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassUsesResource;
@@ -39,7 +41,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     public void initialize(final Bootstrap<DocumentationWikiConfiguration> bootstrap) {
     	
     	
-    	AssetsBundle assets = new AssetsBundle("/assets", "/", "index.html");
+    	AssetsBundle assets = new AssetsBundle("/assets", "/", "index.html", "assets");
     	bootstrap.addBundle(assets);
     	bootstrap.getObjectMapper()
     		.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
@@ -66,8 +68,11 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     		client = new MongoClient();
     	}
     	database = client.getDatabase(configuration.getMongoDatabase());
-    	//TODO add shutdown hook to close client or something
     	
+    	MongoManaged mongoManaged= new MongoManaged(client); 
+    	
+    	environment.lifecycle().manage(mongoManaged);
+    	environment.healthChecks().register("mongoHealthchack", new MongoHealthCheck(client));
     	
     	MongoCollection<Document> reflectedClasses = database.getCollection("reflectedClasses");
     	

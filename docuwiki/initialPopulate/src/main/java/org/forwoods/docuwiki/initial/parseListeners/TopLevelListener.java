@@ -52,6 +52,10 @@ public class TopLevelListener extends MemberListener {
 		if (stack.isEmpty()) {
 			topItem = rep;
 		}
+		else {
+			ClassRepresentation parent = (ClassRepresentation) stack.peek();
+			parent.addNested(rep);
+		}
 		stack.push(rep);
 	}
 

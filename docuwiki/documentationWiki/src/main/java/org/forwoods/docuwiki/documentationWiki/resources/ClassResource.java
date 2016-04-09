@@ -77,11 +77,7 @@ public class ClassResource {
 
 		String annotatedJson = loadClasses(name, annotatedClasses);
 		
-		ObjectMapper mapper = new ObjectMapper();
-		SimpleModule sm = new SimpleModule()
-				.addDeserializer(TopLevelDocumentable.class, 
-						new TopLevelDeserializer());
-		mapper.registerModule(sm);
+		ObjectMapper mapper = getMapper();
 		try {
 			TopLevelDocumentable reflected=null;
 			if (reflectedJson!=null) {
@@ -96,6 +92,15 @@ public class ClassResource {
 			e.printStackTrace();
 		}
 		return null;		
+	}
+
+	public static ObjectMapper getMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		SimpleModule sm = new SimpleModule()
+				.addDeserializer(TopLevelDocumentable.class, 
+						new TopLevelDeserializer());
+		mapper.registerModule(sm);
+		return mapper;
 	}
 
 	private TopLevelDocumentable read(ObjectMapper mapper, String json) throws JsonParseException, JsonMappingException, IOException {

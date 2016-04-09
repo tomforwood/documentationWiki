@@ -1,7 +1,6 @@
 package org.forwoods.docuwiki.documentationWiki.resources;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.or;
+import static com.mongodb.client.model.Filters.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,37 +51,82 @@ public class ClassUsesResource {
 		
 		Bson b = memberSearch("instanceFields",name);
 		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, cr->cr.getInstanceFields()));
+		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "F", 
+				cr->cr.getInstanceFields()));
 		
 		 b = memberSearch("staticFields",name);
 		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, cr->cr.getStaticFields()));
+		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "F",
+				cr->cr.getStaticFields()));
 		
 		 b = memberSearch("instanceProperties",name);
 		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, cr->cr.getInstanceProperties()));
+		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "P",
+				cr->cr.getInstanceProperties()));
 			
 		b = memberSearch("staticProperties",name);
 		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, cr->cr.getStaticProperties()));
+		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "P",
+				cr->cr.getStaticProperties()));
 		
 		b = memberSearch("staticMethods",name);
 		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, cr->cr.getStaticMethods()));
+		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "M",
+				cr->cr.getStaticMethods()));
 		
 		b = memberSearch("instanceMethods",name);
 		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, cr->cr.getInstanceMethods()));
+		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "M",
+				cr->cr.getInstanceMethods()));
 		
 		//now methods with matching parameter type
 		b=parameterSearch("instanceMethods", name);
 		reflectedClasses.find(b)
-		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, cr->cr.getInstanceMethods()));
+		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "M",
+				cr->cr.getInstanceMethods()));
 		//now methods with matching parameter type
 		b=parameterSearch("staticMethods", name);
 		reflectedClasses.find(b)
-		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, cr->cr.getStaticMethods()));
-				
+		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "M",
+				cr->cr.getStaticMethods()));
+		b=parameterSearch("constructors", name);
+		reflectedClasses.find(b)
+		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "C",
+				cr->cr.getInstanceMethods()));
+		
+		
+		//now for annotations
+		
+		b = attributeSearch("instanceFields",name);
+		reflectedClasses.find(b)
+		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "F",
+				cr->cr.getInstanceFields()));
+		
+		 b = attributeSearch("staticFields",name);
+		reflectedClasses.find(b)
+		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "F",
+				cr->cr.getStaticFields()));
+		
+		 b = attributeSearch("instanceProperties",name);
+		reflectedClasses.find(b)
+		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "P",
+				cr->cr.getInstanceProperties()));
+			
+		b = attributeSearch("staticProperties",name);
+		reflectedClasses.find(b)
+		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "P",
+				cr->cr.getStaticProperties()));
+		
+		b = attributeSearch("staticMethods",name);
+		reflectedClasses.find(b)
+		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "M",
+				cr->cr.getStaticMethods()));
+		
+		b = attributeSearch("instanceMethods",name);
+		reflectedClasses.find(b)
+		.forEach(new AttributeTypeConsumer(cu.getUsesReturns(), name, "M",
+				cr->cr.getInstanceMethods()));
+		
 				
 		return cu;
 	}
@@ -96,16 +140,22 @@ public class ClassUsesResource {
 		return or(eq(memberCollection+".parameters.objectType.typeName",type),eq(memberCollection+"parameters.objectType.varargs.typeName",type));
 	}
 	
+	private Bson attributeSearch(String memberCollection, String type) {
+		return regex(memberCollection+".attributes", "\\["+type);
+	}
+	
 	private class MemberTypeConsumer implements Consumer<Document> {
 
 		List<ClassUse> uses;
 		String matchType;
 		private Function<ClassRepresentation, List<? extends Member>> membersFunc;
+		private String useType;
 		
-		private MemberTypeConsumer(List<ClassUse> uses, String type, 
+		private MemberTypeConsumer(List<ClassUse> uses, String type, String useType,
 				Function<ClassRepresentation, List<? extends Member>> members) {
 			this.uses = uses;
 			this.matchType = type;
+			this.useType = useType;
 			this.membersFunc = members;
 		}
 
@@ -116,6 +166,7 @@ public class ClassUsesResource {
 				cr = mapper.readValue(doc.toJson(), ClassRepresentation.class);
 			List<? extends Member> members = membersFunc.apply(cr);
 			for (Member member:members){
+				if (member.getInheritedFrom()!=null) continue;
 				boolean varArgsMatch = false;
 				if (member.getObjectType().getVarargs()!=null)
 					varArgsMatch=member.getObjectType().getVarargs().stream().anyMatch(va->va.getTypeName().equals(matchType));
@@ -125,6 +176,7 @@ public class ClassUsesResource {
 					ClassUse cu = new ClassUse();
 					cu.setUsingClassName(cr.getName());
 					cu.setUsingMember(member.getName());
+					cu.setUseType(useType);
 					uses.add(cu);
 				}
 			}
@@ -141,11 +193,13 @@ public class ClassUsesResource {
 		List<ClassUse> uses;
 		String matchType;
 		private Function<ClassRepresentation, List<MethodRepresentation>> membersFunc;
+		private String useType;
 		
-		private ParameterTypeConsumer(List<ClassUse> uses, String type, 
+		private ParameterTypeConsumer(List<ClassUse> uses, String type, String useType,
 				Function<ClassRepresentation, List<MethodRepresentation>> members) {
 			this.uses = uses;
 			this.matchType = type;
+			this.useType = useType;
 			this.membersFunc = members;
 		}
 
@@ -156,6 +210,7 @@ public class ClassUsesResource {
 				cr = mapper.readValue(doc.toJson(), ClassRepresentation.class);
 			List<MethodRepresentation> members = membersFunc.apply(cr);
 			for (MethodRepresentation method:members){
+				if (method.getInheritedFrom()!=null) continue;
 				for (Member ot: method.parameters) {
 					boolean varArgsMatch = false;
 					if (ot.getObjectType().getVarargs()!=null)
@@ -165,12 +220,60 @@ public class ClassUsesResource {
 						//this member uses matchType in its type
 						ClassUse cu = new ClassUse();
 						cu.setUsingClassName(cr.getName());
-						cu.setUsingMember(method.toString());
+						cu.setUsingMember(method.getName());
+						cu.setUseType(useType);
 						uses.add(cu);
 					}
 				
 				}
 			}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	private class AttributeTypeConsumer implements Consumer<Document> {
+
+		List<ClassUse> uses;
+		String matchType;
+		private Function<ClassRepresentation, List<? extends Member>> membersFunc;
+		private String useType;
+		
+		private AttributeTypeConsumer(List<ClassUse> uses, String type, String useType,
+				Function<ClassRepresentation, List<? extends Member>> members) {
+			this.uses = uses;
+			this.matchType = type;
+			this.useType = useType;
+			this.membersFunc = members;
+		}
+
+		@Override
+		public void accept(Document doc) {
+			ClassRepresentation cr;
+			try {
+				cr = mapper.readValue(doc.toJson(), ClassRepresentation.class);
+
+				String match = "["+matchType;
+				List<? extends Member> members = membersFunc.apply(cr);
+				for (Member member:members){
+					if (member.getInheritedFrom()!=null) continue;
+					boolean attributeMatch = false;
+					if (member.getAttributes()==null) continue;
+					for (String s:member.getAttributes()){
+						attributeMatch|=s.startsWith(match);
+					}
+					if (attributeMatch){
+						//this member uses matchType in its type
+						ClassUse cu = new ClassUse();
+						cu.setUsingClassName(cr.getName());
+						cu.setUsingMember(member.getName());
+						cu.setUseType(useType);
+						uses.add(cu);
+					}
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -23,7 +23,7 @@ namespace Reflector
             {
                 Credentials = new[] { credential }
             };
-            settings.Server = new MongoServerAddress("localhost",27018);
+            settings.Server = new MongoServerAddress("localhost",27017);
             IMongoClient client = new MongoClient(settings);
             //IMongoClient client = new MongoClient();
             database = client.GetDatabase("docuWiki");            

@@ -1,0 +1,411 @@
+{
+	"comment": "An AttachNode represents the physical connection between a Part and its parent Part.",
+	"isOrphaned": false,
+	"objectType": 
+	{
+		"typeName": "class"
+	},
+
+	"modifiers": 
+	[
+		"PUBLIC"
+	],
+
+	"name": "AttachNode",
+	"version": 1,
+	"userGenerated": true,
+	"extensions": 
+	[
+		
+	],
+
+	"instanceFields": 
+	[
+		{
+			"comment": "The part attached to this node. Null if no part is attached.",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "Part"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "attachedPart"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "string"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "attachedPartId"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "AttachNodeMethod"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "attachMethod"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "float"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "breakingForce"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "float"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "breakingTorque"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "GameObject"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "icon"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "string"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "id"
+		},
+
+		{
+			"comment": "Whether this node is a surface-attach node, a stack node, or a docking node.",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "AttachNode.NodeType"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "nodeType"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "offset"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "orientation"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "originalOrientation"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "originalPosition"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "position"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "float"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "radius"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "requestGate"
+		},
+
+		{
+			"comment": "Wether or not resource cross feed can pass through this node.",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "ResourceXFeed"
+		},
+
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "int"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "size"
+		}
+	],
+
+	"staticFields": 
+	[
+		
+	],
+
+	"instanceProperties": 
+	[
+		
+	],
+
+	"staticProperties": 
+	[
+		
+	],
+
+	"instanceMethods": 
+	[
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "FindAttachedPart",
+			"parameters": 
+			[
+				
+			]
+		}
+	],
+
+	"staticMethods": 
+	[
+		
+	],
+
+	"constructors": 
+	[
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "class"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "*constructor*",
+			"parameters": 
+			[
+				
+			]
+		}
+	],
+
+	"nested": 
+	[
+		{
+			"comment": "",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "enum"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "AttachNode+NodeType",
+			"version": 1,
+			"userGenerated": false,
+			"extensions": 
+			[
+				
+			],
+
+			"enumValues": 
+			[
+				{
+					"comment": "/// <summary>/// A stack node, like the connections between stacked fuel tanks/// </summary>",
+					"isOrphaned": false,
+					"name": "Stack",
+					"enumValue": "0"
+				},
+
+				{
+					"comment": "/// <summary>/// A surface node, like the connection between a radial decoupler and its parent./// </summary>",
+					"isOrphaned": false,
+					"name": "Surface",
+					"enumValue": "1"
+				},
+
+				{
+					"comment": "/// <summary>/// This is an orphan/// </summary>",
+					"isOrphaned": false,
+					"name": "Dock",
+					"enumValue": "2"
+				}
+			]
+		}
+	]
+}
