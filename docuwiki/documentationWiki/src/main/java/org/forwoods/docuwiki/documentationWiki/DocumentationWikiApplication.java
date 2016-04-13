@@ -5,11 +5,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bson.Document;
+import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.db.MongoManaged;
 import org.forwoods.docuwiki.documentationWiki.health.MongoHealthCheck;
+import org.forwoods.docuwiki.documentationWiki.resources.ClassBasedResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassListResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassUsesResource;
+import org.forwoods.docuwiki.documentationWiki.resources.ClassVersionsResource;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mongodb.MongoClient;
@@ -74,15 +77,21 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     	environment.lifecycle().manage(mongoManaged);
     	environment.healthChecks().register("mongoHealthchack", new MongoHealthCheck(client));
     	
-    	MongoCollection<Document> reflectedClasses = database.getCollection("reflectedClasses");
     	
-		MongoCollection<Document> annotatedClasses = database.getCollection("annotatedClasses");
-		ClassListResource classList = new ClassListResource(reflectedClasses, annotatedClasses);
-        ClassResource classes = new ClassResource(reflectedClasses, annotatedClasses, classList);
-        ClassUsesResource uses = new ClassUsesResource(reflectedClasses);
+    	MongoCollection<Document> reflectedDocuments = database.getCollection("reflectedClasses");
+		MongoCollection<Document> annotatedDocuments = database.getCollection("annotatedClasses");
+		
+		ClassListResource classList = new ClassListResource(reflectedDocuments, annotatedDocuments);
+        ClassVersionsResource versions = new ClassVersionsResource(annotatedDocuments, classList);
+        
+        ClassBasedResource classes = new ClassResource(reflectedDocuments, annotatedDocuments, classList);
+		ClassUsesResource uses = new ClassUsesResource(reflectedDocuments, classList);
+        
+        
         environment.jersey().register(classes);
         environment.jersey().register(classList);
         environment.jersey().register(uses);
+        environment.jersey().register(versions);
     }
 
 }

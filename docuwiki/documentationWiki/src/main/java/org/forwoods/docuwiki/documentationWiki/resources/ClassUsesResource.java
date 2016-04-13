@@ -29,12 +29,14 @@ import com.mongodb.client.MongoCollection;
 
 @Path("/class/uses")
 @Produces(MediaType.APPLICATION_JSON)
-public class ClassUsesResource {
+public class ClassUsesResource extends ClassBasedResource{
 	private MongoCollection<Document> reflectedClasses;
 	
 	ObjectMapper mapper = new ObjectMapper();
 	
-	public ClassUsesResource(MongoCollection<Document> reflectedClasses) {
+	public ClassUsesResource(MongoCollection<Document> reflectedClasses,
+			ClassListResource classList) {
+		super(classList);
 		this.reflectedClasses = reflectedClasses;
 		SimpleModule sm = new SimpleModule()
 				.addDeserializer(TopLevelDocumentable.class, 
@@ -45,9 +47,10 @@ public class ClassUsesResource {
 	@GET
 	@Path("/{id}")
 	public ClassUses getClass(@PathParam("id") String name) {
-		ClassUses cu = new ClassUses(name);
+		boolean validClass = isValidClass(name);
+		if (!validClass) return null;
 		
-		
+		ClassUses cu = new ClassUses(name);		
 		
 		Bson b = memberSearch("instanceFields",name);
 		reflectedClasses.find(b)

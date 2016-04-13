@@ -6,7 +6,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
@@ -22,7 +21,14 @@ public abstract class TopLevelDocumentable extends Member {
 	protected String namespaceName;
 	@JsonProperty
 	protected List<String> extensions = new ArrayList<>();
-
+	
+	@JsonProperty
+	protected String ipAddress;
+	@JsonProperty
+	protected long modifyTime;
+	@JsonProperty
+	protected String modifyAction;
+	
 	public TopLevelDocumentable(ObjectType type) {
 		this.objectType = type;
 		version =1;
@@ -63,6 +69,25 @@ public abstract class TopLevelDocumentable extends Member {
 	
 	public void addExtension(String ext) {
 		extensions.add(ext);
+	}	
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+	public long getModifyTime() {
+		return modifyTime;
+	}
+	public void setModifyTime(long modifyTime) {
+		this.modifyTime = modifyTime;
+	}
+
+	public String getModifyAction() {
+		return modifyAction;
+	}
+	public void setModifyAction(String modifyAction) {
+		this.modifyAction = modifyAction;
 	}
 	
 	@Override

@@ -61,6 +61,9 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	@JsonProperty
 	private List<MergedClass<?>> nested;
 	
+	@JsonProperty
+	private boolean isLatest;
+	
 	public MergedClass() {
 	}
 	
@@ -393,5 +396,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 
 	public List<MergedClass<?>> getNested() {
 		return nested;
+	}
+
+	public boolean isLatest() {
+		return isLatest;
+	}
+
+	public void setLatest(boolean isLatest) {
+		this.isLatest = isLatest;
 	}
 }

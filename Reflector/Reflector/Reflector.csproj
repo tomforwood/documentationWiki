@@ -36,6 +36,10 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>H:\KSP1.0.5\KSP_win\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MongoDB.Bson, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.2.3\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -66,11 +70,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CLOptions.cs" />
     <Compile Include="ClassReflector.cs" />
     <Compile Include="FieldRepresentation.cs" />
+    <Compile Include="FileClassStore.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="MethodRepresentation.cs" />
+    <Compile Include="MongoClassStore.cs" />
     <Compile Include="PropertyRepresentation.cs" />
+    <Compile Include="IReflectClassStore.cs" />
     <Compile Include="TopLevelDocumentable.cs" />
     <Compile Include="ClassRepresentation.cs" />
     <Compile Include="APIReflector.cs" />

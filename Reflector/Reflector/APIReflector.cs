@@ -6,27 +6,25 @@ using System.Reflection;
 using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
-using MongoDB.Driver;
-using MongoDB.Bson;
 using Newtonsoft.Json.Linq;
+using CommandLine;
 
 namespace Reflector
 {
     public class APIReflector
     {
-        protected IMongoDatabase database;
-        string collectionName = "reflectedClasses";
-        public APIReflector(string password)
+        IReflectClassStore classStore;
+
+        public APIReflector(CLOptions options)
         {
-            MongoCredential credential = MongoCredential.CreateMongoCRCredential("docuWiki", "docuWikiUser", password);
-            var settings = new MongoClientSettings
+            if (options.outputFile==null)
             {
-                Credentials = new[] { credential }
-            };
-            settings.Server = new MongoServerAddress("localhost",27017);
-            IMongoClient client = new MongoClient(settings);
-            //IMongoClient client = new MongoClient();
-            database = client.GetDatabase("docuWiki");            
+                classStore = new MongoClassStore(options);
+            }
+            else
+            {
+                classStore = new FileClassStore(options.outputFile);
+            }   
         }
 
         public IEnumerable<TopLevelDocumentable> reflectAssembly(Assembly assembly)
@@ -121,71 +119,40 @@ namespace Reflector
             }
         }
 
-
-        private BsonDocument persistRep(TopLevelDocumentable rep)
+        public void reflectClasses(CLOptions options)
         {
-            JObject json = rep.getJson();
-            string jsonText = json.ToString();
-            //Debug.WriteLine(jsonText);
-            BsonDocument doc = BsonDocument.Parse(jsonText);
-            return doc;
-        }
-
-        public void reflectClasses()
-        {
-
-            Assembly ksp = typeof(GameEvents).Assembly;
-            clearCollection();
-            int count = 0;
-            int batchSize = 0;
-            List<BsonDocument> reps = new List<BsonDocument>();
-            List<Task> allTasks = new List<Task>();
+            String assemblyFile = options.assemblyFile;
+            Assembly ksp = null;
+            if (assemblyFile == null) {
+                ksp = typeof(GameEvents).Assembly;
+            }
+            else
+            {
+                ksp = Assembly.LoadFrom(assemblyFile);
+            }
 
             foreach (Type type in ksp.GetExportedTypes())
             {
-                if (batchSize >= 100)
-                {
-                    Task task = database.GetCollection<BsonDocument>(collectionName).InsertManyAsync(reps);
-                    task.ContinueWith(tasking=> { Debug.WriteLine("Completed a batch"); return ""; });
-                    Debug.WriteLine("Persisting batch");
-                    allTasks.Add(task);
-                    batchSize = 0;
-                    reps = new List<BsonDocument>();
-                }
+                
                 Debug.WriteLine("reflecting " + type.FullName);
                 TopLevelDocumentable rep = reflectTop(type);
                 if (rep != null)
                 {
-                    BsonDocument doc = persistRep(rep);
-                    reps.Add(doc);
-                    count++;
-                    batchSize++;
+                    classStore.storeClass(rep);
                 }
             }
-            Task t = database.GetCollection<BsonDocument>(collectionName).InsertManyAsync(reps);
-            allTasks.Add(t);
-
-            Task.WaitAll(allTasks.ToArray());
+            int count = classStore.await();
 
             Debug.WriteLine("inserted =" + count);
-            long totalCount = database.GetCollection<BsonDocument>(collectionName).Count(new BsonDocument());
-            Debug.WriteLine("total =" + totalCount);
-        }
-
-        private void clearCollection()
-        {
-            database.DropCollection(collectionName);
         }
 
         static void Main(string[] args)
         {
-            string password = "";
-            if (args.Length>=1)
-            {
-                password = args[0];
-            }
-            APIReflector reflector = new APIReflector(password);
-            reflector.reflectClasses();
+            CLOptions options = new CLOptions();
+            Parser.Default.ParseArguments(args, options);
+
+            APIReflector reflector = new APIReflector(options);
+            reflector.reflectClasses(options);
             
         }
     }
