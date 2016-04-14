@@ -35,8 +35,12 @@ import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.api.MergedClass;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.mongodb.client.MongoCollection;
@@ -94,7 +98,21 @@ public class ClassResource extends ClassBasedResource{
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule sm = new SimpleModule()
 				.addDeserializer(TopLevelDocumentable.class, 
-						new TopLevelDeserializer());
+						new TopLevelDeserializer())
+				.addDeserializer(Long.class, new JsonDeserializer<Long>(){
+
+					@Override
+					public Long deserialize(JsonParser p, DeserializationContext ctxt)
+							throws IOException, JsonProcessingException {
+						JsonNode node = p.getCodec().readTree(p);
+						if (node.has("$numberLong")) {
+							Long value = node.get("$numberLong").asLong();
+							return value;
+						}
+						else {
+							return node.asLong();
+						}
+					}});
 		mapper.registerModule(sm);
 		return mapper;
 	}
@@ -132,7 +150,8 @@ public class ClassResource extends ClassBasedResource{
 	
 	@SuppressWarnings("unchecked")
 	@POST
-	public Response save(MergedClass<?> mergedClass, @Context HttpServletRequest request) {
+	public Response save(MergedClass<?> mergedClass,
+			@QueryParam("action") String action, @Context HttpServletRequest request) {
 		TopLevelDocumentable toSave=null;
 		if (mergedClass.getObjectType().getTypeName().equals("class")) {
 			toSave = saveClass((MergedClass<ClassRepresentation>) mergedClass);
@@ -142,15 +161,16 @@ public class ClassResource extends ClassBasedResource{
 			toSave = saveEnum((MergedClass<EnumRepresentation>)mergedClass);
 		}
 		
+		if ("revert".equals(action)) {
+			toSave.setModifyAction("Reverted to version "+mergedClass.getAnnotatedVersion());
+			toSave.setVersion(fechNextVersion(mergedClass.getName()));
+		}
+		else {
 
-		toSave.setComment(commentTrim(mergedClass.getComment()));
+			toSave.setVersion(mergedClass.getAnnotatedVersion()+1);
+		}
+			
 		
-		toSave.setName(mergedClass.getName());
-		toSave.setUserGenerated(true);
-		toSave.setVersion(mergedClass.getAnnotatedVersion()+1);
-		toSave.setObjectType(mergedClass.getObjectType());
-		toSave.setNamespaceName(mergedClass.getNamespace());
-		toSave.getModifiers().addAll(mergedClass.getClassModifiers());
 		toSave.setModifyTime(clock.millis());
 		toSave.setIpAddress(request.getRemoteAddr());
 		
@@ -168,7 +188,23 @@ public class ClassResource extends ClassBasedResource{
 			//TODO return some kind of error
 		}
 		return Response.serverError().entity("Server Error saving class").type("text/plain").build();
+	}
+
+	private int fechNextVersion(String name) {
+		Document retrievedDoc = annotatedClasses.find(eq("name",name))
+				.sort(descending("version"))
+				.first();
+		return retrievedDoc.getInteger("version")+1;
+	}
+
+	private void setCommon(MergedClass<?> mergedClass, TopLevelDocumentable toSave) {
+		toSave.setComment(commentTrim(mergedClass.getComment()));
 		
+		toSave.setName(mergedClass.getName());
+		toSave.setUserGenerated(true);
+		toSave.setObjectType(mergedClass.getObjectType());
+		toSave.setNamespaceName(mergedClass.getNamespace());
+		toSave.getModifiers().addAll(mergedClass.getClassModifiers());
 	}
 	
 	private TopLevelDocumentable saveEnum(MergedClass<EnumRepresentation> mergedClass) {
@@ -178,6 +214,7 @@ public class ClassResource extends ClassBasedResource{
 			.filter(ec->ec.getComment()!=null)
 			.collect(Collectors.toCollection(()->enumRep.getEnumValues()));
 
+		setCommon(mergedClass, enumRep);
 		return enumRep;
 	}
 
@@ -210,6 +247,7 @@ public class ClassResource extends ClassBasedResource{
 		
 		compactifyNested(mergedClass.getNested(), classRep.getNested());
 		
+		setCommon(mergedClass, classRep);
 		return classRep;
 	}
 	

@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bson.Document;
-import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.db.MongoManaged;
 import org.forwoods.docuwiki.documentationWiki.health.MongoHealthCheck;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassBasedResource;
@@ -46,6 +45,9 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     	
     	AssetsBundle assets = new AssetsBundle("/assets", "/", "index.html", "assets");
     	bootstrap.addBundle(assets);
+    	
+    	bootstrap.addBundle(new AssetsBundle("/META-INF/resources/webjars", "/webjars", null, "webjars"));
+    	
     	bootstrap.getObjectMapper()
     		.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
     }

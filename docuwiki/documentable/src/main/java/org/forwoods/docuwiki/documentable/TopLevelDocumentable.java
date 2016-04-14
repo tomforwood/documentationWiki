@@ -25,7 +25,7 @@ public abstract class TopLevelDocumentable extends Member {
 	@JsonProperty
 	protected String ipAddress;
 	@JsonProperty
-	protected long modifyTime;
+	protected Long modifyTime;
 	@JsonProperty
 	protected String modifyAction;
 	
@@ -76,11 +76,11 @@ public abstract class TopLevelDocumentable extends Member {
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
-	public long getModifyTime() {
+	public Long getModifyTime() {
 		return modifyTime;
 	}
-	public void setModifyTime(long modifyTime) {
-		this.modifyTime = modifyTime;
+	public void setModifyTime(Long modifyTime) {
+		this.modifyTime = modifyTime==null?-1:modifyTime;
 	}
 
 	public String getModifyAction() {

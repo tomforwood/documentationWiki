@@ -9,8 +9,8 @@
 }
 
 .mainview {
-    height: 100%;
-    overflow: scroll;
+    height: 95%;
+    overflow: auto;
 }
 
 .inline {
@@ -43,21 +43,29 @@ textarea.comment {
 	text-decoration: line-through;
 }
 
-table {
+table.member {
 	width: 100%;
 }
 
-table td {
+table.member td {
 	padding:5px;
 	border-bottom:1px solid black
 }
 
-table td:last-child {
+table.member td:last-child {
 	width: 100%;
 }
 
-table td:nth-child(1) {
+table.member td:nth-child(1) {
 
+}
+
+table.versions{
+	width:100%;
+}
+
+table.versions td {
+	border-bottom:1px solid #33F;
 }
 
 .modifiers {
@@ -84,8 +92,14 @@ table td:nth-child(1) {
 }
 
 .classNav {
+	margin-left:5px;
+	margin-right:5px;
 	background-color:#333;
 	color:#FFF;
+}
+
+.classNavRight {
+	float:right;
 }
 
 div.classList {

@@ -1,4 +1,4 @@
-var docuWikiApp = angular.module('docuWikiApp',['ngSanitize','docuWikiServices','ui.router','ui.router.state']);
+var docuWikiApp = angular.module('docuWikiApp',['angular-confirm', 'ui.bootstrap.tpls', 'ngSanitize','docuWikiServices','ui.router','ui.router.state']);
 
 
 docuWikiApp.config(function($stateProvider, $urlRouterProvider, $uiViewScrollProvider){
@@ -14,7 +14,7 @@ docuWikiApp.config(function($stateProvider, $urlRouterProvider, $uiViewScrollPro
 			templateUrl: 'partials/classes.html'
 		})
 		.state('classes.details',{
-			url: '/:classname?scrollTo',
+			url: '/:classname?scrollTo&version',
 			templateUrl: 'partials/classTop.html',
 			abstract: true				
 		})
@@ -24,9 +24,14 @@ docuWikiApp.config(function($stateProvider, $urlRouterProvider, $uiViewScrollPro
 			controller: 'classViewCtrl'
 		})
 		.state('classes.details.uses',{
-			url: '/:classname/uses',
+			url: '/uses',
 			templateUrl: 'partials/classUses.html',
 			controller: 'classUsesCtrl'
+		})
+		.state('classes.details.versions',{
+			url: '/versions',
+			templateUrl: 'partials/classVersions.html',
+			controller: 'classVersionsCtrl'
 		})
 });
 
@@ -128,12 +133,11 @@ docuWikiApp.filter('markupify', ['$sce',function($sanitize) {
 }]);
 
 docuWikiApp.run(function($rootScope, $location, $anchorScroll, $stateParams, $timeout) {
-	$rootScope.$on('$stateChangeSuccess', function(newRoute, oldRoute) {
-		//TODO Is there an event I can use for this instead of a timer?
+	$rootScope.$on('$viewContentLoaded', function(newRoute, oldRoute) {
 		if ($stateParams.scrollTo) {
 			$timeout(function(){
 				$anchorScroll($stateParams.scrollTo);  
-			},700);
+			},100);
 		}
 	});
 });

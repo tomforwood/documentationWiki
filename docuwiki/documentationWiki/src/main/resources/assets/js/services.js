@@ -3,7 +3,7 @@ var docuWikiServices = angular.module('docuWikiServices',['ngResource']);
 docuWikiServices.factory('Class',['$resource',
     function($resource) {
 		return $resource('api/class/:classid',{},{
-			query : {method:'GET', params:{classid:'class'}, isArray:true}
+			get : {method:'GET', params:{classid:'class'}, isArray:false}
 		});
 }]);
 
@@ -20,5 +20,11 @@ docuWikiServices.factory('ClassList', [ '$resource', function($resource) {
 docuWikiServices.factory('ClassUses', [ '$resource', function($resource) {
 	return $resource('api/class/uses/:classid', {}, {
 		query : {method:'GET', params:{classid:'class'}, isArray:false}
+	});
+} ]);
+
+docuWikiServices.factory('ClassVersions', [ '$resource', function($resource) {
+	return $resource('api/versions/:classid', {}, {
+		query : {method:'GET', params:{classid:'class'}, isArray:true}
 	});
 } ]);

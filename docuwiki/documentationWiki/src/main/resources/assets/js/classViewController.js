@@ -3,20 +3,37 @@
  */
 //var classController = angular.module('docuWikiApp',['docuWikiServices']);
 
-docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', 'ClassList', '$stateParams',
-    function($scope, Class, ClassList, $stateParams, $uiViewScroll) {
+docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', 'ClassList', 
+                                         '$stateParams', '$state',
+    function($scope, Class, ClassList, $stateParams, $state) {
+		$scope.version = $stateParams.version;
 		$scope.classFQN=$stateParams.classname
-		$scope.mergedClass = Class.get({classid:$stateParams.classname}, function(classData){
+		var query = {classid:$stateParams.classname};
+		if ($scope.version) {
+			query.version=$scope.version;
+		}
+		$scope.mergedClass = Class.get(query, function(classData){
 					
 				});
 		$scope.classList = ClassList.query(function(classList){});
-		$scope.save =  function() {Class.save($scope.mergedClass, function(mergedClass){
-			console.log(mergedClass.name);
-			$scope.mergedClass = Class.get({classid:mergedClass.name});
-		}, function(error) {
-			console.log("an error");
-			$scope.PostDataResponse = error;
-		})};
+		
+		var saveParams = $scope.version?{action:"revert"}:{}
+		$scope.save =  {
+			buttonText:($scope.version?"Revert to version "+$scope.version:"Save"),
+			confirm:(typeof $scope.version !== 'undefined'),
+			action:function() {
+				Class.save(saveParams,$scope.mergedClass, function(mergedClass){
+					console.log(mergedClass.name);
+					$state.go('classes.details.class',
+							{classname:$stateParams.classname},
+							{reload:true}
+					)
+				}, function(error) {
+					console.log("an error");
+					$scope.PostDataResponse = error;
+				})
+			}
+		};
 		
     }]
 );
