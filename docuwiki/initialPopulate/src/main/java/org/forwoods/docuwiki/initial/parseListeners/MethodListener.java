@@ -36,7 +36,7 @@ public class MethodListener extends MemberListener {
 				member.parameters.add(paramMember);
 			}
 		}
-		
+				
 		member.setName(ctx.methodName.getText());
 		member.setObjectType(new ObjectType(link(ctx.methodType.getText())));
 		

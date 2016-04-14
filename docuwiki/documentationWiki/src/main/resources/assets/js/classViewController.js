@@ -79,13 +79,20 @@ docuWikiApp.filter('inhertitedFilter', [function() {
 
 docuWikiApp.filter('methodFilter', ['$filter',function($filter) {
 	return function(method, classList) {
-		var methodSig = method.name+"(&#8203;"//invisible space as line break hint
+		var methodSig = method.name;
+		if (method.genericArgs) {
+			methodSig+="&lt;";
+			methodSig+=method.genericArgs;
+			methodSig+="&gt;";
+		}
+		methodSig+="(&#8203;"//invisible space as line break hint
 		var i=0;
 		for (i=0;i<method.parameters.length;i++) {
 			if (i!=0) {
 				methodSig+=", ";
 			}
 			methodSig+=$filter('objectType')(method.parameters[i].objectType, classList);
+			methodSig+="&nbsp;"+method.parameters[i].name;
 			first=false;
 		}
 		methodSig+=")";

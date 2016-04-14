@@ -145,6 +145,7 @@ public class ClassResource extends ClassBasedResource{
 		if (retrievedDoc==null) return null;
 		JsonWriterSettings settings = new JsonWriterSettings(JsonMode.STRICT);
 		String reflectedJson = retrievedDoc.toJson(settings);
+		System.out.println(reflectedJson);
 		return reflectedJson;
 	}
 	

@@ -112,6 +112,9 @@ public class ClassRepresentation extends TopLevelDocumentable{
 		@JsonProperty
 		public List<Member> parameters = new ArrayList<>();
 		
+		@JsonProperty
+		public List<String> genericArgs;
+		
 		public boolean equals(Object o) {
 			MethodRepresentation other = (MethodRepresentation)o;
 			//methods are equal if the names are equal and the parameter types are equal

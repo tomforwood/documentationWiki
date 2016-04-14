@@ -10,7 +10,7 @@
 
 .mainview {
     height: 95%;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .inline {
@@ -103,7 +103,7 @@ table.versions td {
 }
 
 div.classList {
-	overflow:auto;
+	overflow-y:auto;
 	height:95%;
 }
 

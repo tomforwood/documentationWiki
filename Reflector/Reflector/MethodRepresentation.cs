@@ -8,7 +8,7 @@ namespace Reflector
 {
     public class MethodRepresentation : Member
     {
-
+        public List<string> genericArgs; 
         public List<Member> parameters = new List<Member>();
 
         public MethodRepresentation(ObjectType type, String name) :

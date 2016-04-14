@@ -60,8 +60,6 @@ namespace Reflector
             count++;
             batchSize++;
 
-
-            throw new NotImplementedException();
         }
 
         public int await()

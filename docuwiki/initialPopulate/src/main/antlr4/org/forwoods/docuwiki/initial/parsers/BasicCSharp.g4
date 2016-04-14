@@ -65,7 +65,6 @@ memberDeclaration :
 	constructorDeclaration|
 	methodDeclaration|
 	fieldDeclaration|
-	genericMethod|
 	propertyDeclaration|
 	enumDeclaration|
 	classDeclaration|
@@ -88,7 +87,9 @@ methodDeclaration :
 	methodMods = modifiers 
 	methodType = type 
 	methodName = identifier 
+	(methodTypeArgs=typeArgs)?
 	methodParams = formalParams 
+	(WHERE identifier ':' type)? 
 	(';'|propertyBody);
 
 constructorDeclaration :
@@ -110,13 +111,6 @@ arrayLikeProperty :
 	annotations
 	modifiers 
 	type 'this['type identifier ']' propertyBody;
-	
-genericMethod : 
-	DocComment*
-	annotations
-	modifiers 
-	type identifier typeArgs formalParams 
-	(WHERE identifier ':' type)? ';';
 	
 enumDeclaration :
 	comment = docCommentBlock

@@ -190,6 +190,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			result.getModifiers().addAll(method.getModifiers());
 			result.setInheritedFrom(method.getInheritedFrom());
 			result.setAttributes(method.getAttributes());
+			result.genericArgs=method.genericArgs;
 			int match = annMethods.indexOf(method);
 			if (match>=0) {
 				MethodRepresentation annMethod = annMethods.remove(match);
