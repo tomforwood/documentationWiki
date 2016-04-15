@@ -24,12 +24,12 @@ public class ClassListResourceTest {
 	private ClassListResource classList;
 	@Before
 	public void setUp() throws Exception {
-		client = new MongoClient();
+		/*client = new MongoClient();
     	MongoDatabase database = client.getDatabase("docuWiki");
     	MongoCollection<Document> reflectedClasses = database.getCollection("reflectedClasses");
     	
 		MongoCollection<Document> annotatedClasses = database.getCollection("annotatedClasses");
-		classList = new ClassListResource(reflectedClasses, annotatedClasses);
+		classList = new ClassListResource(reflectedClasses, annotatedClasses);*/
         
 		
 	}

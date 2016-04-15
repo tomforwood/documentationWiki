@@ -190,7 +190,39 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
 			<plugin>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.3</version>
+			</plugin>
+		</plugins>
+	</reporting>
+	
+	<profiles>
+		<profile>
+			<id>Maven3.1+</id>
+			<activation>
+				<property>
+				<name>maven.version</name>
+				<value>!3.0.4</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+				<plugin>
 				<groupId>com.github.searls</groupId>
 				<artifactId>jasmine-maven-plugin</artifactId>
 				<version>2.1</version>
@@ -226,25 +258,11 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
-	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.8.1</version>
-				<configuration>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
-			</plugin>
-		</plugins>
-	</reporting>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<parent>
 		<groupId>org.forwoods.docuwiki</groupId>
 		<artifactId>docuwiki</artifactId>
