@@ -119,8 +119,35 @@ docuWikiApp.filter('classLinkFilter', ['$sce',function($sanitize) {
 
 docuWikiApp.filter('markupify', ['$sce',function($sanitize) {
 	var substitutions = [{
-		key:/<see cref="([a-zA-z.]*)"\/>/, 
-		value:'<a href="#/classes/$1">$1</a>'}];
+			key:/<see cref=["']([a-zA-z.]*)["']\/>/g, //class link
+			value:'<a href="#/classes/$1">$1</a>'
+		},
+		{
+			key:/<see cref=["']([a-zA-z.]*)\.(\w*)\([a-zA-Z0-9, ]*\)["']\/>/g, //method link
+			value:'<a href="#/classes/$1?scrollTo=$2M">$1.$2</a>'
+		},
+		{
+			key:/<param name=["']([a-zA-z.]*)["']>([^<]*)<\/param>/g, 
+			value:'<br>param $1 &ndash; $2'
+		},
+		{
+			key:/<returns>([^<]*)<\/returns>/g, 
+			value:'<br>returns &ndash; $1'
+		},
+		{
+			key:/<typeparam name=["']([a-zA-z.]*)["']>([^<]*)<\/typeparam>/g, 
+			value:'<br>typeparam $1 &ndash; $2'
+		},
+		{key:/<list type="bullet">/g, value:'<ul>'},
+		{key:/<\/list>/g, value:'</ul>'},
+		{key:/<item>/g, value:'<li>'},
+		{key:/<\/item>/g, value:'</li>'},
+		{key:/<para>/g, value:'<p>'},
+		{key:/<\/para>/g, value:'</p>'},
+		{key:/<c>/g, value:'<code>'},
+		{key:/<\/c>/g, value:'</code>'},
+		{key:/<warning>/g, value:'<em>'},
+		{key:/<\/warning>/g, value:'</em>'}];
 
 	return function(input) {
 		if (!input) return input;
@@ -136,7 +163,8 @@ docuWikiApp.run(function($rootScope, $location, $anchorScroll, $stateParams, $ti
 	$rootScope.$on('$viewContentLoaded', function(newRoute, oldRoute) {
 		if ($stateParams.scrollTo) {
 			$timeout(function(){
-				$anchorScroll($stateParams.scrollTo);  
+				$anchorScroll($stateParams.scrollTo); 
+				$stateParams.scrollTo=null;
 			},100);
 		}
 	});

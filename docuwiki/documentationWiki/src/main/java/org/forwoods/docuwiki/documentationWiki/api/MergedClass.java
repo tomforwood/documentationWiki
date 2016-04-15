@@ -191,6 +191,9 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			result.setInheritedFrom(method.getInheritedFrom());
 			result.setAttributes(method.getAttributes());
 			result.genericArgs=method.genericArgs;
+			if (method.getName().equals("CreateConfigFromObject")) {
+				int k=5;
+			}
 			int match = annMethods.indexOf(method);
 			if (match>=0) {
 				MethodRepresentation annMethod = annMethods.remove(match);

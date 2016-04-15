@@ -1,7 +1,9 @@
 package org.forwoods.docuwiki.initial.parseListeners;
 
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -19,6 +21,18 @@ public class MemberListener extends BasicCSharpBaseListener {
 	
 	Deque<Member> stack;
 	List<String> usings;
+	
+	private final static Map<String, String> replacements = new HashMap<>();
+	
+	static {
+		//list of pointless tags to strip out
+		replacements.put("<summary>", "");
+		replacements.put("</summary>", "");
+		replacements.put("<remarks>", "");
+		replacements.put("</remarks>", "");
+		replacements.put("<description>", "");
+		replacements.put("</description>", "");
+	}
 
 	public MemberListener(Deque<Member> stack, List<String> usings) {
 		this.stack = stack;
@@ -34,7 +48,11 @@ public class MemberListener extends BasicCSharpBaseListener {
 	}
 
 	private String trimCommentLine(String commentLine) {
-		return commentLine.substring(3).replace("<summary>", "").replace("</summary>", "");
+		String line=commentLine.substring(3);//remove the ///
+		for (Map.Entry<String, String> replace:replacements.entrySet()) {
+			line = line.replace(replace.getKey(), replace.getValue());
+		}
+		return line;
 	}
 
 	@Override

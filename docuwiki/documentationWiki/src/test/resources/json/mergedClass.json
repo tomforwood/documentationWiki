@@ -1,0 +1,415 @@
+{
+	"isOrphaned": false,
+	"reflectedVersion": 1,
+	"annotatedVersion": 1,
+	"objectType": 
+	{
+		"typeName": "class"
+	},
+
+	"classModifiers": 
+	[
+		"PUBLIC"
+	],
+
+	"name": "AeroFXState",
+	"extensions": 
+	[
+		
+	],
+
+	"instanceFields": 
+	[
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "airspeedNoisePitch"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "airspeedNoiseVolume"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxColor"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "color"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "edgeFade"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "falloff1"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "falloff2"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "falloff3"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "intensity"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "length"
+		},
+
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "lightPower"
+		},
+
+		{
+			"comment": "Describes the amount of wobble, whatever that is",
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "MinMaxFloat"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "wobble"
+		}
+	],
+
+	"staticFields": 
+	[
+		
+	],
+
+	"instanceProperties": 
+	[
+		
+	],
+
+	"staticProperties": 
+	[
+		
+	],
+
+	"instanceMethods": 
+	[
+		{
+			"attributes": 
+			[
+				"[__DynamicallyInvokable]"
+			],
+
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "System.Boolean"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "Equals",
+			"inheritedFrom": "System.Object",
+			"parameters": 
+			[
+				{
+					"attributes": 
+					[
+						
+					],
+
+					"isOrphaned": false,
+					"objectType": 
+					{
+						"typeName": "System.Object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "obj"
+				}
+			]
+		},
+
+		{
+			"attributes": 
+			[
+				"[__DynamicallyInvokable]",
+				"[NonVersionable]",
+				"[ReliabilityContract(3, 2)]"
+			],
+
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PROTECTED",
+				"VIRTUAL"
+			],
+
+			"name": "Finalize",
+			"inheritedFrom": "System.Object",
+			"parameters": 
+			[
+				
+			]
+		},
+
+		{
+			"attributes": 
+			[
+				"[__DynamicallyInvokable]"
+			],
+
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "System.Int32"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "GetHashCode",
+			"inheritedFrom": "System.Object",
+			"parameters": 
+			[
+				
+			]
+		},
+
+		{
+			"attributes": 
+			[
+				"[SecuritySafeCritical]",
+				"[__DynamicallyInvokable]"
+			],
+
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "System.Type"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetType",
+			"inheritedFrom": "System.Object",
+			"parameters": 
+			[
+				
+			]
+		},
+
+		{
+			"attributes": 
+			[
+				"[SecuritySafeCritical]",
+				"[__DynamicallyInvokable]"
+			],
+
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "System.Object"
+			},
+
+			"modifiers": 
+			[
+				"PROTECTED"
+			],
+
+			"name": "MemberwiseClone",
+			"inheritedFrom": "System.Object",
+			"parameters": 
+			[
+				
+			]
+		},
+
+		{
+			"attributes": 
+			[
+				"[__DynamicallyInvokable]"
+			],
+
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "System.String"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "ToString",
+			"inheritedFrom": "System.Object",
+			"parameters": 
+			[
+				
+			]
+		}
+	],
+
+	"staticMethods": 
+	[
+		
+	],
+
+	"constructors": 
+	[
+		{
+			"isOrphaned": false,
+			"objectType": 
+			{
+				"typeName": "AeroFXState"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "AeroFXState",
+			"parameters": 
+			[
+				
+			]
+		}
+	],
+
+	"nested": 
+	[
+		
+	]
+}

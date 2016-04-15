@@ -43,13 +43,24 @@ docuWikiApp.filter('objectType', ['$filter',function($filter) {
 		if (!input) return "";
 		var out = $filter('classLinkFilter')(input.typeName,classList);
 		if (input.varargs) {
-			out+="<";
-			for (var i=0;i<input.varargs.length;i++) {
-				out+=$filter('objectType')(input.varargs[i],classList);
-				if (i<input.varargs.length-1) out+=",";
-			}
-			out+=">"
+			out+=$filter('varargs')(input.varargs, classList)
 		}
+
+		return out;
+	};
+}]);
+
+docuWikiApp.filter('varargs', ['$filter',function($filter) {
+	return function(varargs, classList) {
+		if (!varargs) return "";
+
+		var out="<";
+		for (var i=0;i<varargs.length;i++) {
+			out+=$filter('objectType')(varargs[i],classList);
+			if (i<varargs.length-1) out+=",";
+		}
+		out+=">"
+
 
 		return out;
 	};
@@ -99,3 +110,13 @@ docuWikiApp.filter('methodFilter', ['$filter',function($filter) {
 		return methodSig;
 	};
 }]);
+
+docuWikiApp.directive('methodElement', function(){
+	return {
+		scope: {
+			methodInfo: '=methodElement',
+			classList:'=classList'
+		},
+		templateUrl: 'partials/methodTemplate.html'
+	};
+});

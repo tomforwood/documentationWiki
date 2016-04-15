@@ -6,8 +6,19 @@
 <h2>Contributing</h2>
 <p>Anyone can edit this documentation.
 To edit the comment attached to an element simply click on the comment box and make your edits</p>
-<p>You can use basic html in the comments (it will be sanitized by angular's sanitizer)</p>
-<p>Then <em>PRESS SAVE</em> at the bottom of the page to save them.</p>
+<p>You can use basic html in the comments (it will be sanitized by angular's sanitizer).
+The editor also supports most of the <a href="https://msdn.microsoft.com/en-us/library/5ast78ax.aspx">
+standard microsoft</a> documentation tags</p>
+<p>Links are supported using both with &ltsee cref= (for class links) and with HTML &lt;a&gt; links. 
+To link to a method within a class use a link of the form 
+<a href="#/classes/Part?scrollTo=ActivatesEvenIfDisconnectedF">
+&lt;a href="#/classes/Part?scrollTo=ActivatesEvenIfDisconnectedF"&gt;</a> where Part is the name of the class,
+ActivatesEvenIfDisconnected is the name of the member in that class to show and F is one of F, P, M, C, N
+indicating of the linked member is a field, property, method, constructor or an nested inner type.</p>
+<p>You must <em>click done</em> once you are finished editing and then 
+<em>PRESS SAVE</em> at the bottom of the page to save them.</p>
+
+
 
 <p>The structure of the documentation is created by reflection on the KSP assembly.
 The comments come from users with an initial population from the comments in the 
@@ -17,7 +28,7 @@ project created by The_Duck/Anatid.</a></p>
 <h3>Errors</h3>
 <p>If there are errors in the documentation then please correct them yourself</p>
 
-<p>Errors in the reflected bits or requests for new featuers can be reported at
+<p>Errors in the reflected bits or requests for new features can be reported at
 <ul>
 	<li>The SP forums:insert link to KSP forum thread here</li>
 	<li>at GitHub: <a href="https://github.com/Anatid/XML-Documentation-for-the-KSP-API/issues">Open Issues</a></li>

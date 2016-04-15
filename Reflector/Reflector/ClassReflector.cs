@@ -202,6 +202,10 @@ namespace Reflector
         {
             foreach (MethodInfo method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
+                if (method.Name == "Generate" && type.Name == "ProceduralAsteroid")
+                {
+                    Debug.WriteLine("asteroid generate");
+                }
                 MethodRepresentation methodRep = mrep(method);
                 if (methodRep == null) continue;
                 rep.instanceMethods.Add(methodRep);
@@ -225,6 +229,22 @@ namespace Reflector
             if (method.DeclaringType!=method.ReflectedType)
             {
                 methodRep.inheritedFrom = method.DeclaringType.FullName;
+            }
+            if (method.IsGenericMethod)
+            {
+                Type[] gens = method.GetGenericArguments();
+                List<string> genArgs = new List<string>();
+                foreach (Type genType in gens)
+                {
+                    object[] constraints = genType.GetGenericParameterConstraints();
+                    string argString = genType.ToString();
+                    if (constraints.Count() > 0)
+                    {
+                        argString+=":"+string.Join(",",constraints);
+                    }
+                    genArgs.Add(argString);
+                }
+                methodRep.genericArgs = genArgs;
             }
             methodRep.modifiers.Add(convert(method));
             methodRep.attributes = getAttributes(method);

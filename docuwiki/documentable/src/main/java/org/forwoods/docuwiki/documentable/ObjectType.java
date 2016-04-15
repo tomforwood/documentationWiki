@@ -27,6 +27,8 @@ public class ObjectType {
 		classNameMap.put("Int32", "int");
 		classNameMap.put("long", "Int642");
 		classNameMap.put("Int64", "long");
+		classNameMap.put("object", "Object");
+		classNameMap.put("Object", "object");
 	}
 	
 	public ObjectType(String name) {
@@ -61,8 +63,11 @@ public class ObjectType {
 		String localName = typeName.replace('+', '.');
 		String otherName = other.typeName.replace('+', '.');
 		
-		localName=localName.replace("System.", "");
-		otherName=otherName.replace("System.", "");
+		//compare only the last part
+		int localLastDot = localName.lastIndexOf('.');
+		int otherLastDot = otherName.lastIndexOf('.');
+		localName = localName.substring(localLastDot+1);
+		otherName = otherName.substring(otherLastDot+1);
 		
 		if (localName.equals(otherName)) return true;
 		if (otherName.equals(classNameMap.get(localName))) return true;

@@ -84,7 +84,7 @@
     <Compile Include="APIReflector.cs" />
     <Compile Include="EnumRepresentation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Type.cs" />
+    <Compile Include="ObjectType.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>

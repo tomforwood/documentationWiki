@@ -28,6 +28,11 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+.comment li{
+	
+    padding: 0px;
+    margin: 0 0 0px;
+}
 
 table pre.comment {
 	color: green;
@@ -39,7 +44,10 @@ textarea.comment {
 	width : 95%;
 }
 
-.orphaned {
+.orphaned .memberName {
+	text-decoration: line-through;
+}
+.orphaned .type {
 	text-decoration: line-through;
 }
 

@@ -6,7 +6,7 @@
 			
 <span ng-repeat="mod in mergedClass.classModifiers">{{mod}} </span>
 {{mergedClass.objectType|objectType:classList}}
-<b>{{mergedClass.name.replace("+",".")}}</b>
+<b>{{mergedClass.name.replace("+",".")}}</b>{{mergedClass.varargs|varargs:classList}}
 <span ng-repeat="extend in mergedClass.extensions">{{$first?":":""}}
 <span ng-bind-html="extend|classLinkFilter:classList"></span>{{$last?"":", "}} 
 </span>
@@ -36,7 +36,10 @@
 				<div click-to-edit="field.comment"></div></td>
 		</table>
 		Inherited static fields
-		<span ng-repeat='method in mergedClass.staticFields| filter:{inheritedFrom:""}' >
+		{{prev.inherit=""}}
+		<span ng-repeat='method in mergedClass.staticFields| filter:{inheritedFrom:""}| orderBy:"-inheritedFrom"' >
+			<span ng-if="!(prev.inherit==method.inheritedFrom)"><br><b>{{method.inheritedFrom}}</b></span>
+					{{prev.inherit=method.inheritedFrom;""}}
 			<span ng-bind-html="method|inhertitedFilter:'F':classList"></span>
 		</span>
 	</div>
@@ -54,7 +57,10 @@
 				<div click-to-edit="field.comment"></div></td>
 		</table>
 		Inherited fields
-		<span ng-repeat='method in mergedClass.instanceFields| filter:{inheritedFrom:""}' >
+		{{prev.inherit=""}}
+		<span ng-repeat='method in mergedClass.instanceFields| filter:{inheritedFrom:""}| orderBy:"-inheritedFrom"' >
+			<span ng-if="!(prev.inherit==method.inheritedFrom)"><br><b>{{method.inheritedFrom}}</b></span>
+					{{prev.inherit=method.inheritedFrom;""}}
 			<span ng-bind-html="method|inhertitedFilter:'F':classList"></span>
 		</span>
 	</div>
@@ -62,7 +68,7 @@
 	<div ng-if="mergedClass.staticProperties.length>0">
 		<h3>Static Properties</h3>
 		<table class="member">
-		<tr ng-repeat="prop in mergedClass.staticProperties| filter:{inheritedFrom:'!'}" ng-class="{orphaned: field.isOrphaned}">
+		<tr ng-repeat="prop in mergedClass.staticProperties| filter:{inheritedFrom:'!'}" ng-class="{orphaned: prop.isOrphaned}">
 				<td class ="modifiers"><span ng-repeat="mod in prop.modifiers">{{mod}} </span></td>
 				<td class="type"><span ng-bind-html="prop.objectType|objectType:classList"></span></td>
 				<td id='{{prop.name}}P' class="memberName">
@@ -73,7 +79,10 @@
 		</tr>
 		</table>
 		Inherited static properties
-		<span ng-repeat='method in mergedClass.staticProperties| filter:{inheritedFrom:""}' >
+		{{prev.inherit=""}}
+		<span ng-repeat='method in mergedClass.staticProperties| filter:{inheritedFrom:""}| orderBy:"-inheritedFrom"' >
+			<span ng-if="!(prev.inherit==method.inheritedFrom)"><br><b>{{method.inheritedFrom}}</b></span>
+					{{prev.inherit=method.inheritedFrom;""}}
 			<span ng-bind-html="method|inhertitedFilter:'P':classList"></span>
 		</span>
 	</div>
@@ -81,7 +90,7 @@
 	<div ng-if="mergedClass.instanceProperties.length>0">
 		<h3>Instance Properties</h3>
 		<table class="member">
-			<tr ng-repeat="prop in mergedClass.instanceProperties| filter:{inheritedFrom:'!'}" ng-class="{orphaned: field.isOrphaned}">
+			<tr ng-repeat="prop in mergedClass.instanceProperties| filter:{inheritedFrom:'!'}" ng-class="{orphaned: prop.isOrphaned}">
 				<td class="modifiers"><span ng-repeat="mod in prop.modifiers">{{mod}} </span></td>
 				<td class="type"><span ng-bind-html="prop.objectType|objectType:classList"></span></td>
 				<td id='{{prop.name}}P' class="memberName">
@@ -92,7 +101,10 @@
 			</tr>
 		</table>
 		Inherited properties
-		<span ng-repeat='method in mergedClass.instanceProperties| filter:{inheritedFrom:""}' >
+		{{prev.inherit=""}}
+		<span ng-repeat='method in mergedClass.instanceProperties| filter:{inheritedFrom:""}| orderBy:"-inheritedFrom"' >
+			<span ng-if="!(prev.inherit==method.inheritedFrom)"><br><b>{{method.inheritedFrom}}</b></span>
+					{{prev.inherit=method.inheritedFrom;""}}
 			<span ng-bind-html="method|inhertitedFilter:'P':classList"></span>
 		</span>
 	</div>
@@ -112,18 +124,16 @@
 	<div ng-if="mergedClass.staticMethods.length>0">
 		<h3>Static Methods</h3>
 		<table class="member">
-		<tr ng-repeat="method in mergedClass.staticMethods| filter:{inheritedFrom:'!'}" ng-class="{orphaned: field.isOrphaned}">
-				<td class ="modifiers"><span ng-repeat="mod in method.modifiers">{{mod}} </span></td>
-				<td class="type"><span ng-bind-html="method.objectType|objectType:classList"></span></td>
-				<td id='{{method.name}}M'>
-					<div ng-if="method.attributes">
-					<div class="attribute" ng-repeat="att in method.attributes">{{att}}<br></div></div>
-					<span class="memberName" ng-bind-html="method|methodFilter:classList"></span>
-				<div click-to-edit="method.comment"></div></td>
-		</tr>
+			<tr ng-repeat="method in mergedClass.staticMethods| filter:{inheritedFrom:'!'}" 
+				ng-class="{orphaned: method.isOrphaned}"
+				method-element="method" class-list="classList">
+			</tr>
 		</table>
 		Inherited static methods
-		<span ng-repeat='method in mergedClass.staticMethods| filter:{inheritedFrom:""}' >
+		{{prev.inherit=""}}
+		<span ng-repeat='method in mergedClass.staticMethods| filter:{inheritedFrom:""}| orderBy:"-inheritedFrom"' >
+			<span ng-if="!(prev.inherit==method.inheritedFrom)"><br><b>{{method.inheritedFrom}}</b></span>
+					{{prev.inherit=method.inheritedFrom;""}}
 			<span ng-bind-html="method|inhertitedFilter:'M':classList"></span>
 		</span>
 	</div>
@@ -131,29 +141,26 @@
 	<div ng-if="mergedClass.instanceMethods.length>0">
 		<h3>Instance Methods</h3>
 		<table class="member">
-			<tr ng-repeat='method in mergedClass.instanceMethods| filter:{inheritedFrom:"!"}' ng-class="{orphaned: field.isOrphaned}">
-				<td class ="modifiers"><span ng-repeat="mod in method.modifiers">{{mod}} </span></td>
-				<td class="type"><span ng-bind-html="method.objectType|objectType:classList"></span></td>
-				<td id='{{method.name}}M'>
-					<div ng-if="method.attributes">
-					<div class="attribute" ng-repeat="att in method.attributes">{{att}}<br></div></div>
-					<span class="memberName" ng-bind-html="method|methodFilter:classList"></span>
-				<div click-to-edit="method.comment"></div></td>
+			<tr ng-repeat='method in mergedClass.instanceMethods| filter:{inheritedFrom:"!"}' 
+			ng-class="{orphaned: method.isOrphaned}"
+			method-element="method" class-list="classList">
 			</tr>
 		</table>
 		Inherited methods
-		<span ng-repeat='method in mergedClass.instanceMethods| filter:{inheritedFrom:""}' >
+		{{prev.inherit=""}}
+		<span ng-repeat='method in mergedClass.instanceMethods| filter:{inheritedFrom:""} | orderBy:"-inheritedFrom"' >
+			<span ng-if="!(prev.inherit==method.inheritedFrom)"><br><b>{{method.inheritedFrom}}</b></span>
+					{{prev.inherit=method.inheritedFrom;""}}
 			<span ng-bind-html="method|inhertitedFilter:'M':classList"></span>
 		</span>
-		</div>
+	</div>
 	<br>
-</div>
 	
 	<div ng-if="mergedClass.nested.length>0">
 		<h3>Nested types</h3>
 		<div ng-repeat='mergedClass in mergedClass.nested'>
 				
-			<h3  id='{{mergedClass.name.split("+").pop()}}N'>{{mergedClass.name.replace("+",".")}}</h3>
+			<h3 id='{{mergedClass.name.split("+").pop()}}N'>{{mergedClass.name.replace("+",".")}}</h3>
 			<div ng-include="'partials/classView.html'"></div>
 		</div>
 	</div>

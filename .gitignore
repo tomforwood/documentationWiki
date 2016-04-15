@@ -19,3 +19,4 @@ buildNumber.properties
 *.classpath
 .settings/
 /docuwiki/documentationWiki/*.log
+/docuwiki/*.log

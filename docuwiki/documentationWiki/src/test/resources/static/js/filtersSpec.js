@@ -6,6 +6,24 @@ describe('Filter tests', function(){
 			inject(function(markupifyFilter) {
 			expect(markupifyFilter('<see cref="CB"/>')).toBe('<a href="#/classes/CB">CB</a>');		
 		}));
+		
+		it('converts params to nice html', 
+			inject(function(markupifyFilter) {
+			expect(markupifyFilter('<param name="obj">The object </param>'))
+				.toBe('<br>param obj &ndash; The object ');		
+		}));
+		
+		it('converts params to nice html', 
+				inject(function(markupifyFilter) {
+				expect(markupifyFilter("<param name='r'>The</param><param name='r'>The</param>"))
+				.toBe('<br>param r &ndash; The<br>param r &ndash; The');		
+				}));
+		
+		it('converts returns to nice html', 
+			inject(function(markupifyFilter) {
+			expect(markupifyFilter('<returns>A ConfigNode.</returns>'))
+				.toBe('<br>returns &ndash; A ConfigNode.');		
+		}));
 
 		it('links should match that created by the classLink filter', 
 			inject(function(markupifyFilter, classLinkFilterFilter) {
@@ -86,11 +104,11 @@ describe('Filter tests', function(){
 		it('formats methods', 
 			inject(function(methodFilterFilter, objectTypeFilter) {
 				var method = {name:'doStuff',
-						parameters:[{objectType:{typeName:'string'}},
-						            {objectType:{typeName:'CB'}}]};
+						parameters:[{objectType:{typeName:'string'}, name:'param1'},
+						            {objectType:{typeName:'CB'}, name:'param2'}]};
 				var methodString = methodFilterFilter(method,classList);
 				var objectLink = objectTypeFilter({typeName:'CB'},classList);
-				expect(methodString).toBe('doStuff\(&#8203;string, '+objectLink+')');
+				expect(methodString).toBe('doStuff\(&#8203;string&nbsp;param1, '+objectLink+'&nbsp;param2)');
 		}));
 	});
 });

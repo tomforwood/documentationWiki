@@ -1,0 +1,16 @@
+
+<h4>History of {{classFQN}}</h4>
+<table class="versions">
+<thead>
+<tr><th>Version</th><th>modify time</th><th>modifier IP</th><th>comment</th><th></th></tr>
+</thead>
+<tbody>
+<tr ng-repeat="version in classVersions ">
+	<td>{{version.version}}</td>
+	<td>{{version.editTimestamp| date:'yyyy-MM-d HH:mm:ss Z'}}</td>
+	<td>{{version.editingAddress}}</td>
+	<td>{{version.action}}</td>
+	<td><a href="#/classes/{{classFQN}}?version={{version.version}}">View Version</a></td>
+</tr>
+</tbody>
+</table>

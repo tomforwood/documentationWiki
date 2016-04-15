@@ -20,7 +20,7 @@ namespace Reflector
         public TopLevelDocumentable(ObjectType objectType, string name) :
             base(objectType,name)
         {
-            version = 1;
+            version = 105;
         }
 
         public JObject getJson()
