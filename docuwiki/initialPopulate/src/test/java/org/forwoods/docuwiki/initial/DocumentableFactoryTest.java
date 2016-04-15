@@ -25,15 +25,6 @@ public class DocumentableFactoryTest {
 	public void setUp() throws Exception {
 		documentableFactory = new DocumentableFactory();
 	}
-
-	@Test
-	public void test() throws IOException {
-		File f = new File("C:/Users/Tom/Source/Repos/XML-Documentation-for-the-KSP-API/src/ControlTypes.cs");
-		BufferedReader reader = new BufferedReader(new FileReader(f));
-		TopLevelDocumentable top = documentableFactory.createTopLevel(reader);
-		
-		assertThat(top).isNotNull().isInstanceOf(EnumRepresentation.class);
-	}
 	
 	@Test
 	public void testNestedEnum() throws IOException {
