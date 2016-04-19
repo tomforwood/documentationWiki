@@ -1,0 +1,9 @@
+<div> 
+    <span ng-hide="view.editorEnabled">
+    	<div class="comment" ng-click="enableEditor()"><span ng-bind-html="value|markupify"></span></div> 
+    </span> 
+    <div ng-show="view.editorEnabled"> 
+        <textarea auto-height class="comment" ng-model="value"></textarea><br> 
+        <button ng-click="cancel()">undo</button>. 
+    </div> 
+</div>

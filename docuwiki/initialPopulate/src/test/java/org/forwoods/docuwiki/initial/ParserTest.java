@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStream;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpLexer;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser;
-import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.CompilationUnitContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,10 +28,9 @@ public class ParserTest {
 		CharStream cstream = new ANTLRInputStream(reader);
 		TokenStream tokens = new CommonTokenStream(new BasicCSharpLexer(cstream));
 		BasicCSharpParser parser = new BasicCSharpParser(tokens);
-		CompilationUnitContext file = parser.compilationUnit();
+		parser.compilationUnit();
 		
 		
-		System.out.println(file.toStringTree());
 	}
 
 }

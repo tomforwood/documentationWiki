@@ -18,120 +18,116 @@ import org.bson.conversions.Bson;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.ClassRepresentation.MethodRepresentation;
 import org.forwoods.docuwiki.documentable.Member;
-import org.forwoods.docuwiki.documentable.TopLevelDeserializer;
-import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
+import org.forwoods.docuwiki.documentationWiki.DocumentationWikiApplication;
 import org.forwoods.docuwiki.documentationWiki.api.ClassUse;
 import org.forwoods.docuwiki.documentationWiki.api.ClassUses;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.codahale.metrics.Timer;
 import com.mongodb.client.MongoCollection;
 
 @Path("/class/uses")
 @Produces(MediaType.APPLICATION_JSON)
 public class ClassUsesResource extends ClassBasedResource{
 	private MongoCollection<Document> reflectedClasses;
-	
-	ObjectMapper mapper = new ObjectMapper();
+	private Timer classUsesTimer;
 	
 	public ClassUsesResource(MongoCollection<Document> reflectedClasses,
 			ClassListResource classList) {
 		super(classList);
 		this.reflectedClasses = reflectedClasses;
-		SimpleModule sm = new SimpleModule()
-				.addDeserializer(TopLevelDocumentable.class, 
-						new TopLevelDeserializer());
-		mapper.registerModule(sm);
+		classUsesTimer = DocumentationWikiApplication.metrics.timer("ClassUsesTimer");
 	}
 	
 	@GET
 	@Path("/{id}")
 	public ClassUses getClass(@PathParam("id") String name) {
-		boolean validClass = isValidClass(name);
-		if (!validClass) return null;
-		
-		ClassUses cu = new ClassUses(name);		
-		
-		Bson b = memberSearch("instanceFields",name);
-		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "F", 
-				cr->cr.getInstanceFields()));
-		
-		 b = memberSearch("staticFields",name);
-		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "F",
-				cr->cr.getStaticFields()));
-		
-		 b = memberSearch("instanceProperties",name);
-		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "P",
-				cr->cr.getInstanceProperties()));
+		try (Timer.Context context = classUsesTimer.time()) {
+			boolean validClass = isValidClass(name);
+			if (!validClass) return null;
 			
-		b = memberSearch("staticProperties",name);
-		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "P",
-				cr->cr.getStaticProperties()));
-		
-		b = memberSearch("staticMethods",name);
-		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "M",
-				cr->cr.getStaticMethods()));
-		
-		b = memberSearch("instanceMethods",name);
-		reflectedClasses.find(b)
-		.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "M",
-				cr->cr.getInstanceMethods()));
-		
-		//now methods with matching parameter type
-		b=parameterSearch("instanceMethods", name);
-		reflectedClasses.find(b)
-		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "M",
-				cr->cr.getInstanceMethods()));
-		//now methods with matching parameter type
-		b=parameterSearch("staticMethods", name);
-		reflectedClasses.find(b)
-		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "M",
-				cr->cr.getStaticMethods()));
-		b=parameterSearch("constructors", name);
-		reflectedClasses.find(b)
-		.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "C",
-				cr->cr.getInstanceMethods()));
-		
-		
-		//now for annotations
-		
-		b = attributeSearch("instanceFields",name);
-		reflectedClasses.find(b)
-		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "F",
-				cr->cr.getInstanceFields()));
-		
-		 b = attributeSearch("staticFields",name);
-		reflectedClasses.find(b)
-		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "F",
-				cr->cr.getStaticFields()));
-		
-		 b = attributeSearch("instanceProperties",name);
-		reflectedClasses.find(b)
-		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "P",
-				cr->cr.getInstanceProperties()));
+			ClassUses cu = new ClassUses(name);		
 			
-		b = attributeSearch("staticProperties",name);
-		reflectedClasses.find(b)
-		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "P",
-				cr->cr.getStaticProperties()));
-		
-		b = attributeSearch("staticMethods",name);
-		reflectedClasses.find(b)
-		.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "M",
-				cr->cr.getStaticMethods()));
-		
-		b = attributeSearch("instanceMethods",name);
-		reflectedClasses.find(b)
-		.forEach(new AttributeTypeConsumer(cu.getUsesReturns(), name, "M",
-				cr->cr.getInstanceMethods()));
-		
+			Bson b = memberSearch("instanceFields",name);
+			reflectedClasses.find(b)
+			.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "F", 
+					cr->cr.getInstanceFields()));
+			
+			 b = memberSearch("staticFields",name);
+			reflectedClasses.find(b)
+			.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "F",
+					cr->cr.getStaticFields()));
+			
+			 b = memberSearch("instanceProperties",name);
+			reflectedClasses.find(b)
+			.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "P",
+					cr->cr.getInstanceProperties()));
 				
-		return cu;
+			b = memberSearch("staticProperties",name);
+			reflectedClasses.find(b)
+			.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "P",
+					cr->cr.getStaticProperties()));
+			
+			b = memberSearch("staticMethods",name);
+			reflectedClasses.find(b)
+			.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "M",
+					cr->cr.getStaticMethods()));
+			
+			b = memberSearch("instanceMethods",name);
+			reflectedClasses.find(b)
+			.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "M",
+					cr->cr.getInstanceMethods()));
+			
+			//now methods with matching parameter type
+			b=parameterSearch("instanceMethods", name);
+			reflectedClasses.find(b)
+			.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "M",
+					cr->cr.getInstanceMethods()));
+			//now methods with matching parameter type
+			b=parameterSearch("staticMethods", name);
+			reflectedClasses.find(b)
+			.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "M",
+					cr->cr.getStaticMethods()));
+			b=parameterSearch("constructors", name);
+			reflectedClasses.find(b)
+			.forEach(new ParameterTypeConsumer(cu.getUsesParameters(), name, "C",
+					cr->cr.getInstanceMethods()));
+			
+			
+			//now for annotations
+			
+			b = attributeSearch("instanceFields",name);
+			reflectedClasses.find(b)
+			.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "F",
+					cr->cr.getInstanceFields()));
+			
+			 b = attributeSearch("staticFields",name);
+			reflectedClasses.find(b)
+			.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "F",
+					cr->cr.getStaticFields()));
+			
+			 b = attributeSearch("instanceProperties",name);
+			reflectedClasses.find(b)
+			.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "P",
+					cr->cr.getInstanceProperties()));
+				
+			b = attributeSearch("staticProperties",name);
+			reflectedClasses.find(b)
+			.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "P",
+					cr->cr.getStaticProperties()));
+			
+			b = attributeSearch("staticMethods",name);
+			reflectedClasses.find(b)
+			.forEach(new AttributeTypeConsumer(cu.getUsesAttributes(), name, "M",
+					cr->cr.getStaticMethods()));
+			
+			b = attributeSearch("instanceMethods",name);
+			reflectedClasses.find(b)
+			.forEach(new AttributeTypeConsumer(cu.getUsesReturns(), name, "M",
+					cr->cr.getInstanceMethods()));
+			
+					
+			return cu;
+		}
 	}
 	
 	private Bson memberSearch(String memberCollection, String type) {

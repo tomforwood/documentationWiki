@@ -30,19 +30,16 @@ import org.bson.json.JsonWriterSettings;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.EnumRepresentation;
 import org.forwoods.docuwiki.documentable.Member;
-import org.forwoods.docuwiki.documentable.TopLevelDeserializer;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
+import org.forwoods.docuwiki.documentationWiki.DocumentationWikiApplication;
 import org.forwoods.docuwiki.documentationWiki.api.MergedClass;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.mongodb.client.MongoCollection;
 
 
@@ -54,6 +51,9 @@ public class ClassResource extends ClassBasedResource{
 	private MongoCollection<Document> reflectedClasses;
 	private MongoCollection<Document> annotatedClasses;
 	private Clock clock = Clock.systemUTC();
+	private Timer classGetTimer;
+	private Timer classSaveTimer;
+	private Meter saveFailMeter;
 
 	public ClassResource(MongoCollection<Document> reflectedClasses, 
 			MongoCollection<Document> annotatedClasses,
@@ -61,6 +61,11 @@ public class ClassResource extends ClassBasedResource{
 		super(classList);
 		this.reflectedClasses = reflectedClasses;
 		this.annotatedClasses = annotatedClasses;
+		
+
+		classGetTimer = DocumentationWikiApplication.metrics.timer("ClassGetTimer");
+		classSaveTimer = DocumentationWikiApplication.metrics.timer("ClassSaveTimer");
+		saveFailMeter = DocumentationWikiApplication.metrics.meter("SaveFailMeter");
 	}
 	
 	@GET
@@ -68,53 +73,32 @@ public class ClassResource extends ClassBasedResource{
 	public MergedClass<? extends TopLevelDocumentable> 
 			getClass(@PathParam("id") String name,
 					@QueryParam("version") Integer version) {
-		boolean validClass = isValidClass(name);
-		if (!validClass) return null;
-		
-		String reflectedJson = loadClasses(name, reflectedClasses, null);
-
-		String annotatedJson = loadClasses(name, annotatedClasses, version);
-		
-		ObjectMapper mapper = getMapper();
-		try {
-			TopLevelDocumentable reflected=null;
-			if (reflectedJson!=null) {
-				reflected = read(mapper, reflectedJson);
+		try (Timer.Context context = classGetTimer.time()){
+			boolean validClass = isValidClass(name);
+			if (!validClass) return null;
+			
+			String reflectedJson = loadClasses(name, reflectedClasses, null);
+	
+			String annotatedJson = loadClasses(name, annotatedClasses, version);
+			
+			ObjectMapper mapper = getMapper();
+			try {
+				TopLevelDocumentable reflected=null;
+				if (reflectedJson!=null) {
+					reflected = read(mapper, reflectedJson);
+				}
+				TopLevelDocumentable annotated=null;
+				if (annotatedJson!=null) {
+					annotated = read(mapper, annotatedJson);
+				}
+				MergedClass<TopLevelDocumentable> result = MergedClass.createMergedClass(reflected, annotated);
+				result.setLatest(version==null);
+				return result;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			TopLevelDocumentable annotated=null;
-			if (annotatedJson!=null) {
-				annotated = read(mapper, annotatedJson);
-			}
-			MergedClass<TopLevelDocumentable> result = MergedClass.createMergedClass(reflected, annotated);
-			result.setLatest(version==null);
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
+			return null;
 		}
-		return null;		
-	}
-
-	public static ObjectMapper getMapper() {
-		ObjectMapper mapper = new ObjectMapper();
-		SimpleModule sm = new SimpleModule()
-				.addDeserializer(TopLevelDocumentable.class, 
-						new TopLevelDeserializer())
-				.addDeserializer(Long.class, new JsonDeserializer<Long>(){
-
-					@Override
-					public Long deserialize(JsonParser p, DeserializationContext ctxt)
-							throws IOException, JsonProcessingException {
-						JsonNode node = p.getCodec().readTree(p);
-						if (node.has("$numberLong")) {
-							Long value = node.get("$numberLong").asLong();
-							return value;
-						}
-						else {
-							return node.asLong();
-						}
-					}});
-		mapper.registerModule(sm);
-		return mapper;
 	}
 
 	protected TopLevelDocumentable read(ObjectMapper mapper, String json) throws JsonParseException, JsonMappingException, IOException {
@@ -153,42 +137,47 @@ public class ClassResource extends ClassBasedResource{
 	@POST
 	public Response save(MergedClass<?> mergedClass,
 			@QueryParam("action") String action, @Context HttpServletRequest request) {
-		TopLevelDocumentable toSave=null;
-		if (mergedClass.getObjectType().getTypeName().equals("class")) {
-			toSave = saveClass((MergedClass<ClassRepresentation>) mergedClass);
+		try (Timer.Context context = classSaveTimer.time()) { 
+			TopLevelDocumentable toSave=null;
+			if (mergedClass.getObjectType().getTypeName().equals("class")) {
+				toSave = saveClass((MergedClass<ClassRepresentation>) mergedClass);
+				
+			}
+			else if (mergedClass.getObjectType().getTypeName().equals("enum")) {
+				toSave = saveEnum((MergedClass<EnumRepresentation>)mergedClass);
+			}
 			
-		}
-		else if (mergedClass.getObjectType().getTypeName().equals("enum")) {
-			toSave = saveEnum((MergedClass<EnumRepresentation>)mergedClass);
-		}
-		
-		if ("revert".equals(action)) {
-			toSave.setModifyAction("Reverted to version "+mergedClass.getAnnotatedVersion());
-			toSave.setVersion(fechNextVersion(mergedClass.getName()));
-		}
-		else {
-
-			toSave.setVersion(mergedClass.getAnnotatedVersion()+1);
-		}
+			if ("revert".equals(action)) {
+				toSave.setModifyAction("Reverted to version " + 
+						mergedClass.getAnnotatedVersion());
+				toSave.setVersion(fechNextVersion(mergedClass.getName()));
+			}
+			else {
+	
+				toSave.setVersion(mergedClass.getAnnotatedVersion()+1);
+			}
+				
 			
-		
-		toSave.setModifyTime(clock.millis());
-		toSave.setIpAddress(request.getRemoteAddr());
-		
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.writeValueAsString(toSave);
-			String json = mapper.writeValueAsString(toSave);
-			Document document = Document.parse(json);
-			annotatedClasses.insertOne(document);
-			URI created = new URI("/api/class/"+toSave.getName());
-			return Response.created(created).build();
-		} catch (JsonProcessingException | URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			//TODO return some kind of error
+			toSave.setModifyTime(clock.millis());
+			toSave.setIpAddress(request.getRemoteAddr());
+			
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValueAsString(toSave);
+				String json = mapper.writeValueAsString(toSave);
+				Document document = Document.parse(json);
+				annotatedClasses.insertOne(document);
+				URI created = new URI("/api/class/"+toSave.getName());
+				return Response.created(created).build();
+			} catch (JsonProcessingException | URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				//TODO return some kind of error
+			}
+			saveFailMeter.mark();
+			return Response.serverError().entity("Server Error saving class")
+					.type("text/plain").build();
 		}
-		return Response.serverError().entity("Server Error saving class").type("text/plain").build();
 	}
 
 	private int fechNextVersion(String name) {

@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.ClassRepresentation.MethodRepresentation;
 import org.forwoods.docuwiki.documentable.Member;
-import org.forwoods.docuwiki.documentable.Modifier;
 import org.forwoods.docuwiki.documentable.ObjectType;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ConstructorDeclarationContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.FormalParamContext;

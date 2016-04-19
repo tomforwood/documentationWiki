@@ -1,4 +1,4 @@
-<div click-to-edit="mergedClass.comment"></div>
+<div click-to-edit2="mergedClass.comment"></div>
 <br>
 <div ng-if="mergedClass.attributes">
 	<div class="attribute" ng-repeat="att in mergedClass.attributes">{{att}}<br></div>
@@ -17,7 +17,7 @@
 	<tr ng-repeat="enumValue in mergedClass.enumConsts">
 		<td class="memberName">{{enumValue.name}}</td>
 		<td>{{enumValue.enumValue?"="+enumValue.enumValue:""}}</td>
-		<td><div click-to-edit="enumValue.comment"></div></td>
+		<td><div click-to-edit2="enumValue.comment"></div></td>
 	</tr>
 	</table>
 </div>
@@ -28,12 +28,12 @@
 		<table class="member">
 		<tr ng-repeat="field in mergedClass.staticFields| filter:{inheritedFrom:'!'}" ng-class="{orphaned: field.isOrphaned}">
 				<td class ="modifiers"><span ng-repeat="mod in field.modifiers">{{mod}} </span></td>
-				<td class="type"><span ng-bind-html="field.objectType|objectType:classList"></span></td>
+				<td class="type"><span ng-bind-html="field.objectType|objectType:classList"></span>{{field.objectType}}</td>
 				<td class="memberName">
 					<div ng-if="field.attributes">
 					<div class="attribute" ng-repeat="att in field.attributes">{{att}}<br></div></div>
 					{{field.name}} {{field.assignment?" = "+field.assignment:""}}
-				<div click-to-edit="field.comment"></div></td>
+				<div click-to-edit2="field.comment"></div></td>
 		</table>
 		Inherited static fields
 		{{prev.inherit=""}}
@@ -54,7 +54,7 @@
 					<div ng-if="field.attributes">
 					<div class="attribute" ng-repeat="att in field.attributes">{{att}}<br></div></div>
 					{{field.name}} {{field.assignment?field.assignment:""}}
-				<div click-to-edit="field.comment"></div></td>
+				<div click-to-edit2="field.comment"></div></td>
 		</table>
 		Inherited fields
 		{{prev.inherit=""}}
@@ -75,7 +75,7 @@
 					<div ng-if="prop.attributes">
 					<div class="attribute" ng-repeat="att in prop.attributes">{{att}}<br></div></div>
 					{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}
-				<div click-to-edit="prop.comment"></div></td>
+				<div click-to-edit2="prop.comment"></div></td>
 		</tr>
 		</table>
 		Inherited static properties
@@ -97,7 +97,7 @@
 					<div ng-if="prop.attributes">
 					<div class="attribute" ng-repeat="att in prop.attributes">{{att}}<br></div></div>
 					{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}
-				<div click-to-edit="prop.comment"></div></td>
+				<div click-to-edit2="prop.comment"></div></td>
 			</tr>
 		</table>
 		Inherited properties
@@ -117,7 +117,7 @@
 					<div ng-if="method.attributes">
 					<div class="attribute" ng-repeat="att in method.attributes">{{att}}<br></div></div>
 					{{method.name=mergedClass.name.replace("+",".");""}}<span class="memberName" ng-bind-html="method|methodFilter:classList"></span>
-				<div click-to-edit="method.comment"></div></td>
+				<div click-to-edit2="method.comment"></div></td>
 		</tr>
 	</table>
 	

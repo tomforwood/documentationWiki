@@ -1,10 +1,10 @@
 <h1>{{mergedClass.name}}</h1>
-viewing version{{version}}
+<h3 ng-if="version" class="versionTag">viewing version {{version}}</h3>
 <div ng-include="'partials/classView.html'"></div>
 
 
-<br><button ng-click='save.action()' confirm-if='save.confirm' 
+<dir ng-if="edited.value">
+<button ng-click='save.action()' confirm-if='save.confirm' 
 	confirm="Replace the latest version with {{version}}?">{{save.buttonText}}</button>
+</dir>
 {{ PostDataResponse }}
-
-<br>

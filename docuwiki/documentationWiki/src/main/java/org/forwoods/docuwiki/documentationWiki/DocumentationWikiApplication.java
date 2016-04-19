@@ -13,6 +13,7 @@ import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassUsesResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassVersionsResource;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
@@ -29,6 +30,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
 
     MongoDatabase database;
 	private MongoClient client;
+	public static MetricRegistry metrics = new MetricRegistry();
 	
 	public static void main(final String[] args) throws Exception {
         new DocumentationWikiApplication().run(args);
@@ -50,6 +52,9 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     	
     	bootstrap.getObjectMapper()
     		.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+    	
+    	metrics = bootstrap.getMetricRegistry();
+
     }
 
     @Override
@@ -88,7 +93,6 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
         
         ClassBasedResource classes = new ClassResource(reflectedDocuments, annotatedDocuments, classList);
 		ClassUsesResource uses = new ClassUsesResource(reflectedDocuments, classList);
-        
         
         environment.jersey().register(classes);
         environment.jersey().register(classList);

@@ -8,8 +8,6 @@ import org.assertj.core.api.Condition;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.Documentable;
 import org.forwoods.docuwiki.documentable.EnumRepresentation;
-import org.forwoods.docuwiki.documentable.EnumRepresentation.EnumConstant;
-import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +25,7 @@ public class MergedClassTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		ObjectMapper mapper = ClassResource.getMapper();
+		ObjectMapper mapper = ClassResource.createMapper();
 		InputStream reflectedStream = this.getClass().getClassLoader()
 				.getResourceAsStream("json/reflectedClass.json");
 		reflectedClass = mapper.readValue(reflectedStream, ClassRepresentation.class);

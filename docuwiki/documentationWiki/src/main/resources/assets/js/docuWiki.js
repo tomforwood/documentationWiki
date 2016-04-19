@@ -46,25 +46,27 @@ docuWikiApp.directive("autoHeight", function ($timeout) {
             }
 
             var resize = function() {
-              return element[0].style.height = "" + element[0].scrollHeight + "px";
+            	var res= element[0].style.height = "" + element[0].scrollHeight + "px";
+            	return res;
             };
             $scope.resize=resize;
-
-            element.on("blur keyup change", resize);
-            $timeout(resize, 0)
+            $scope.focus=function() {
+            	element.focus();
+            }
+            element.on("blur keyup change focus", resize);
         }
     };
 });
 
 
-docuWikiApp.directive("clickToEdit", function($timeout) {
+docuWikiApp.directive("clickToEdit2", function($timeout) {
 
 	return {
 	    restrict: "A",
 	    replace: true,
-	    templateUrl: 'partials/editorTemplate.html',
+	    templateUrl: 'partials/editorTemplate2.html',
 	    scope: {
-	        value: "=clickToEdit"
+	        value: "=clickToEdit2"
 	    },
 	    controller: function($scope) {
 	        $scope.view = {
@@ -73,18 +75,18 @@ docuWikiApp.directive("clickToEdit", function($timeout) {
 	        };
 
 	        $scope.enableEditor = function() {
-	            $scope.view.editorEnabled = true;
-	            $scope.view.editableValue = $scope.value;
-	            $timeout($scope.resize, 0);
+	            if (!$scope.$parent.version){
+		        	$scope.view.editorEnabled = true;
+		            $scope.origValue = angular.copy($scope.value);
+		            $scope.$parent.edited.value=true;
+	
+		            $timeout($scope.focus, 0);
+	            }
 	        };
 
-	        $scope.disableEditor = function() {
+	        $scope.cancel = function() {
+	            $scope.value = angular.copy($scope.origValue);
 	            $scope.view.editorEnabled = false;
-	        };
-
-	        $scope.save = function() {
-	            $scope.value = $scope.view.editableValue;
-	            $scope.disableEditor();
 	        };
 	    }
 	};
@@ -117,7 +119,7 @@ docuWikiApp.filter('classLinkFilter', ['$sce',function($sanitize) {
 	};
 }]);
 
-docuWikiApp.filter('markupify', ['$sce',function($sanitize) {
+docuWikiApp.filter('markupify', [function() {
 	var substitutions = [{
 			key:/<see cref=["']([a-zA-z.]*)["']\/>/g, //class link
 			value:'<a href="#/classes/$1">$1</a>'
@@ -165,7 +167,7 @@ docuWikiApp.run(function($rootScope, $location, $anchorScroll, $stateParams, $ti
 			$timeout(function(){
 				$anchorScroll($stateParams.scrollTo); 
 				$stateParams.scrollTo=null;
-			},100);
+			},700);
 		}
 	});
 });

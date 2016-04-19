@@ -81,8 +81,15 @@ describe('Filter tests', function(){
 		it('formats varargs with links', 
 				inject(function(objectTypeFilter, classLinkFilterFilter) {
 				expect(objectTypeFilter({typeName:'List',varargs:[{typeName:'CB'}]},classList))
-					.toBe('List<'+classLinkFilterFilter('CB', classList)+'>');
+					.toBe('List&lt;'+classLinkFilterFilter('CB', classList)+'&gt;');
 		}));
+		it("formats Complicated thing", function(){
+			inject(function(objectTypeFilter, classLinkFilterFilter) {
+				var objectType={"typeName":"EventData","varargs":[{"typeName":"float"},{"typeName":"ScienceSubject"},{"typeName":"ProtoVessel"},{"typeName":"bool"}]};
+				expect(objectTypeFilter(objectType,classList))
+				.toBe("EventData&lt;float,ScienceSubject,ProtoVessel,bool&gt;");
+			});
+		});
 	});
 	
 	describe('InheritedFilter', function(){

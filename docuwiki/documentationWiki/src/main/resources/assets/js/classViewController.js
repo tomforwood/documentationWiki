@@ -8,6 +8,7 @@ docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', 'ClassList',
     function($scope, Class, ClassList, $stateParams, $state) {
 		$scope.version = $stateParams.version;
 		$scope.classFQN=$stateParams.classname
+		$scope.edited={value:undefined!=$scope.version};
 		var query = {classid:$stateParams.classname};
 		if ($scope.version) {
 			query.version=$scope.version;
@@ -54,12 +55,12 @@ docuWikiApp.filter('varargs', ['$filter',function($filter) {
 	return function(varargs, classList) {
 		if (!varargs) return "";
 
-		var out="<";
+		var out="&lt;";
 		for (var i=0;i<varargs.length;i++) {
 			out+=$filter('objectType')(varargs[i],classList);
 			if (i<varargs.length-1) out+=",";
 		}
-		out+=">"
+		out+="&gt;"
 
 
 		return out;

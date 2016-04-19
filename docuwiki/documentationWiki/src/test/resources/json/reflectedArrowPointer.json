@@ -1,0 +1,3067 @@
+{
+	"instanceFields": 
+	[
+		
+	],
+
+	"staticFields": 
+	[
+		
+	],
+
+	"instanceProperties": 
+	[
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "Offset"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Vector3"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "Direction"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "float"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "Length"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Color"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "Color"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "WorldSpace"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "useGUILayout",
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "enabled",
+			"inheritedFrom": "UnityEngine.Behaviour"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "isActiveAndEnabled",
+			"inheritedFrom": "UnityEngine.Behaviour"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Transform"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "transform",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Rigidbody"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "rigidbody",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Rigidbody2D"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "rigidbody2D",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Camera"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "camera",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Light"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "light",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Animation"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "animation",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.ConstantForce"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "constantForce",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Renderer"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "renderer",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.AudioSource"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "audio",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.GUIText"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "guiText",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.NetworkView"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "networkView",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.GUIElement"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "guiElement",
+			"attributes": 
+			[
+				"[Obsolete(Please use guiTexture instead)]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.GUITexture"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "guiTexture",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Collider"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "collider",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Collider2D"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "collider2D",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.HingeJoint"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "hingeJoint",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.ParticleEmitter"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "particleEmitter",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.ParticleSystem"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "particleSystem",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": false,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.GameObject"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "gameObject",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "active",
+			"attributes": 
+			[
+				"[Obsolete(the active property is deprecated on components. Please use gameObject.active instead. If you meant to enable / disable a single component use enabled instead.)]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "string"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "tag",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "string"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "name",
+			"inheritedFrom": "UnityEngine.Object"
+		},
+
+		{
+			"setter": true,
+			"getter": true,
+			"objectType": 
+			{
+				"typeName": "UnityEngine.HideFlags"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "hideFlags",
+			"inheritedFrom": "UnityEngine.Object"
+		}
+	],
+
+	"staticProperties": 
+	[
+		
+	],
+
+	"instanceMethods": 
+	[
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "float"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "time",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "Invoke",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "float"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "time",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "float"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "repeatRate",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "InvokeRepeating",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "CancelInvoke",
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "CancelInvoke",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "IsInvoking",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "IsInvoking",
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Collections.IEnumerator"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "routine",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Coroutine"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StartCoroutine",
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Collections.IEnumerator"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "routine",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Coroutine"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StartCoroutine_Auto",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "value",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Coroutine"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StartCoroutine",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Coroutine"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StartCoroutine",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StopCoroutine",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Collections.IEnumerator"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "routine",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StopCoroutine",
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.Coroutine"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "routine",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StopCoroutine",
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "StopAllCoroutines",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.MonoBehaviour"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "type",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponent",
+			"attributes": 
+			[
+				"[TypeInferenceRule(0)]",
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "T"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponent",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "type",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponent",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "t",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentInChildren",
+			"attributes": 
+			[
+				"[TypeInferenceRule(0)]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "T"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentInChildren",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "t",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInChildren",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "t",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "bool"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "includeInactive",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInChildren",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "bool"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "includeInactive",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "T[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInChildren",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "bool"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "includeInactive",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "List",
+						"varargs": 
+						[
+							{
+								"typeName": "T"
+							}
+						]
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "result",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInChildren",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "T[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInChildren",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "List",
+						"varargs": 
+						[
+							{
+								"typeName": "T"
+							}
+						]
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "results",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInChildren",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "t",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentInParent",
+			"attributes": 
+			[
+				"[TypeInferenceRule(0)]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "T"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentInParent",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "t",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInParent",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "t",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "bool"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "includeInactive",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInParent",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "bool"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "includeInactive",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "T[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInParent",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "T[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponentsInParent",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "type",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "UnityEngine.Component[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponents",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "T[]"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponents",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "System.Type"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "type",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "System.Collections.Generic.List",
+						"varargs": 
+						[
+							{
+								"typeName": "UnityEngine.Component"
+							}
+						]
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "results",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponents",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"genericArgs": 
+			[
+				"T:UnityEngine.Component"
+			],
+
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "List",
+						"varargs": 
+						[
+							{
+								"typeName": "T"
+							}
+						]
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "results",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetComponents",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "tag",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "CompareTag",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "value",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.SendMessageOptions"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "options",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessageUpwards",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "value",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessageUpwards",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessageUpwards",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.SendMessageOptions"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "options",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessageUpwards",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "value",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.SendMessageOptions"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "options",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessage",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "value",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessage",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessage",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.SendMessageOptions"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "options",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "SendMessage",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "parameter",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.SendMessageOptions"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "options",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "BroadcastMessage",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "parameter",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "BroadcastMessage",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "BroadcastMessage",
+			"attributes": 
+			[
+				"[ExcludeFromDocs]"
+			],
+
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "string"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "methodName",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.SendMessageOptions"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "options",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "BroadcastMessage",
+			"inheritedFrom": "UnityEngine.Component"
+		},
+
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "object"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "o",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "Equals",
+			"inheritedFrom": "UnityEngine.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "int"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "GetHashCode",
+			"inheritedFrom": "UnityEngine.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "int"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetInstanceID",
+			"attributes": 
+			[
+				"[NotRenamed]"
+			],
+
+			"inheritedFrom": "UnityEngine.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "string"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"VIRTUAL"
+			],
+
+			"name": "ToString",
+			"attributes": 
+			[
+				"[WrapperlessIcall]"
+			],
+
+			"inheritedFrom": "UnityEngine.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Type"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "GetType",
+			"attributes": 
+			[
+				"[SecuritySafeCritical]",
+				"[__DynamicallyInvokable]"
+			],
+
+			"inheritedFrom": "System.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "System.Void"
+			},
+
+			"modifiers": 
+			[
+				"PROTECTED",
+				"VIRTUAL"
+			],
+
+			"name": "Finalize",
+			"attributes": 
+			[
+				"[__DynamicallyInvokable]",
+				"[NonVersionable]",
+				"[ReliabilityContract(3, 2)]"
+			],
+
+			"inheritedFrom": "System.Object"
+		},
+
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "object"
+			},
+
+			"modifiers": 
+			[
+				"PROTECTED"
+			],
+
+			"name": "MemberwiseClone",
+			"attributes": 
+			[
+				"[SecuritySafeCritical]",
+				"[__DynamicallyInvokable]"
+			],
+
+			"inheritedFrom": "System.Object"
+		}
+	],
+
+	"staticMethods": 
+	[
+		{
+			"parameters": 
+			[
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.Transform"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "parent",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.Vector3"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "offset",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.Vector3"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "direction",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "float"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "length",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "UnityEngine.Color"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "color",
+					"attributes": 
+					[
+						
+					]
+				},
+
+				{
+					"objectType": 
+					{
+						"typeName": "bool"
+					},
+
+					"modifiers": 
+					[
+						
+					],
+
+					"name": "worldSpace",
+					"attributes": 
+					[
+						
+					]
+				}
+			],
+
+			"objectType": 
+			{
+				"typeName": "ArrowPointer"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC",
+				"STATIC"
+			],
+
+			"name": "Create"
+		}
+	],
+
+	"constructors": 
+	[
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "ArrowPointer"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "*constructor*"
+		}
+	],
+
+	"extensions": 
+	[
+		"UnityEngine.MonoBehaviour"
+	],
+
+	"nested": 
+	[
+		
+	],
+
+	"version": 105,
+	"userGenerated": false,
+	"objectType": 
+	{
+		"typeName": "class"
+	},
+
+	"modifiers": 
+	[
+		"PUBLIC"
+	],
+
+	"name": "ArrowPointer"
+}

@@ -2,7 +2,7 @@ package org.forwoods.docuwiki.documentationWiki.resources;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static com.mongodb.client.model.Filters.*;
+//import static com.mongodb.client.model.Filters.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
@@ -22,6 +21,7 @@ import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.api.FQClassName;
 import org.forwoods.docuwiki.documentationWiki.api.MergedClass;
+import org.forwoods.docuwiki.documentationWiki.testUtil.FindIterableStub;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -57,10 +57,12 @@ public class ClassResourceTest {
 	@Test
 	public void testGetClass() {
 		classes.add(new FQClassName("test", "test.TestClass", FQClassName.ALL));
-		FindIterable<Document> findIterableRef = readJson("json/reflectedClass.json");
-		FindIterable<Document> findIterableAnn = readJson("json/annotatedClass.json");
+		FindIterable<Document> findIterableRef = 
+				FindIterableStub.loadResources("json/reflectedClass.json");
+		FindIterable<Document> findIterableAnn = 
+				FindIterableStub.loadResources("json/annotatedClass.json");
 		when(reflected.find(any(Bson.class))).thenReturn(findIterableRef);
-		Bson query = eq("name","test.TestClass");
+		//Bson query = eq("name","test.TestClass");
 		when(annotated.find(any(Bson.class))).thenReturn(findIterableAnn);
 		
 		MergedClass<? extends TopLevelDocumentable> class1 = 
@@ -80,10 +82,12 @@ public class ClassResourceTest {
 	@Test
 	public void testGetClassVersion() {
 		classes.add(new FQClassName("test", "test.TestClass", FQClassName.ALL));
-		FindIterable<Document> findIterableRef = readJson("json/reflectedClass.json");
-		FindIterable<Document> findIterableAnn = readJson("json/annotatedClass.json");
+		FindIterable<Document> findIterableRef = 
+				FindIterableStub.loadResources("json/reflectedClass.json");
+		FindIterable<Document> findIterableAnn = 
+				FindIterableStub.loadResources("json/annotatedClass.json");
 		when(reflected.find(any(Bson.class))).thenReturn(findIterableRef);
-		Bson query = and(eq("name","test.TestClass"),eq("version",1));
+		//Bson query = and(eq("name","test.TestClass"),eq("version",1));
 		when(annotated.find(any(Bson.class))).thenReturn(findIterableAnn);
 		
 		MergedClass<? extends TopLevelDocumentable> class1 = 
@@ -103,14 +107,14 @@ public class ClassResourceTest {
 		
 		InputStream reflectedStream = this.getClass().getClassLoader()
 				.getResourceAsStream("json/mergedClass.json");
-		MergedClass<?> mergedClass = ClassResource.getMapper()
+		MergedClass<?> mergedClass = classResource.getMapper()
 				.readValue(reflectedStream, MergedClass.class);
 
 		Response response = classResource.save(mergedClass,null, request);
 		
 		verify(annotated).insertOne(saver.capture());
 		Document saved = saver.getValue();
-		ClassRepresentation doc = (ClassRepresentation)classResource.read(ClassResource.getMapper(), saved.toJson());
+		ClassRepresentation doc = (ClassRepresentation)classResource.read(classResource.getMapper(), saved.toJson());
 		
 		assertThat(response.getStatusInfo().getStatusCode()).isEqualTo(201);
 		assertThat(doc.getName()).isEqualTo("AeroFXState");
@@ -138,14 +142,14 @@ public class ClassResourceTest {
 		
 		InputStream reflectedStream = this.getClass().getClassLoader()
 				.getResourceAsStream("json/mergedClass.json");
-		MergedClass<?> mergedClass = ClassResource.getMapper()
+		MergedClass<?> mergedClass = classResource.getMapper()
 				.readValue(reflectedStream, MergedClass.class);
 
 		Response response = classResource.save(mergedClass,"revert", request);
 		
 		verify(annotated).insertOne(saver.capture());
 		Document saved = saver.getValue();
-		ClassRepresentation savedClass = (ClassRepresentation)classResource.read(ClassResource.getMapper(), saved.toJson());
+		ClassRepresentation savedClass = (ClassRepresentation)classResource.read(classResource.getMapper(), saved.toJson());
 		
 		assertThat(response.getStatusInfo().getStatusCode()).isEqualTo(201);
 		assertThat(savedClass.getName()).isEqualTo("AeroFXState");
@@ -157,17 +161,5 @@ public class ClassResourceTest {
 		assertThat(savedClass.getVersion()).isEqualTo(6);
 		
 		
-	}
-
-	private FindIterable<Document> readJson(String name){
-		InputStream stream = this.getClass().getClassLoader()
-				.getResourceAsStream(name) ;
-		String text = new Scanner(stream).useDelimiter("\\A").next();
-		Document d = Document.parse(text);
-		@SuppressWarnings("unchecked")
-		FindIterable<Document> findIterable = mock(FindIterable.class);
-		when(findIterable.sort(any(Bson.class))).thenReturn(findIterable);
-		when(findIterable.first()).thenReturn(d);
-		return findIterable;
 	}
 }

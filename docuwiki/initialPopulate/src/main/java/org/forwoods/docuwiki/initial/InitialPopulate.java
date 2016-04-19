@@ -7,28 +7,20 @@ import static com.mongodb.client.model.Projections.include;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.bson.Document;
 import org.forwoods.docuwiki.documentable.Member;
-import org.forwoods.docuwiki.documentable.Validator;
-import org.mongojack.JacksonDBCollection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
-import com.github.fge.jsonschema.core.report.ProcessingReport;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -40,7 +32,6 @@ public class InitialPopulate {
 
 	private MongoDatabase database;
 	private String collectionName= "annotatedClasses";
-	private Validator validator;
 	private MongoClient mongo;
 	
 	public static List<String> readClasses = new ArrayList<>();
@@ -71,8 +62,6 @@ public class InitialPopulate {
 		collection.find().projection(fields(include("name"), excludeId()))
 		.map(doc->doc.getString("name")).forEach(add);
 		
-		
-		validator = new Validator();
 	}
 	
 	public Document convertOne(Path file)  {
