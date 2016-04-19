@@ -28,7 +28,7 @@
 		<table class="member">
 		<tr ng-repeat="field in mergedClass.staticFields| filter:{inheritedFrom:'!'}" ng-class="{orphaned: field.isOrphaned}">
 				<td class ="modifiers"><span ng-repeat="mod in field.modifiers">{{mod}} </span></td>
-				<td class="type"><span ng-bind-html="field.objectType|objectType:classList"></span>{{field.objectType}}</td>
+				<td class="type"><span ng-bind-html="field.objectType|objectType:classList"></span></td>
 				<td class="memberName">
 					<div ng-if="field.attributes">
 					<div class="attribute" ng-repeat="att in field.attributes">{{att}}<br></div></div>
