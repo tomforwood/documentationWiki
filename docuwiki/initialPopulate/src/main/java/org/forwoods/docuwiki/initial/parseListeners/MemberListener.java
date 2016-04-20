@@ -55,13 +55,6 @@ public class MemberListener extends BasicCSharpBaseListener {
 		return line;
 	}
 
-	@Override
-	public void exitExtended(ExtendedContext ctx) {
-		TopLevelDocumentable rep = (TopLevelDocumentable)stack.peek();
-		rep.addExtension(ctx.extName.getText());
-		//TODO this is run by every listerer and duplicates
-	}
-
 	protected void readMods(ModifiersContext mods, Member member) {
 		if (mods!=null && mods.children!=null) {
 			for (ParseTree pt:mods.children) {

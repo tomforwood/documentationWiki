@@ -18,12 +18,14 @@
 			</div>
 			<div class="classList">
 			<ul class="classList">
-				{{prev.ns=""}}
-				<li class="classList" ng-repeat="class in classes | filter:query | subset:subsetOp">
-					<span ng-if="!(class.namespace==null || prev.ns.startsWith(class.namespace))"><i>{{class.namespace}}</i><br></span>
-					{{prev.ns=class.namespace;""}}
-					<a ui-sref='.details.class({"classname":class.className,version:"", scrollTo:""})'>
-					<span ng-bind-html="class.className|indenter"></span></a></li>
+				<li class="classList" ng-repeat="class in classes | nameSpace:query:subsetOp:expandedNamespaces">
+					<a class="namespace" ng-if="class.ns" ng-click="toggle(class.ns)">
+						<i>{{class.ns}}{{expandedNamespaces.indexOf(class.ns)>=0?"(-)":"(+)"}}</i><br></a>
+					<span ng-if="class.cn">
+						<a ui-sref='.details.class({"classname":class.cn,version:"", scrollTo:""})'>
+						<span ng-bind-html="class.cn|indenter"></span></a>
+					</span>
+				</li>
 			</ul>
 			</div>
 		</div>

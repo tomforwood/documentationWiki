@@ -121,6 +121,10 @@ div.classList {
 	font-size: small;
 }
 
+.namespace {
+	
+}
+
 .versionTag {
 	color:red;
 }

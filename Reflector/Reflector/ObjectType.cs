@@ -24,9 +24,12 @@ namespace Reflector
         {
             string name = type.FullName;
             if (name==null) name = type.Name;
-            if (commonTypes.ContainsKey(name))
+            foreach (KeyValuePair<string, String> commonType in commonTypes)
             {
-                name = commonTypes[name];
+                if (name.StartsWith(commonType.Key))
+                {
+                    name = name.Replace(commonType.Key, commonType.Value);
+                }
             }
             ObjectType result = new ObjectType(name);
             if (type.IsGenericType)

@@ -23,16 +23,17 @@
 </div>
 
 <div ng-if='mergedClass.objectType.typeName=="class" || mergedClass.objectType.typeName=="interface" || mergedClass.objectType.typeName=="struct"'>
+	
 	<div ng-if="mergedClass.staticFields.length>0">
 		<h3>Static fields</h3>
 		<table class="member">
 		<tr ng-repeat="field in mergedClass.staticFields| filter:{inheritedFrom:'!'}" ng-class="{orphaned: field.isOrphaned}">
 				<td class ="modifiers"><span ng-repeat="mod in field.modifiers">{{mod}} </span></td>
 				<td class="type"><span ng-bind-html="field.objectType|objectType:classList"></span></td>
-				<td class="memberName">
+				<td>
 					<div ng-if="field.attributes">
 					<div class="attribute" ng-repeat="att in field.attributes">{{att}}<br></div></div>
-					{{field.name}} {{field.assignment?" = "+field.assignment:""}}
+					<span class="memberName">{{field.name}} {{field.assignment?" = "+field.assignment:""}}</span>
 				<div click-to-edit2="field.comment"></div></td>
 		</table>
 		Inherited static fields
@@ -50,10 +51,10 @@
 		<tr ng-repeat="field in mergedClass.instanceFields| filter:{inheritedFrom:'!'}" ng-class="{orphaned: field.isOrphaned}">
 				<td class ="modifiers"><span class ="modifiers" ng-repeat="mod in field.modifiers">{{mod}} </span></td>
 				<td class="type"><span ng-bind-html="field.objectType|objectType:classList"></span></td>
-				<td id='{{field.name}}F' class="memberName">
+				<td id='{{field.name}}F'>
 					<div ng-if="field.attributes">
 					<div class="attribute" ng-repeat="att in field.attributes">{{att}}<br></div></div>
-					{{field.name}} {{field.assignment?field.assignment:""}}
+					<span class="memberName">{{field.name}} {{field.assignment?field.assignment:""}}</span>
 				<div click-to-edit2="field.comment"></div></td>
 		</table>
 		Inherited fields
@@ -71,10 +72,10 @@
 		<tr ng-repeat="prop in mergedClass.staticProperties| filter:{inheritedFrom:'!'}" ng-class="{orphaned: prop.isOrphaned}">
 				<td class ="modifiers"><span ng-repeat="mod in prop.modifiers">{{mod}} </span></td>
 				<td class="type"><span ng-bind-html="prop.objectType|objectType:classList"></span></td>
-				<td id='{{prop.name}}P' class="memberName">
+				<td id='{{prop.name}}P'>
 					<div ng-if="prop.attributes">
 					<div class="attribute" ng-repeat="att in prop.attributes">{{att}}<br></div></div>
-					{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}
+					<span class="memberName">{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}</span>
 				<div click-to-edit2="prop.comment"></div></td>
 		</tr>
 		</table>
@@ -93,10 +94,10 @@
 			<tr ng-repeat="prop in mergedClass.instanceProperties| filter:{inheritedFrom:'!'}" ng-class="{orphaned: prop.isOrphaned}">
 				<td class="modifiers"><span ng-repeat="mod in prop.modifiers">{{mod}} </span></td>
 				<td class="type"><span ng-bind-html="prop.objectType|objectType:classList"></span></td>
-				<td id='{{prop.name}}P' class="memberName">
+				<td id='{{prop.name}}P'>
 					<div ng-if="prop.attributes">
 					<div class="attribute" ng-repeat="att in prop.attributes">{{att}}<br></div></div>
-					{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}
+					<span class="memberName">{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}</span>
 				<div click-to-edit2="prop.comment"></div></td>
 			</tr>
 		</table>
@@ -116,7 +117,7 @@
 				<td id='{{method.name}}C'>
 					<div ng-if="method.attributes">
 					<div class="attribute" ng-repeat="att in method.attributes">{{att}}<br></div></div>
-					{{method.name=mergedClass.name.replace("+",".");""}}<span class="memberName" ng-bind-html="method|methodFilter:classList"></span>
+					<span class="memberName">{{method.name=mergedClass.name.replace("+",".");""}}<span class="memberName" ng-bind-html="method|methodFilter:classList"></span></span>
 				<div click-to-edit2="method.comment"></div></td>
 		</tr>
 	</table>

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using CommandLine;
 
@@ -85,7 +84,7 @@ namespace Reflector
             {
                 return null;
             }
-            TypeInfo ti = type.GetTypeInfo();
+            //TypeInfo ti = type..GetTypeInfo();
 
             rep.userGenerated = false;
 
@@ -141,6 +140,46 @@ namespace Reflector
                     classStore.storeClass(rep);
                 }
             }
+
+            ksp = typeof(ConfigNode).Assembly;
+
+            foreach (Type type in ksp.GetExportedTypes())
+            {
+
+                Debug.WriteLine("reflecting " + type.FullName);
+                TopLevelDocumentable rep = reflectTop(type);
+                if (rep != null)
+                {
+                    classStore.storeClass(rep);
+                }
+            }
+
+            ksp = typeof(PQSOrbit).Assembly;
+
+            foreach (Type type in ksp.GetExportedTypes())
+            {
+
+                Debug.WriteLine("reflecting " + type.FullName);
+                TopLevelDocumentable rep = reflectTop(type);
+                if (rep != null)
+                {
+                    classStore.storeClass(rep);
+                }
+            }
+
+            ksp = typeof(KSPAssets.AssetDefinition).Assembly;
+
+            foreach (Type type in ksp.GetExportedTypes())
+            {
+
+                Debug.WriteLine("reflecting " + type.FullName);
+                TopLevelDocumentable rep = reflectTop(type);
+                if (rep != null)
+                {
+                    classStore.storeClass(rep);
+                }
+            }
+
             int count = classStore.await();
 
             Debug.WriteLine("inserted =" + count);

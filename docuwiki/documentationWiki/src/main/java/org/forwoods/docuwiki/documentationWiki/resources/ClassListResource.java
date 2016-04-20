@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import org.bson.Document;
 import org.forwoods.docuwiki.documentationWiki.DocumentationWikiApplication;
 import org.forwoods.docuwiki.documentationWiki.api.FQClassName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.Timer;
 import com.mongodb.Function;
@@ -25,6 +27,9 @@ import com.mongodb.client.MongoCollection;
 @Path("/classList")
 @Produces(MediaType.APPLICATION_JSON)
 public class ClassListResource {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClassListResource.class);
+	
 	private MongoCollection<Document> reflectedClasses;
 	private MongoCollection<Document> annotatedClasses;
 	private Collection<FQClassName> cachedClasses;
@@ -45,6 +50,8 @@ public class ClassListResource {
 
 		
 		cachedClasses = retrieved.values();
+		LOGGER.debug("{}",cachedClasses);
+		LOGGER.info("retreived {} classes",cachedClasses.size());
 		return cachedClasses;
 	}
 	

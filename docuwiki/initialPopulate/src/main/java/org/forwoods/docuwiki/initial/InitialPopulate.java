@@ -37,7 +37,6 @@ public class InitialPopulate {
 	public static List<String> readClasses = new ArrayList<>();
 
 	public InitialPopulate() throws URISyntaxException, ProcessingException {
-		//TODO password should be env var or command line
 		
 		String password = System.getenv("MONGO_PASS");
 		if (password!=null) {

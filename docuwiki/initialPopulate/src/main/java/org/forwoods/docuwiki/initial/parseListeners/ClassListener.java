@@ -7,6 +7,7 @@ import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ClassDeclarationContext;
+import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.ExtendedContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.InterfaceDeclarationContext;
 import org.forwoods.docuwiki.initial.parsers.BasicCSharpParser.StructDeclarationContext;
 
@@ -32,6 +33,13 @@ public class ClassListener extends MemberListener{
 		rep.getModifiers().clear();
 		readMods(ctx.classmods, rep);
 		rep.setComment(readComment(ctx.comment));
+	}
+
+	@Override
+	public void exitExtended(ExtendedContext ctx) {
+		TopLevelDocumentable rep = (TopLevelDocumentable)stack.peek();
+		rep.addExtension(ctx.extName.getText());
+		//TODO this is run by every listener and duplicates
 	}
 	
 	@Override

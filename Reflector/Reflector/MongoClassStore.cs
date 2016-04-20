@@ -32,7 +32,7 @@ namespace Reflector
                 {
                     Credentials = new[] { credential }
                 };
-                settings.Server = new MongoServerAddress("localhost", 27017);
+                settings.Server = new MongoServerAddress("localhost", 27018);
                 client = new MongoClient(settings);
             }
             else

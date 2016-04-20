@@ -4,21 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml;
 using System.Threading.Tasks;
 
 namespace Reflector
 {
     public class ClassReflector
     {
+        System.Xml.XmlComment c;
         public void reflectClass(ClassRepresentation rep, Type type)
         {
             Type parent = type.BaseType;
             if (parent!=null && parent != typeof(Object)) {
                 rep.extensions.Add(parent.FullName);
-            }
-            if (type.Name== "BTButton")
-            {
-                Debug.WriteLine("button2");
             }
             foreach (Type t in type.GetInterfaces())
             {
@@ -37,10 +35,6 @@ namespace Reflector
 
         private void reflectSubtypes(ClassRepresentation rep, Type type)
         {
-            if (type.FullName=="Administration")
-            {
-                Debug.WriteLine("admin nested");
-            }
             foreach (Type t in type.GetNestedTypes(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 if (t.IsNestedPrivate)
@@ -118,17 +112,22 @@ namespace Reflector
         {
             foreach (FieldInfo field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
-                if (field.IsPrivate || field.IsAssembly) continue;
-                string name = field.Name;
-                ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
-                FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
-                fieldRep.attributes = getAttributes(field);
-                if (field.DeclaringType != field.ReflectedType)
-                {
-                    fieldRep.inheritedFrom = field.DeclaringType.FullName;
+                try {
+                    if (field.IsPrivate || field.IsAssembly) continue;
+                    string name = field.Name;
+                    ObjectType fieldType = ObjectType.toObjectType(field.FieldType);
+                    FieldRepresentation fieldRep = new FieldRepresentation(fieldType, name);
+                    fieldRep.attributes = getAttributes(field);
+                    if (field.DeclaringType != field.ReflectedType)
+                    {
+                        fieldRep.inheritedFrom = field.DeclaringType.FullName;
+                    }
+                    convert(fieldRep.modifiers, field);
+                    rep.instanceFields.Add(fieldRep);
                 }
-                convert(fieldRep.modifiers, field);
-                rep.instanceFields.Add(fieldRep);
+                catch (TypeLoadException ex) {
+                    Console.WriteLine(ex);
+                }
             }
 
             foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
@@ -202,10 +201,6 @@ namespace Reflector
         {
             foreach (MethodInfo method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
-                if (method.Name == "Generate" && type.Name == "ProceduralAsteroid")
-                {
-                    Debug.WriteLine("asteroid generate");
-                }
                 MethodRepresentation methodRep = mrep(method);
                 if (methodRep == null) continue;
                 rep.instanceMethods.Add(methodRep);

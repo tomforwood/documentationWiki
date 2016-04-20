@@ -12,6 +12,8 @@ import org.forwoods.docuwiki.documentationWiki.resources.ClassListResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassUsesResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassVersionsResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -27,6 +29,8 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 public class DocumentationWikiApplication extends Application<DocumentationWikiConfiguration> {
+	
+	private static Logger logger = LoggerFactory.getLogger(DocumentationWikiApplication.class);
 
     MongoDatabase database;
 	private MongoClient client;
@@ -61,7 +65,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     public void run(final DocumentationWikiConfiguration configuration,
                     final Environment environment) {
     	if (configuration.isMongoSecured()) {
-    		
+    		logger.info("Connecting to mongo as user {}", configuration.getMongoUsername());
     		String password = System.getenv("MONGO_PASS");
     		
 	    	MongoCredential mongoCred = MongoCredential.createCredential(
@@ -82,7 +86,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     	MongoManaged mongoManaged= new MongoManaged(client); 
     	
     	environment.lifecycle().manage(mongoManaged);
-    	environment.healthChecks().register("mongoHealthchack", new MongoHealthCheck(client));
+    	environment.healthChecks().register("mongoHealthcheck", new MongoHealthCheck(client));
     	
     	
     	MongoCollection<Document> reflectedDocuments = database.getCollection("reflectedClasses");

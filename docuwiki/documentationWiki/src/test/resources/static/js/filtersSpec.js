@@ -55,19 +55,83 @@ describe('Filter tests', function(){
 		}));
 	});
 	
-	describe('subsetFilter', function(){
-		var classDefs=[{subset:3},{subset:1},{subset:2}];
-		it('All returns all', 
-			inject(function(subsetFilter) {
-			expect(subsetFilter(classDefs,'ALL').length).toBe(3);
+	describe('nameSpaceFilter', function(){
+		beforeEach(function() {
+			jasmine.addMatchers({
+				toEqualData : function() {
+					return {
+						compare:function(actual, expected) {
+							//works on two arrays
+							//checks that for each property set in each object 
+							//in the expected array the actual has the same value
+							if (actual.length!=expected.length) return {pass:false};
+							for (var i=0;i<expected.length;i++) {
+								acItem = actual[i];
+								exItem = expected[i];
+								for (var prop in exItem) {
+									if (acItem[prop]!=exItem[prop]) return {pass:false};
+								}
+							}
+							
+							return {pass:true};
+						}
+					};
+				}
+			});
+		});
+		
+		var classList;
+		
+		beforeEach(function(){
+			classList=[{namespace:null,className:"Class1","subset":3},
+		               {namespace:"A",className:"A.Class2","subset":2},
+		               {namespace:"A",className:"A.Class3","subset":1},
+		               {namespace:"A.B",className:"A.B.Class3.1","subset":1},
+		               {namespace:null,className:"Class4","subset":1},
+		               {namespace:null,className:"Class5","subset":2},
+		               {namespace:"C.D",className:"C.D.Class6","subset":2}];
+		});
+		
+		it('Collapses namespaces', inject(function(nameSpaceFilter){
+			expect(nameSpaceFilter(classList, null, "ALL", []))
+				.toEqualData([{cn:"Class1"},{ns:"A"},{cn:"Class4"},{cn:"Class5"},{ns:"C.D"}]);
 		}));
-		it('Orphaned returns orphans', 
-			inject(function(subsetFilter) {
-			expect(subsetFilter(classDefs,'ORPHANED').length).toBe(1);
+		
+		it('Can expand namespaces', inject(function(nameSpaceFilter){
+			var expanded=["A","C.D"];
+			expect(nameSpaceFilter(classList, null, "ALL", expanded))
+				.toEqualData([{cn:"Class1"},{ns:"A",cn:"A.Class2"},{cn:"A.Class3"},
+					{ns:"A.B"},{cn:"Class4"},{cn:"Class5"},{ns:"C.D",cn:"C.D.Class6"}]);
 		}));
-		it('Documented returns documented', 
-			inject(function(subsetFilter) {
-			expect(subsetFilter(classDefs,'DOCUMENTED').length).toBe(2);
+		it('Copes with namespace first', inject(function(nameSpaceFilter){
+			var item0={namespace:"Z",className:"Class0"}
+			classList.unshift(item0);
+			expect(nameSpaceFilter(classList, null, "ALL", []))
+			.toEqualData([{ns:"Z"},{cn:"Class1"},{ns:"A"},{cn:"Class4"},{cn:"Class5"},{ns:"C.D"}]);
+		}));
+		
+		it('Can query', inject(function(nameSpaceFilter){
+			var expanded=["C.D"];
+			var query = "3";
+			expect(nameSpaceFilter(classList, query, "ALL", expanded))
+				.toEqualData([{ns:"A",cn:"A.Class3"},{ns:"A.B",cn:"A.B.Class3.1"}]);
+		}));
+		
+		it('Can Subset', inject(function(nameSpaceFilter){
+			var expanded=["C.D"];
+			var query = "";
+			subset="DOCUMENTED";
+			expect(nameSpaceFilter(classList, query, subset, expanded))
+				.toEqualData([{cn:"Class1"},{ns:"A",cn:"A.Class2"},
+				{cn:"Class5"},{ns:"C.D",cn:"C.D.Class6"}]);
+		}));
+		
+		it('Can Subset AND filter', inject(function(nameSpaceFilter){
+			var expanded=["C.D"];
+			var query = "A.C";
+			subset="ORPHANED";
+			expect(nameSpaceFilter(classList, query, subset, expanded))
+				.toEqualData([{ns:"A",cn:"A.Class2"}]);
 		}));
 	});
 	

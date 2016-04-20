@@ -33,6 +33,8 @@ import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.DocumentationWikiApplication;
 import org.forwoods.docuwiki.documentationWiki.api.MergedClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.Timer;
@@ -47,6 +49,8 @@ import com.mongodb.client.MongoCollection;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClassResource extends ClassBasedResource{
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClassResource.class);
 	
 	private MongoCollection<Document> reflectedClasses;
 	private MongoCollection<Document> annotatedClasses;
@@ -128,9 +132,9 @@ public class ClassResource extends ClassBasedResource{
 		Document retrievedDoc = collection.find(query).sort(descending("version")).first();
 		if (retrievedDoc==null) return null;
 		JsonWriterSettings settings = new JsonWriterSettings(JsonMode.STRICT);
-		String reflectedJson = retrievedDoc.toJson(settings);
-		System.out.println(reflectedJson);
-		return reflectedJson;
+		String readJson = retrievedDoc.toJson(settings);
+		LOGGER.debug("read {}",readJson);
+		return readJson;
 	}
 	
 	@SuppressWarnings("unchecked")
