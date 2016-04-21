@@ -3,7 +3,7 @@
     	<div class="comment" ng-click="enableEditor()"><span ng-bind-html="value|markupify"></span></div> 
     </span> 
     <div ng-show="view.editorEnabled"> 
-        <textarea auto-height class="comment" ng-model="value"></textarea><br> 
-        <button ng-click="cancel()">undo</button>. 
+        <textarea auto-height ng-blur="closeEditor()" class="comment" ng-model="value"></textarea><br> 
     </div> 
+    <button ng-show="view.changed" ng-click="cancel()">undo</button> 
 </div>

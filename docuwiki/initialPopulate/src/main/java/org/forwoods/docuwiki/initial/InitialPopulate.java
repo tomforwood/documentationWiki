@@ -46,7 +46,7 @@ public class InitialPopulate {
 	    			password.toCharArray());
 			List<MongoCredential> creds = Stream.of(mongoCred).collect(Collectors.toList());
 			ServerAddress addr = new ServerAddress("127.0.0.1", 
-					27017);
+					27018);
 			
 			mongo = new MongoClient(addr, creds);
 		}

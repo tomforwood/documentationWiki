@@ -1,8 +1,8 @@
-<td class ="modifiers"><span ng-repeat="mod in methodInfo.modifiers">{{mod}} </span></td>
-<td class="type"><span ng-bind-html="methodInfo.objectType|objectType:classList"></span></td> 
-<td id='{{methodInfo.name}}M'>
-	<div ng-if="methodInfo.attributes">
-	<div class="attribute" ng-repeat="att in methodInfo.attributes">{{att}}<br></div></div>
-	<span class="memberName" ng-bind-html="methodInfo|methodFilter:classList"></span>
-	<div click-to-edit2="methodInfo.comment"></div>
+<td class ="modifiers"><span ng-repeat="mod in method.modifiers">{{mod}} </span></td>
+<td class="type"><span ng-bind-html="method.objectType|objectType:classList"></span></td> 
+<td id='{{method.name}}M'>
+	<div ng-if="method.attributes">
+	<div class="attribute" ng-repeat="att in method.attributes">{{att}}<br></div></div>
+	<span class="memberName" ng-bind-html="method|methodFilter:classList"></span>
+	<div click-to-edit2="method.comment"></div>
 </td>

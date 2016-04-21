@@ -77,12 +77,21 @@ docuWikiApp.directive("clickToEdit2", function($timeout) {
 	        $scope.enableEditor = function() {
 	            if (!$scope.$parent.version){
 		        	$scope.view.editorEnabled = true;
-		            $scope.origValue = angular.copy($scope.value);
+		        	if (!$scope.view.changed) {
+		        		//the first time we edit
+		        		//copy the original value so it can be reverted
+			            $scope.origValue = angular.copy($scope.value);
+		        	}
+		        	$scope.view.changed = true;
 		            $scope.$parent.edited.value=true;
 	
 		            $timeout($scope.focus, 0);
 	            }
 	        };
+	        
+	        $scope.closeEditor = function() {
+	        	$scope.view.editorEnabled = false;
+	        }
 
 	        $scope.cancel = function() {
 	            $scope.value = angular.copy($scope.origValue);
@@ -103,6 +112,7 @@ docuWikiApp.filter('classLinkFilter', ['$sce',function($sanitize) {
 			topClass = input.substr(0,plusPos);
 			nestedScroll = "?scrollTo="+input.substr(plusPos+1)+"N";
 		}
+		topClass = topClass.replace("[]","");
 
 		for (i=0;i<classList.length;i++){
 			if (classList[i].className==topClass)  {

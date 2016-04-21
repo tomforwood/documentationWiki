@@ -114,10 +114,10 @@ docuWikiApp.filter('methodFilter', ['$filter',function($filter) {
 
 docuWikiApp.directive('methodElement', function(){
 	return {
-		scope: {
+		/*scope: {
 			methodInfo: '=methodElement',
-			classList:'=classList'
-		},
+			classList:'='
+		},*/
 		templateUrl: 'partials/methodTemplate.html'
 	};
 });

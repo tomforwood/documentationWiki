@@ -46,6 +46,11 @@ describe('Filter tests', function(){
 				inject(function(classLinkFilterFilter) {
 				expect(classLinkFilterFilter('CB+Fish',[{className:'CB'}])).toBe('<a href="#/classes/CB?scrollTo=FishN">CB.Fish</a>');			
 		}));
+		
+		it('should create links for arrays',
+				inject(function(classLinkFilterFilter){
+					expect(classLinkFilterFilter('CB[]',[{className:'CB'}])).toBe('<a href="#/classes/CB">CB[]</a>');
+		}));
 	});
 	
 	describe('indenterFilter', function(){
