@@ -17,6 +17,8 @@ namespace Reflector
 
         public string namespaceName;
 
+        public string assemblyName;
+
         public TopLevelDocumentable(ObjectType objectType, string name) :
             base(objectType,name)
         {

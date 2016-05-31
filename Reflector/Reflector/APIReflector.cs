@@ -40,6 +40,11 @@ namespace Reflector
             return reflectTopOrNested(type);
         }
 
+        /// <summary>
+        /// reflects on a Type object (class, enum, struct or interface) (the ones that can be top level
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>A representation of that type</returns>
         public static TopLevelDocumentable reflectTopOrNested(Type type)
         {
             if (type.IsGenericType)
@@ -89,6 +94,7 @@ namespace Reflector
             rep.userGenerated = false;
 
             rep.namespaceName = type.Namespace;
+            rep.assemblyName = type.Assembly.GetName().Name;
             convert(rep.modifiers, type);
             return rep;
         }

@@ -11,7 +11,7 @@ namespace Reflector
 {
     public class ClassReflector
     {
-        System.Xml.XmlComment c;
+
         public void reflectClass(ClassRepresentation rep, Type type)
         {
             Type parent = type.BaseType;
@@ -166,33 +166,41 @@ namespace Reflector
         private static List<String> getAttributes(MemberInfo field)
         {
             List<string> result = new List<string>();
-            foreach (CustomAttributeData att in field.GetCustomAttributesData())
+            try
             {
-                StringBuilder builder = new StringBuilder();
-                builder.Append("[")
-                    .Append(att.AttributeType.Name.Replace("Attribute", ""));
-                String consArgs = String.Join(", ", att.ConstructorArguments.Select(arg => arg.Value.ToString()));
-                String namedArgs = String.Join(", ", att.NamedArguments.Select(arg => arg.ToString()));
-
-                if (consArgs.Length>0 || namedArgs.Length>0)
+                foreach (CustomAttributeData att in field.GetCustomAttributesData())
                 {
-                    builder.Append("(");
-                    if (consArgs.Length>0)
+                    StringBuilder builder = new StringBuilder();
+                    builder.Append("[")
+                        .Append(att.AttributeType.Name.Replace("Attribute", ""));
+                    String consArgs = String.Join(", ", att.ConstructorArguments.Select(arg => arg.Value.ToString()));
+                    String namedArgs = String.Join(", ", att.NamedArguments.Select(arg => arg.ToString()));
+
+                    if (consArgs.Length > 0 || namedArgs.Length > 0)
                     {
-                        builder.Append(consArgs);
-                        if (namedArgs.Length>0)
+                        builder.Append("(");
+                        if (consArgs.Length > 0)
                         {
-                            builder.Append(", ");
+                            builder.Append(consArgs);
+                            if (namedArgs.Length > 0)
+                            {
+                                builder.Append(", ");
+                            }
                         }
+                        if (namedArgs.Length > 0)
+                        {
+                            builder.Append(namedArgs);
+                        }
+                        builder.Append(")");
                     }
-                    if (namedArgs.Length > 0)
-                    {
-                        builder.Append(namedArgs);
-                    }
-                    builder.Append(")");
+                    builder.Append("]");
+                    result.Add(builder.ToString());
                 }
-                builder.Append("]");
-                result.Add(builder.ToString());
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
             }
             return result.Count() == 0 ? null : result;
         }
