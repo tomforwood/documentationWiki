@@ -207,7 +207,7 @@ public class XMLDocResource {
 		else {
 			File temp = File.createTempFile(assemblyName, "tmp", xmlFileLocation);
 			OutputStream fout = new FileOutputStream(temp);
-			XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(fout);
+			XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(fout, "UTF-8");
 			//writer = new IndentingXMLStreamWriter(writer);
 			writer.writeStartDocument("UTF-8", "1.0");
 			
