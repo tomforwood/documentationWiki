@@ -24,7 +24,7 @@ public class XMLDocTest {
 		String structured = "This is a complicated "
 				+ "<param name=\"test\" fish=\"cod\">xml containing<param>nested stuff "
 				+ "and <</param></param>a<param>another param</param>thing";
-		String expected = "<summary>This is a complicated </summary>"
+		String expected = "<summary>This is a complicated</summary>"
 				+ "<param name=\"test\" fish=\"cod\">xml containing<param>nested "
 				+ "stuff and &lt;</param></param><remarks>a</remarks><param>another param</param>"
 				+ "<remarks>thing</remarks>";
@@ -34,7 +34,9 @@ public class XMLDocTest {
 		
 		XMLParser parser = new XMLParser();
 		parser.parse(structured);
+		System.out.println(writer);
 		parser.writeXML(writer);
+		writer.close();
 		String result = new String(bout.toByteArray());
 		assertEquals(expected, result);
 	}
@@ -44,7 +46,7 @@ public class XMLDocTest {
 		String structured = "This is a complicated "
 				+ "<param name=\"test\" fish=\"cod\">xml containing<paramref name=signal/>"
 				+ "and <</param>a<param>another param</param>thing";
-		String expected = "<summary>This is a complicated </summary>"
+		String expected = "<summary>This is a complicated</summary>"
 				+ "<param name=\"test\" fish=\"cod\">xml containing<paramref name=\"signal\"/>"
 				+ "and &lt;</param><remarks>a</remarks><param>another param</param>"
 				+ "<remarks>thing</remarks>";
@@ -55,6 +57,7 @@ public class XMLDocTest {
 		XMLParser parser = new XMLParser();
 		parser.parse(structured);
 		parser.writeXML(writer);
+		writer.close();
 		String result = new String(bout.toByteArray());
 		assertEquals(expected, result);
 	}
@@ -72,6 +75,7 @@ public class XMLDocTest {
 		XMLParser parser = new XMLParser();
 		parser.parse(structured);
 		parser.writeXML(writer);
+		writer.close();
 		String result = new String(bout.toByteArray());
 		assertEquals(expected, result);
 	}

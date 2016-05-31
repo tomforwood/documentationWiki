@@ -184,7 +184,7 @@ describe('Filter tests', function(){
 						            {objectType:{typeName:'CB'}, name:'param2'}]};
 				var methodString = methodFilterFilter(method,classList);
 				var objectLink = objectTypeFilter({typeName:'CB'},classList);
-				expect(methodString).toBe('doStuff\(&#8203;string&nbsp;param1, '+objectLink+'&nbsp;param2)');
+				expect(methodString).toBe('doStuff\(<wbr>string&nbsp;param1, '+objectLink+'&nbsp;param2)');
 		}));
 	});
 });
