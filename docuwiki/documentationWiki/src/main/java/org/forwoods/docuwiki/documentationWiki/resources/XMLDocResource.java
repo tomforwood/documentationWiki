@@ -61,6 +61,7 @@ public class XMLDocResource {
 		this.xmlFileLocation = xmlFileLocation;
 		this.annotatedClasses = annotatedClasses;
 		this.classResource = classResource;
+		LOGGER.info("Writing xml to "+xmlFileLocation.getAbsolutePath());
 	}
 	
 	@GET
@@ -204,7 +205,7 @@ public class XMLDocResource {
 			return writers.get(assemblyName).c;
 		}
 		else {
-			File temp = File.createTempFile(assemblyName, "tmp");
+			File temp = File.createTempFile(assemblyName, "tmp", xmlFileLocation);
 			OutputStream fout = new FileOutputStream(temp);
 			XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(fout);
 			//writer = new IndentingXMLStreamWriter(writer);
