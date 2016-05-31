@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter;
 
 @Path("/xml")
 public class XMLDocResource {
@@ -208,7 +207,7 @@ public class XMLDocResource {
 			File temp = File.createTempFile(assemblyName, "tmp");
 			OutputStream fout = new FileOutputStream(temp);
 			XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(fout);
-			writer = new IndentingXMLStreamWriter(writer);
+			//writer = new IndentingXMLStreamWriter(writer);
 			writer.writeStartDocument("UTF-8", "1.0");
 			
 			writer.writeStartElement("doc");
