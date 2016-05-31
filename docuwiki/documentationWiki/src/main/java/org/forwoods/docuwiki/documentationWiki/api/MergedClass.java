@@ -24,6 +24,9 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	@JsonProperty
 	private String namespace;
 	@JsonProperty
+	private String assemblyName;
+
+	@JsonProperty
 	private ObjectType objectType;
 	@JsonProperty
 	private List<Modifier> classModifiers;
@@ -75,7 +78,9 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	public static <T extends TopLevelDocumentable> MergedClass<T> createMergedClass(T reflected, T annotated) {
 		
 		MergedClass<T> mergedClass = new MergedClass<>(reflected, annotated);
-		
+		if (reflected!=null) {//orphaned classes don't have a reflected version
+			mergedClass.assemblyName = reflected.getAssemblyName();
+		}
 		String typeName = reflected==null?
 				annotated.getObjectType().getTypeName():
 					reflected.getObjectType().getTypeName();
@@ -160,11 +165,10 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	protected static void mergeNested(List<MergedClass<?>> nested, List<TopLevelDocumentable> refNested,
 			List<TopLevelDocumentable> annNested) {
 		for (TopLevelDocumentable tld: refNested) {
-			String name = tld.getName();
 			TopLevelDocumentable annTLD=null;
 			
 			for (TopLevelDocumentable ansTLD: annNested) {
-				if (ansTLD.getName().equals(name)) {
+				if (nestedNameEquals(tld,ansTLD)) {
 					annTLD = ansTLD;
 					annNested.remove(ansTLD);
 					break;
@@ -178,6 +182,14 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			nested.add(mc);
 		}
 		
+	}
+	
+	private static boolean nestedNameEquals(TopLevelDocumentable ref, TopLevelDocumentable ann){
+		if (ref.getName().equals(ann.getName())) return true;
+		//I have made a mistake populating the annotated nested classes and not included their namespace
+		//this is to compensate
+		if (ref.getName().equals(ref.getNamespaceName()+"."+ann.getName())) return true;
+		return false;
 	}
 
 	protected static void mergeMethods(List<MethodRepresentation> mergedMethods,
@@ -405,5 +417,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 
 	public void setLatest(boolean isLatest) {
 		this.isLatest = isLatest;
+	}
+	
+	public String getAssemblyName() {
+		return assemblyName;
+	}
+
+	public void setAssemblyName(String assemblyName) {
+		this.assemblyName = assemblyName;
 	}
 }

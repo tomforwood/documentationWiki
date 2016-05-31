@@ -33,6 +33,10 @@ docuWikiApp.config(function($stateProvider, $urlRouterProvider, $uiViewScrollPro
 			templateUrl: 'partials/classVersions.html',
 			controller: 'classVersionsCtrl'
 		})
+		.state('xml',{
+			url: '/xml',
+			templateUrl: 'partials/xml.html'
+		})
 });
 
 docuWikiApp.directive("autoHeight", function ($timeout) {

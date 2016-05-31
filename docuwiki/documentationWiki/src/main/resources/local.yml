@@ -19,3 +19,4 @@ mongoUsername : docuWikiUser
 mongoDatabase : docuWiki
 mongoHost : localhost
 
+xmlFileLocation: ${XML_FILE_LOC}

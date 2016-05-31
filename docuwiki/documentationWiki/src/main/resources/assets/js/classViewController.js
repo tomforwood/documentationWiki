@@ -1,8 +1,6 @@
 /**
  * to load (and manipluate?) the merged class object
  */
-//var classController = angular.module('docuWikiApp',['docuWikiServices']);
-
 docuWikiApp.controller('classViewCtrl', ['$scope', 'Class', 'ClassList', 
                                          '$stateParams', '$state',
     function($scope, Class, ClassList, $stateParams, $state) {
@@ -97,7 +95,7 @@ docuWikiApp.filter('methodFilter', ['$filter',function($filter) {
 			methodSig+=method.genericArgs;
 			methodSig+="&gt;";
 		}
-		methodSig+="(&#8203;"//invisible space as line break hint
+		methodSig+="(<wbr>"//invisible space as line break hint
 		var i=0;
 		for (i=0;i<method.parameters.length;i++) {
 			if (i!=0) {
@@ -114,10 +112,6 @@ docuWikiApp.filter('methodFilter', ['$filter',function($filter) {
 
 docuWikiApp.directive('methodElement', function(){
 	return {
-		/*scope: {
-			methodInfo: '=methodElement',
-			classList:'='
-		},*/
 		templateUrl: 'partials/methodTemplate.html'
 	};
 });

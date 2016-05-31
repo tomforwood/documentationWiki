@@ -15,8 +15,19 @@ public class DocumentationWikiConfiguration extends Configuration {
     
     @NotEmpty
     private String mongoDatabase;
+    
+    @NotEmpty
+    private String xmlFileLocation;
 
-    private int mongoPort = 27017;
+    public String getXmlFileLocation() {
+		return xmlFileLocation;
+	}
+
+	public void setXmlFileLocation(String xmlFile) {
+		this.xmlFileLocation = xmlFile;
+	}
+
+	private int mongoPort = 27017;
     
     public int getMongoPort() {
 		return mongoPort;

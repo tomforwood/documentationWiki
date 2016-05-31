@@ -20,6 +20,8 @@ public abstract class TopLevelDocumentable extends Member {
 	@JsonProperty
 	protected String namespaceName;
 	@JsonProperty
+	private String assemblyName;
+	@JsonProperty
 	protected List<String> extensions = new ArrayList<>();
 	
 	@JsonProperty
@@ -142,6 +144,12 @@ public abstract class TopLevelDocumentable extends Member {
 		if (version != other.version)
 			return false;
 		return true;
+	}
+	public String getAssemblyName() {
+		return assemblyName;
+	}
+	public void setAssemblyName(String assemblyName) {
+		this.assemblyName = assemblyName;
 	}
 	
 	

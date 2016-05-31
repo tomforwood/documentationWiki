@@ -13,3 +13,5 @@ mongoDatabase : docuWiki
 mongoHost : @OPENSHIFT_MONGODB_DB_HOST@
 mongoPort : @OPENSHIFT_MONGODB_DB_PORT@
 
+xmlFileLocation: ${OPENSHIFT_DATA_DIR}
+

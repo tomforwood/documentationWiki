@@ -28,3 +28,10 @@ docuWikiServices.factory('ClassVersions', [ '$resource', function($resource) {
 		query : {method:'GET', params:{classid:'class'}, isArray:true}
 	});
 } ]);
+
+docuWikiServices.factory('XMLFile', [ '$resource', function($resource) {
+	return $resource('api/xml', {}, {
+		query : {method:'GET', isArray:false},
+		get : {method:'GET', params:{filename:'file'}}
+	});
+} ]);

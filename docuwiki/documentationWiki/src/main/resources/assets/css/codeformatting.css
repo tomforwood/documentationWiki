@@ -12,6 +12,10 @@
     height: 95%;
     overflow-y: auto;
 }
+.subview {
+    height: 90%;
+    overflow-y: auto;
+}
 
 .inline {
 	display: inline;

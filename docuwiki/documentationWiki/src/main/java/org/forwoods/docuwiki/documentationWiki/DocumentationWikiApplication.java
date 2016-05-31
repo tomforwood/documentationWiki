@@ -1,5 +1,6 @@
 package org.forwoods.docuwiki.documentationWiki;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -7,11 +8,11 @@ import java.util.stream.Stream;
 import org.bson.Document;
 import org.forwoods.docuwiki.documentationWiki.db.MongoManaged;
 import org.forwoods.docuwiki.documentationWiki.health.MongoHealthCheck;
-import org.forwoods.docuwiki.documentationWiki.resources.ClassBasedResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassListResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassUsesResource;
 import org.forwoods.docuwiki.documentationWiki.resources.ClassVersionsResource;
+import org.forwoods.docuwiki.documentationWiki.resources.XMLDocResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,8 @@ import com.mongodb.client.MongoDatabase;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -48,9 +51,15 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     @Override
     public void initialize(final Bootstrap<DocumentationWikiConfiguration> bootstrap) {
     	
+    	bootstrap.setConfigurationSourceProvider(
+    			new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),  
+    					new EnvironmentVariableSubstitutor()));
     	
     	AssetsBundle assets = new AssetsBundle("/assets", "/", "index.html", "assets");
     	bootstrap.addBundle(assets);
+    	
+    	//AssetsBundle assets2 = new AssetsBundle(, "/", "index.html", "assets");
+    	//.addBundle(assets);
     	
     	bootstrap.addBundle(new AssetsBundle("/META-INF/resources/webjars", "/webjars", null, "webjars"));
     	
@@ -95,13 +104,21 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
 		ClassListResource classList = new ClassListResource(reflectedDocuments, annotatedDocuments);
         ClassVersionsResource versions = new ClassVersionsResource(annotatedDocuments, classList);
         
-        ClassBasedResource classes = new ClassResource(reflectedDocuments, annotatedDocuments, classList);
+        ClassResource classes = new ClassResource(reflectedDocuments, annotatedDocuments, classList);
 		ClassUsesResource uses = new ClassUsesResource(reflectedDocuments, classList);
+
+        String xmlLoc=configuration.getXmlFileLocation();
+		XMLDocResource xmlDoc = new XMLDocResource(new File(xmlLoc), annotatedDocuments, classes);
         
         environment.jersey().register(classes);
         environment.jersey().register(classList);
         environment.jersey().register(uses);
         environment.jersey().register(versions);
+        environment.jersey().register(xmlDoc);
+        
+        
+        logger.info("Registering AssetBundle with name: {} for path {}", "xmlFiles", "/files" + '*');
+
     }
 
 }

@@ -25,7 +25,7 @@ public class ObjectType {
 		classNameMap.put("string", "String");
 		classNameMap.put("int", "Int32");
 		classNameMap.put("Int32", "int");
-		classNameMap.put("long", "Int642");
+		classNameMap.put("long", "Int64");
 		classNameMap.put("Int64", "long");
 		classNameMap.put("object", "Object");
 		classNameMap.put("Object", "object");

@@ -118,7 +118,8 @@ public class ClassRepresentation extends TopLevelDocumentable{
 		public boolean equals(Object o) {
 			MethodRepresentation other = (MethodRepresentation)o;
 			//methods are equal if the names are equal and the parameter types are equal
-			if (!name.equals(other.name)) return false;
+			if (!name.equals("*constructor*") &&
+					!name.equals(other.name)) return false;
 			if (parameters.size()!=other.parameters.size()) return false;
 			for (int i=0;i<parameters.size();i++) {
 				if (!parameters.get(i).getObjectType().typeNameEquals(

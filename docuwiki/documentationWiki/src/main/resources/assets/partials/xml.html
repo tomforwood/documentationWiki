@@ -1,0 +1,14 @@
+<div ng-controller="xmlCtrl">
+	<div ng-if="fileList.files">
+		To see tooltip help in visual studio download these files 
+		and place them in the same directory as the equivalent dll files from KSP
+		<ul>
+			<li ng-repeat="file in fileList.files">
+				<a href="api/xml/{{file.file}}">{{file.file}}</a>
+			</li>
+		</ul>
+	</div>
+	<div ng-if="!fileList.files">
+		Please wait - the xml is being generated.
+	</div>
+</div>
