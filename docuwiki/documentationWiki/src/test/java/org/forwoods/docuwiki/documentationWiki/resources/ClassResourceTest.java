@@ -19,8 +19,10 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
+import org.forwoods.docuwiki.documentationWiki.api.ClassExtensions;
 import org.forwoods.docuwiki.documentationWiki.api.FQClassName;
 import org.forwoods.docuwiki.documentationWiki.api.MergedClass;
+import org.forwoods.docuwiki.documentationWiki.core.SquadClassLoader;
 import org.forwoods.docuwiki.documentationWiki.testUtil.FindIterableStub;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +39,8 @@ public class ClassResourceTest {
 	private MongoCollection<Document> annotated;
 	private MongoCollection<Document> reflected;
 	private ClassListResource classList;
+	private SquadClassLoader squadLoader;
+	private ClassesExtendingResource extensions;
 	
 	private List<FQClassName> classes = new ArrayList<>();
 	
@@ -48,8 +52,11 @@ public class ClassResourceTest {
 		annotated = mock(MongoCollection.class);
 		reflected = mock(MongoCollection.class);
 		classList = mock(ClassListResource.class);
+		squadLoader = mock(SquadClassLoader.class);
+		extensions = mock(ClassesExtendingResource.class);
 		
-		classResource = new ClassResource(reflected, annotated, classList);
+		classResource = new ClassResource(reflected, annotated, classList,
+				squadLoader, extensions);
 		
 		when(classList.getCachedClasses()).thenReturn(classes); 
 	}
@@ -64,6 +71,7 @@ public class ClassResourceTest {
 		when(reflected.find(any(Bson.class))).thenReturn(findIterableRef);
 		//Bson query = eq("name","test.TestClass");
 		when(annotated.find(any(Bson.class))).thenReturn(findIterableAnn);
+		when(extensions.getExtensions("test.TestClass")).thenReturn(new ClassExtensions());
 		
 		MergedClass<? extends TopLevelDocumentable> class1 = 
 				classResource.getClass("test.TestClass",null);
@@ -89,6 +97,7 @@ public class ClassResourceTest {
 		when(reflected.find(any(Bson.class))).thenReturn(findIterableRef);
 		//Bson query = and(eq("name","test.TestClass"),eq("version",1));
 		when(annotated.find(any(Bson.class))).thenReturn(findIterableAnn);
+		when(extensions.getExtensions("test.TestClass")).thenReturn(new ClassExtensions());
 		
 		MergedClass<? extends TopLevelDocumentable> class1 = 
 				classResource.getClass("test.TestClass",1);

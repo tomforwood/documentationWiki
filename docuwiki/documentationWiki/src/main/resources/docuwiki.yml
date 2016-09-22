@@ -13,5 +13,17 @@ mongoDatabase : docuWiki
 mongoHost : @OPENSHIFT_MONGODB_DB_HOST@
 mongoPort : @OPENSHIFT_MONGODB_DB_PORT@
 
-xmlFileLocation: ${OPENSHIFT_DATA_DIR}
+xmlFileLocation: ${OPENSHIFT_DATA_DIR}/generated
+squadXMLFileLocation: ${OPENSHIFT_DATA_DIR}/downloaded/squadXML.zip
+
+squadXMLFileSource: https://kerbalspaceprogram.com/api/xml.zip
+
+sundial:
+  thread-pool-size: 1
+  shutdown-on-unload: true
+  wait-on-shutdown: false
+  start-delay-seconds: 0
+  start-scheduler-on-load: true
+  global-lock-on-load: false
+  annotated-jobs-package-name: org.forwoods.docuwiki.documentationWiki.jobs
 

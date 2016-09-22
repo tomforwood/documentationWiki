@@ -6,9 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.assertj.core.api.Condition;
 import org.bson.Document;
@@ -54,7 +52,7 @@ public class ClassListResourceTest {
 		
 		Collection<FQClassName> classes = classList.getClassList();
 		Condition<Integer> allCondition = new Condition<>(Predicate.isEqual(FQClassName.ALL),"type");
-		List<FQClassName> collect = classes.stream().filter(fqcn->fqcn.getSubset()==FQClassName.ALL).collect(Collectors.toList());
+		//List<FQClassName> collect = classes.stream().filter(fqcn->fqcn.getSubset()==FQClassName.ALL).collect(Collectors.toList());
 		assertThat(classes).extracting(fqcn->fqcn.getSubset())
 			.areAtLeastOne(allCondition);
 	}

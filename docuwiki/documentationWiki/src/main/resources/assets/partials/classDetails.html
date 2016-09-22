@@ -1,4 +1,5 @@
 <h1>{{mergedClass.name}}</h1>
+<div ng-if="mergedClass.squadApiFile"> please see also <a href = "https://kerbalspaceprogram.com/api/{{mergedClass.squadApiFile}}.html">Squad documentation</a></div>
 <div ng-if="edited.value">
 <button ng-click='save.action()' confirm-if='save.confirm' 
 	confirm="Replace the latest version with {{version}}?">{{save.buttonText}}</button>

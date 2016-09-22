@@ -1,7 +1,9 @@
 package org.forwoods.docuwiki.documentationWiki.api;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.forwoods.docuwiki.documentable.ClassRepresentation;
 import org.forwoods.docuwiki.documentable.ClassRepresentation.FieldRepresentation;
@@ -36,7 +38,9 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	List<ObjectType> varargs;
 	@JsonProperty
 	private List<String> extensions;
-	
+	@JsonProperty
+	private Set<String> extendingClasses;
+
 	@JsonProperty
 	private List<EnumConstant> enumConsts;
 	
@@ -67,6 +71,9 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	@JsonProperty
 	private boolean isLatest;
 	
+	@JsonProperty
+	private String squadApiFile;
+	
 	public MergedClass() {
 	}
 	
@@ -75,7 +82,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		populateReflected(reflected);//fields from reflected get priority of annotated
 	}
 	
-	public static <T extends TopLevelDocumentable> MergedClass<T> createMergedClass(T reflected, T annotated) {
+	public static <T extends TopLevelDocumentable> MergedClass<T> createMergedClass(T reflected, T annotated, SquadClass squadDocs) {
 		
 		MergedClass<T> mergedClass = new MergedClass<>(reflected, annotated);
 		if (reflected!=null) {//orphaned classes don't have a reflected version
@@ -85,20 +92,21 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 				annotated.getObjectType().getTypeName():
 					reflected.getObjectType().getTypeName();
 		if (typeName.equals("class") || typeName.equals("interface") || typeName.equals("struct")) {
-			mergeClass(reflected, annotated, mergedClass);
+			mergeClass(reflected, annotated, mergedClass, squadDocs);
 		}
 		else if (typeName.equals("enum")) {
-			mergeEnum(reflected, annotated, mergedClass);
+			mergeEnum(reflected, annotated, mergedClass, squadDocs);
 		}
 		mergedClass.objectType = reflected==null?annotated.getObjectType():reflected.getObjectType();
 
 		mergedClass.populateAnnotated(annotated);
 		mergedClass.populateReflected(reflected);//fields from reflected get priority over annotated
+		mergedClass.populateSquad(squadDocs);
 		
 		return mergedClass;
 	}
 
-	protected static <T extends TopLevelDocumentable> void mergeClass(T reflected, T annotated, MergedClass<T> mergedClass) {
+	protected static <T extends TopLevelDocumentable> void mergeClass(T reflected, T annotated, MergedClass<T> mergedClass, SquadClass squadDocs) {
 		ClassRepresentation refClass = (ClassRepresentation) reflected;
 		ClassRepresentation annClass = (ClassRepresentation) annotated;
 		
@@ -107,12 +115,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		mergedClass.instanceFields = new ArrayList<>();
 		List<FieldRepresentation> refInst = refClass==null?new ArrayList<>():refClass.getInstanceFields();
 		List<FieldRepresentation> annInst = annClass==null?new ArrayList<>():annClass.getInstanceFields();
-		mergeFields(mergedClass.instanceFields, refInst, annInst);
+		List<FieldRepresentation> squadFields = squadDocs==null?new ArrayList<>():squadDocs.getFields();
+		mergeFields(mergedClass.instanceFields, refInst, annInst, squadFields);
 		
 		mergedClass.staticFields = new ArrayList<>();
 		List<FieldRepresentation> refStat = refClass==null?new ArrayList<>():refClass.getStaticFields();
 		List<FieldRepresentation> annStat = annClass==null?new ArrayList<>():annClass.getStaticFields();
-		mergeFields(mergedClass.staticFields, refStat, annStat);
+		mergeFields(mergedClass.staticFields, refStat, annStat, squadFields);
 		
 		mergedClass.instanceFields.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
 		mergedClass.staticFields.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
@@ -120,12 +129,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		mergedClass.instanceProperties = new ArrayList<>();
 		List<PropertyRepresentation> refInstProps = refClass==null?new ArrayList<>():refClass.getInstanceProperties();
 		List<PropertyRepresentation> annInstProps = annClass==null?new ArrayList<>():annClass.getInstanceProperties();
-		mergeProperties(mergedClass.instanceProperties, refInstProps, annInstProps);
+		List<PropertyRepresentation> squadProps = squadDocs==null?new ArrayList<>():squadDocs.getProperties();
+		mergeProperties(mergedClass.instanceProperties, refInstProps, annInstProps, squadProps);
 		
 		mergedClass.staticProperties = new ArrayList<>();
 		List<PropertyRepresentation> refStatProps = refClass==null?new ArrayList<>():refClass.getStaticProperties();
 		List<PropertyRepresentation> annStatProps = annClass==null?new ArrayList<>():annClass.getStaticProperties();
-		mergeProperties(mergedClass.staticProperties, refStatProps, annStatProps);
+		mergeProperties(mergedClass.staticProperties, refStatProps, annStatProps, squadProps);
 		
 		mergedClass.instanceProperties.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
 		mergedClass.staticProperties.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
@@ -133,12 +143,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		mergedClass.instanceMethods = new ArrayList<>();
 		List<MethodRepresentation> refInstMethods = refClass==null?new ArrayList<>():refClass.getInstanceMethods();
 		List<MethodRepresentation> annInstMethods = annClass==null?new ArrayList<>():annClass.getInstanceMethods();
-		mergeMethods(mergedClass.instanceMethods, refInstMethods, annInstMethods);
+		List<MethodRepresentation> squadMethods = squadDocs==null?Collections.emptyList():squadDocs.getMethods();
+		mergeMethods(mergedClass.instanceMethods, refInstMethods, annInstMethods, squadMethods);
 		
 		mergedClass.staticMethods = new ArrayList<>();
 		List<MethodRepresentation> refStatMethods = refClass==null?new ArrayList<>():refClass.getStaticMethods();
 		List<MethodRepresentation> annStatMethods = annClass==null?new ArrayList<>():annClass.getStaticMethods();
-		mergeMethods(mergedClass.staticMethods, refStatMethods, annStatMethods);
+		mergeMethods(mergedClass.staticMethods, refStatMethods, annStatMethods, squadMethods);
 		
 		mergedClass.instanceMethods.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
 		mergedClass.staticMethods.sort((a,b)->a.getName().compareToIgnoreCase(b.getName()));
@@ -146,12 +157,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		mergedClass.constructors = new ArrayList<>();
 		List<MethodRepresentation> refConstructors = refClass==null?new ArrayList<>():refClass.getConstructors();
 		List<MethodRepresentation> annConstructors = annClass==null?new ArrayList<>():annClass.getConstructors();
-		mergeMethods(mergedClass.constructors, refConstructors, annConstructors);
+		mergeMethods(mergedClass.constructors, refConstructors, annConstructors, squadMethods);
 		
 		mergedClass.nested = new ArrayList<>();
 		List<TopLevelDocumentable> refNested = refClass==null?new ArrayList<>():refClass.getNested();
 		List<TopLevelDocumentable> annNested = annClass==null?new ArrayList<>():annClass.getNested();
-		mergeNested(mergedClass.nested, refNested, annNested);
+		List<SquadClass> sqNest = squadDocs==null?new ArrayList<>():squadDocs.nested;
+		mergeNested(mergedClass.nested, refNested, annNested, sqNest);
 		
 		mergedClass.attributes = refClass==null?null:refClass.getAttributes();
 		
@@ -163,7 +175,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 
 	protected static void mergeNested(List<MergedClass<?>> nested, List<TopLevelDocumentable> refNested,
-			List<TopLevelDocumentable> annNested) {
+			List<TopLevelDocumentable> annNested, List<SquadClass> squadNested) {
 		for (TopLevelDocumentable tld: refNested) {
 			TopLevelDocumentable annTLD=null;
 			
@@ -174,16 +186,23 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 					break;
 				}
 			}
-			nested.add(MergedClass.createMergedClass(tld, annTLD));
+			SquadClass sc = null;
+			for (SquadClass nestedSC:squadNested) {
+				if (tld.getName().endsWith(nestedSC.getName())) {
+					sc=nestedSC;
+				}
+			}
+			nested.add(MergedClass.createMergedClass(tld, annTLD, sc));
 		}
 		for (TopLevelDocumentable tld: annNested) {
-			MergedClass<TopLevelDocumentable> mc = MergedClass.createMergedClass(null, tld);
+			
+			MergedClass<TopLevelDocumentable> mc = MergedClass.createMergedClass(null, tld, null);
 			mc.setIsOrphaned(true);
 			nested.add(mc);
 		}
 		
 	}
-	
+
 	private static boolean nestedNameEquals(TopLevelDocumentable ref, TopLevelDocumentable ann){
 		if (ref.getName().equals(ann.getName())) return true;
 		//I have made a mistake populating the annotated nested classes and not included their namespace
@@ -193,7 +212,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 
 	protected static void mergeMethods(List<MethodRepresentation> mergedMethods,
-			List<MethodRepresentation> refMethods, List<MethodRepresentation> annMethods) {
+			List<MethodRepresentation> refMethods, List<MethodRepresentation> annMethods, List<MethodRepresentation> squadMethods) {
 		for (MethodRepresentation method: refMethods) {
 			MethodRepresentation result = new MethodRepresentation();
 			result.setName(method.getName());
@@ -209,6 +228,12 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 				result.setComment(annMethod.getComment());
 			}
 			mergedMethods.add(result);
+			
+			//read squad comment
+			int sqMatch = squadMethods.indexOf(method);
+			if (sqMatch>=0) {
+				result.setSquadComment(squadMethods.get(sqMatch).getSquadComment());
+			}
 		}
 		for (MethodRepresentation method: annMethods) {
 			MethodRepresentation result = new MethodRepresentation();
@@ -224,7 +249,8 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 
 	protected static void mergeFields(List<FieldRepresentation> fields,
-			List<FieldRepresentation> refFields, List<FieldRepresentation> annFields) {
+			List<FieldRepresentation> refFields, List<FieldRepresentation> annFields,
+			List<FieldRepresentation> squadFields) {
 		for (FieldRepresentation field : refFields) {
 			FieldRepresentation result = new FieldRepresentation();
 			result.setName(field.getName());
@@ -238,8 +264,15 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 				FieldRepresentation annField = annFields.remove(match);
 				result.setComment(annField.getComment());
 				if (field.assignment==null) result.assignment=annField.assignment;
+			}	
+			
+			//read squad comment
+			int sqMatch = squadFields.indexOf(field);
+			if (sqMatch>=0) {
+				result.setSquadComment(squadFields.get(sqMatch).getSquadComment());
 			}
-			fields.add(result);			
+			
+			fields.add(result);	
 		}
 		for (FieldRepresentation annField:annFields){
 			FieldRepresentation result = new FieldRepresentation();
@@ -254,7 +287,8 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 	
 	protected static void mergeProperties(List<PropertyRepresentation> fields,
-			List<PropertyRepresentation> refInst, List<PropertyRepresentation> annInst) {
+			List<PropertyRepresentation> refInst, List<PropertyRepresentation> annInst, 
+			List<PropertyRepresentation> squadProps) {
 		for (PropertyRepresentation prop : refInst) {
 			PropertyRepresentation result = new PropertyRepresentation();
 			result.setName(prop.getName());
@@ -269,7 +303,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 				PropertyRepresentation annProp = annInst.remove(match);
 				result.setComment(annProp.getComment());
 			}
-			fields.add(result);			
+			fields.add(result);	
+			
+			//read squad comment
+			int sqMatch = squadProps.indexOf(prop);
+			if (sqMatch>=0) {
+				result.setSquadComment(squadProps.get(sqMatch).getSquadComment());
+			}
 		}
 		for (PropertyRepresentation annProp:annInst){
 			PropertyRepresentation result = new PropertyRepresentation();
@@ -283,7 +323,7 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 	}
 
 	protected static <T extends TopLevelDocumentable> void mergeEnum(T reflected, T annotated,
-			MergedClass<T> mergedClass) {
+			MergedClass<T> mergedClass, SquadClass squadEnum) {
 		mergedClass.enumConsts = new ArrayList<>();
 		EnumRepresentation refEnum = (EnumRepresentation) reflected;
 		EnumRepresentation annEnum = (EnumRepresentation) annotated;
@@ -297,6 +337,13 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 			if (match>=0) {
 				EnumConstant annConst = annEnumValues.remove(match);
 				result.setComment(annConst.getComment());
+			}
+			if (squadEnum!=null) {
+				int sqMatch = squadEnum.getEnums().indexOf(refConst);
+				if (sqMatch>=0) {
+					EnumConstant sqConst = squadEnum.getEnums().get(sqMatch);
+					result.setSquadComment(sqConst.getSquadComment());
+				}
 			}
 			mergedClass.enumConsts.add(result);
 		}
@@ -330,6 +377,12 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 		reflectedVersion = reflected.getVersion();
 		populateEither(reflected);
 		isOrphaned=false;
+	}
+	
+	private void populateSquad(SquadClass squadDocs) {
+		if (squadDocs==null) return;
+		setSquadComment(squadDocs.getSquadComment());
+		squadApiFile = squadDocs.getFileName();
 	}
 
 	public int getReflectedVersion() {
@@ -425,5 +478,21 @@ public class MergedClass<A extends TopLevelDocumentable> extends Documentable{
 
 	public void setAssemblyName(String assemblyName) {
 		this.assemblyName = assemblyName;
+	}
+
+	public String getSquadApiFile() {
+		return squadApiFile;
+	}
+
+	public void setSquadApiFile(String squadApiFile) {
+		this.squadApiFile = squadApiFile;
+	}
+	
+	public Set<String> getExtendingClasses() {
+		return extendingClasses;
+	}
+
+	public void setExtendingClasses(Set<String> set) {
+		this.extendingClasses = set;
 	}
 }

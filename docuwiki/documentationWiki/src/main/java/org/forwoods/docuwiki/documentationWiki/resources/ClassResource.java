@@ -32,7 +32,10 @@ import org.forwoods.docuwiki.documentable.EnumRepresentation;
 import org.forwoods.docuwiki.documentable.Member;
 import org.forwoods.docuwiki.documentable.TopLevelDocumentable;
 import org.forwoods.docuwiki.documentationWiki.DocumentationWikiApplication;
+import org.forwoods.docuwiki.documentationWiki.api.ClassExtensions;
 import org.forwoods.docuwiki.documentationWiki.api.MergedClass;
+import org.forwoods.docuwiki.documentationWiki.api.SquadClass;
+import org.forwoods.docuwiki.documentationWiki.core.SquadClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,17 +57,24 @@ public class ClassResource extends ClassBasedResource{
 	
 	private MongoCollection<Document> reflectedClasses;
 	private MongoCollection<Document> annotatedClasses;
+	private SquadClassLoader squadLoader;
 	private Clock clock = Clock.systemUTC();
 	private Timer classGetTimer;
 	private Timer classSaveTimer;
 	private Meter saveFailMeter;
 
+	private ClassesExtendingResource extending;
+
 	public ClassResource(MongoCollection<Document> reflectedClasses, 
 			MongoCollection<Document> annotatedClasses,
-			ClassListResource classList) {
+			ClassListResource classList, 
+			SquadClassLoader squadLoader,
+			ClassesExtendingResource extending) {
 		super(classList);
 		this.reflectedClasses = reflectedClasses;
 		this.annotatedClasses = annotatedClasses;
+		this.squadLoader = squadLoader;
+		this.extending = extending;
 		
 
 		classGetTimer = DocumentationWikiApplication.metrics.timer("ClassGetTimer");
@@ -84,7 +94,7 @@ public class ClassResource extends ClassBasedResource{
 			String reflectedJson = loadClasses(name, reflectedClasses, null);
 	
 			String annotatedJson = loadClasses(name, annotatedClasses, version);
-			
+						
 			ObjectMapper mapper = getMapper();
 			try {
 				TopLevelDocumentable reflected=null;
@@ -95,8 +105,11 @@ public class ClassResource extends ClassBasedResource{
 				if (annotatedJson!=null) {
 					annotated = read(mapper, annotatedJson);
 				}
-				MergedClass<TopLevelDocumentable> result = MergedClass.createMergedClass(reflected, annotated);
+				SquadClass squadClass = squadLoader.loadClass(name);
+				MergedClass<TopLevelDocumentable> result = MergedClass.createMergedClass(reflected, annotated, squadClass);
 				result.setLatest(version==null);
+				ClassExtensions ext = extending.getExtensions(name);
+				result.setExtendingClasses(ext.getExtendingClasses());
 				return result;
 			} catch (IOException e) {
 				e.printStackTrace();

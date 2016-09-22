@@ -130,8 +130,7 @@ public class ClassUsesResource extends ClassBasedResource{
 		}
 	}
 	
-	private Bson memberSearch(String memberCollection, String type) {
-		
+	private Bson memberSearch(String memberCollection, String type) {		
 		return or(eq(memberCollection+".objectType.typeName",type),eq(memberCollection+".objectType.varargs.typeName",type));
 	}
 	

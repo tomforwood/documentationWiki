@@ -9,8 +9,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class Documentable {
 	@JsonProperty
-	protected
-	String comment;
+	protected String comment;
+	@JsonProperty
+	protected String squadComment;
 	@JsonProperty
 	protected List<String> attributes;
 	
@@ -23,6 +24,14 @@ public class Documentable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getSquadComment() {
+		return squadComment;
+	}
+
+	public void setSquadComment(String squadComment) {
+		this.squadComment = squadComment;
 	}
 
 	public boolean getIsOrphaned() {

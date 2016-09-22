@@ -1,13 +1,22 @@
+<div class="squad-comment"><span ng-bind-html="mergedClass.squadComment|markupify"></span></div>
 <div click-to-edit2="mergedClass.comment"></div>
 <br>
 <div ng-if="mergedClass.attributes">
 	<div class="attribute" ng-repeat="att in mergedClass.attributes">{{att}}<br></div>
 </div>
-			
+
+		
 <span ng-repeat="mod in mergedClass.classModifiers">{{mod}} </span>
 {{mergedClass.objectType|objectType:classList}}
 <b>{{mergedClass.name.replace("+",".")}}</b>{{mergedClass.varargs|varargs:classList}}
+<!-- List of classes this extends/implements -->	
 <span ng-repeat="extend in mergedClass.extensions">{{$first?":":""}}
+<span ng-bind-html="extend|classLinkFilter:classList"></span>{{$last?"":", "}} 
+</span>
+
+<!-- List of classes that extends this class -->
+<h4>Classes the extend/implement {{mergedClass.name.replace("+",".")}}</h4>	
+<span ng-repeat="extend in mergedClass.extendingClasses">
 <span ng-bind-html="extend|classLinkFilter:classList"></span>{{$last?"":", "}} 
 </span>
 
@@ -34,6 +43,7 @@
 					<div ng-if="field.attributes">
 					<div class="attribute" ng-repeat="att in field.attributes">{{att}}<br></div></div>
 					<span class="memberName">{{field.name}} {{field.assignment?" = "+field.assignment:""}}</span>
+				<div class="squad-comment"><span ng-bind-html="field.squadComment|markupify"></span></div>
 				<div click-to-edit2="field.comment"></div></td>
 		</table>
 		Inherited static fields
@@ -55,6 +65,7 @@
 					<div ng-if="field.attributes">
 					<div class="attribute" ng-repeat="att in field.attributes">{{att}}<br></div></div>
 					<span class="memberName">{{field.name}} {{field.assignment?field.assignment:""}}</span>
+				<div class="squad-comment"><span ng-bind-html="field.squadComment|markupify"></span></div>
 				<div click-to-edit2="field.comment"></div></td>
 		</table>
 		Inherited fields
@@ -76,6 +87,7 @@
 					<div ng-if="prop.attributes">
 					<div class="attribute" ng-repeat="att in prop.attributes">{{att}}<br></div></div>
 					<span class="memberName">{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}</span>
+				<div class="squad-comment"><span ng-bind-html="prop.squadComment|markupify"></span></div>
 				<div click-to-edit2="prop.comment"></div></td>
 		</tr>
 		</table>
@@ -98,6 +110,7 @@
 					<div ng-if="prop.attributes">
 					<div class="attribute" ng-repeat="att in prop.attributes">{{att}}<br></div></div>
 					<span class="memberName">{{prop.name}} {&nbsp;{{prop.getter?"get;":""}}&nbsp;{{prop.setter?"set;":""}}&nbsp;}</span>
+				<div class="squad-comment"><span ng-bind-html="prop.squadComment|markupify"></span></div>
 				<div click-to-edit2="prop.comment"></div></td>
 			</tr>
 		</table>
@@ -118,6 +131,7 @@
 					<div ng-if="method.attributes">
 					<div class="attribute" ng-repeat="att in method.attributes">{{att}}<br></div></div>
 					<span class="memberName">{{method.name=mergedClass.name.replace("+",".");""}}<span class="memberName" ng-bind-html="method|methodFilter:classList"></span></span>
+				<div class="squad-comment"><span ng-bind-html="method.squadComment|markupify"></span></div>
 				<div click-to-edit2="method.comment"></div></td>
 		</tr>
 	</table>

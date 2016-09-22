@@ -1,6 +1,10 @@
 package org.forwoods.docuwiki.documentationWiki;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
+import org.knowm.dropwizard.sundial.SundialConfiguration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,6 +22,16 @@ public class DocumentationWikiConfiguration extends Configuration {
     
     @NotEmpty
     private String xmlFileLocation;
+    
+    @NotEmpty
+    private String squadXMLFileLocation;
+    
+    @NotEmpty
+    private String squadXMLFileSource;
+    
+    @Valid
+    @NotNull
+    public SundialConfiguration sundialConfiguration = new SundialConfiguration();
 
     public String getXmlFileLocation() {
 		return xmlFileLocation;
@@ -73,4 +87,26 @@ public class DocumentationWikiConfiguration extends Configuration {
 	public void setMongoSecured(boolean mongoSecured) {
 		this.mongoSecured = mongoSecured;
 	}
+
+	public String getSquadXMLFileLocation() {
+		return squadXMLFileLocation;
+	}
+
+	public void setSquadXMLFileLocation(String squadXMLFileLocation) {
+		this.squadXMLFileLocation = squadXMLFileLocation;
+	}
+
+    public String getSquadXMLFileSource() {
+		return squadXMLFileSource;
+	}
+
+	public void setSquadXMLFileSource(String squadXMLFileSource) {
+		this.squadXMLFileSource = squadXMLFileSource;
+	}
+
+	@JsonProperty("sundial")
+    public SundialConfiguration getSundialConfiguration() {
+
+      return sundialConfiguration;
+    }
 }

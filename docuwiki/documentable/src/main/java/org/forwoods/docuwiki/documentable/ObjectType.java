@@ -32,9 +32,6 @@ public class ObjectType {
 	}
 	
 	public ObjectType(String name) {
-		if (name.endsWith("ContractParameter")) {
-			System.out.println("k");
-		}
 		typeName = name;
 	}
 	

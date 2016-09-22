@@ -1,6 +1,7 @@
 {
 	"instanceFields": 
 	[
+		
 		{
 			"objectType": 
 			{
@@ -312,7 +313,7 @@
 
 	"staticFields": 
 	[
-		
+		{ "objectType" : { "typeName" : "EventData", "varargs" : [ { "typeName" : "Vessel" } ] }, "modifiers" : [ "PUBLIC", "STATIC" ], "name" : "onAsteroidSpawned" }
 	],
 
 	"instanceProperties": 
@@ -385,6 +386,25 @@
 			],
 
 			"name": "FindOpposingNode"
+		},
+		
+		{
+			"parameters": 
+			[
+				
+			],
+
+			"objectType": 
+			{
+				"typeName": "bool"
+			},
+
+			"modifiers": 
+			[
+				"PUBLIC"
+			],
+
+			"name": "CanBeCancelled"
 		},
 
 		{
@@ -721,7 +741,8 @@
 			[
 				
 			]
-		}
+		},
+		 { "enumValues" : [ { "name" : "Trivial", "enumValue" : "0" }, { "name" : "Significant", "enumValue" : "1" }, { "name" : "Exceptional", "enumValue" : "2" } ], "version" : 105, "userGenerated" : false, "namespaceName" : "Contracts", "assemblyName" : "Assembly-CSharp", "objectType" : { "typeName" : "enum" }, "modifiers" : [ ], "name" : "Contracts.Contract+ContractPrestige", "attributes" : [ ] } 
 	],
 
 	"version": 1,

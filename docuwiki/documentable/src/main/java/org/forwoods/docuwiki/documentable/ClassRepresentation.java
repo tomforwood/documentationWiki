@@ -18,6 +18,9 @@ public class ClassRepresentation extends TopLevelDocumentable{
 	@JsonProperty
 	List<ObjectType> varargs;
 	
+	@JsonProperty 
+	List<String> extendingClasses;
+	
 	@JsonProperty
 	List<FieldRepresentation> instanceFields = new ArrayList<>();
 	

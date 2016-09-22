@@ -4,5 +4,6 @@
 	<div ng-if="method.attributes">
 	<div class="attribute" ng-repeat="att in method.attributes">{{att}}<br></div></div>
 	<span class="memberName" ng-bind-html="method|methodFilter:classList"></span>
+	<div class="squad-comment"><span ng-bind-html="method.squadComment|markupify"></span></div>
 	<div click-to-edit2="method.comment"></div>
 </td>

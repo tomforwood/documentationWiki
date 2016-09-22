@@ -28,6 +28,7 @@ public class ParserTest {
 		CharStream cstream = new ANTLRInputStream(reader);
 		TokenStream tokens = new CommonTokenStream(new BasicCSharpLexer(cstream));
 		BasicCSharpParser parser = new BasicCSharpParser(tokens);
+		parser.setTrace(true);
 		parser.compilationUnit();
 		
 		

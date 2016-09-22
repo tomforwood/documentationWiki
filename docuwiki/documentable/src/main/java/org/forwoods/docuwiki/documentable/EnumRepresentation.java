@@ -26,7 +26,7 @@ public class EnumRepresentation extends TopLevelDocumentable {
 		
 		//JSON constructor
 		@SuppressWarnings("unused")
-		private EnumConstant() {}
+		public EnumConstant() {}
 		
 		public EnumConstant(String name) {
 			this.name = name;
