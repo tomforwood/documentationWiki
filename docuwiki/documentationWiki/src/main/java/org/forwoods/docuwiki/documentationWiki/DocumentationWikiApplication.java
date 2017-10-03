@@ -37,6 +37,7 @@ import com.mongodb.client.MongoDatabase;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -62,7 +63,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
     public void initialize(final Bootstrap<DocumentationWikiConfiguration> bootstrap) {
     	
     	bootstrap.setConfigurationSourceProvider(
-    			new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),  
+    			new SubstitutingSourceProvider(new ResourceConfigurationSourceProvider(),  
     					new EnvironmentVariableSubstitutor()));
     	
     	AssetsBundle assets = new AssetsBundle("/assets", "/", "index.html", "assets");
