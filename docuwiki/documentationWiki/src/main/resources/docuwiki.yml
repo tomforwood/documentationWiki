@@ -10,8 +10,8 @@ server:
   
 mongoUsername : docuWikiUser
 mongoDatabase : docuWiki
-mongoHost : @OPENSHIFT_MONGODB_DB_HOST@
-mongoPort : @OPENSHIFT_MONGODB_DB_PORT@
+mongoHost : @mongodb_SERVICE_HOST@
+mongoPort : @mongodb_SERVICE__PORT@
 
 xmlFileLocation: ${OPENSHIFT_DATA_DIR}/generated
 squadXMLFileLocation: ${OPENSHIFT_DATA_DIR}/downloaded/squadXML.zip
