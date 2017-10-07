@@ -8,8 +8,8 @@ server:
     port: 8080
     bindHost: 127.9.90.1
   
-mongoUsername : docuWikiUser
-mongoDatabase : docuWiki
+mongoUsername : ${mongodb_USER}
+mongoDatabase : ${mongodb_DATABASE}
 mongoHost : ${mongodb_SERVICE_HOST}
 mongoPort : ${mongodb_SERVICE__PORT}
 
