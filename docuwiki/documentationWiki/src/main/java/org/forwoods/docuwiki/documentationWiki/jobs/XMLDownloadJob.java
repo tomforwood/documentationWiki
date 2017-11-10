@@ -11,10 +11,14 @@ import org.forwoods.docuwiki.documentationWiki.core.SquadClassLoader;
 import org.knowm.sundial.Job;
 import org.knowm.sundial.annotations.CronTrigger;
 import org.knowm.sundial.exceptions.JobInterruptException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @CronTrigger(cron = "0 0 1 ? * MON")
 //@SimpleTrigger(repeatInterval = 5, timeUnit = TimeUnit.SECONDS)
 public class XMLDownloadJob extends Job{
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(XMLDownloadJob.class);
 
 	private static URL url;
 	private static File docSaveLocation;
@@ -23,10 +27,10 @@ public class XMLDownloadJob extends Job{
 	@Override
 	public void doRun() throws JobInterruptException {	
 		squadLoader.clearCachedClasses();
-		try (
-			ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-			FileOutputStream fos = new FileOutputStream(docSaveLocation);
+		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+				FileOutputStream fos = new FileOutputStream(docSaveLocation);
 			) {
+			LOGGER.info("Downloading qdaud docs from "+docSaveLocation);
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

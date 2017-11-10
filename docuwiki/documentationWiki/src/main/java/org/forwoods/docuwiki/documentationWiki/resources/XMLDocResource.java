@@ -43,6 +43,7 @@ import org.forwoods.docuwiki.documentationWiki.api.XMLParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
@@ -165,8 +166,8 @@ public class XMLDocResource {
 	}
 	
 	private void writeContent(XMLStreamWriter writer, Documentable doc) throws XMLStreamException {
-		String comment = doc.getComment();
-		if (comment==null) return;
+		String comment = Joiner.on(" - ").skipNulls().join(doc.getSquadComment(),doc.getComment());
+		if (comment==null || comment.length()==0) return;
 		try {
 			XMLParser parser = new XMLParser();
 			parser.parse(comment);

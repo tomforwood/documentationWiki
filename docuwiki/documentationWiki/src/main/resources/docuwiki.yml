@@ -10,8 +10,8 @@ server:
   
 mongoUsername : ${mongodb_USER}
 mongoDatabase : ${mongodb_DATABASE}
-mongoHost : ${mongodb_SERVICE_HOST}
-mongoPort : ${mongodb_SERVICE__PORT}
+mongoHost : ${MONGODB_SERVICE_HOST}
+mongoPort : ${MONGODB_SERVICE_PORT}
 
 xmlFileLocation: ${OPENSHIFT_DATA_DIR}/generated
 squadXMLFileLocation: ${OPENSHIFT_DATA_DIR}/downloaded/squadXML.zip

@@ -51,6 +51,7 @@ public class DocumentationWikiApplication extends Application<DocumentationWikiC
 	public static MetricRegistry metrics = new MetricRegistry();
 	
 	public static void main(final String[] args) throws Exception {
+		System.out.println(System.getenv());
         new DocumentationWikiApplication().run(args);
     }
 
