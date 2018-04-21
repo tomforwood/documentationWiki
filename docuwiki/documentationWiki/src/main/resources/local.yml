@@ -1,8 +1,4 @@
 server:
-  type: simple
-  applicationContextPath: /
-  rootPath: '/api'
-  adminContextPath: /admin
 #  connector:
 #    type: http
 #    port: 8080
@@ -13,6 +9,26 @@ server:
 #    - type: http
 #      bindHost: 127.9.90.1
 #      port: 8080
+  #type: simple
+  applicationContextPath: /
+  rootPath: '/api'
+  adminContextPath: /admin
+
+logging:
+  level: INFO
+  loggers:
+    "io.dropwizard": INFO
+    "org.forwoods.docuwiki":
+      level: INFO
+      additive: false
+      appenders:
+        - type: file
+          currentLogFilename: docuwiki.log
+          archivedLogFilenamePattern: docuwiki-%d.log.gz
+          archivedFileCount: 5
+    
+  appenders:
+    - type: console
   
 mongoSecured : false
 mongoUsername : docuWikiUser

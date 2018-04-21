@@ -6,7 +6,6 @@ server:
   connector:
     type: http
     port: 8080
-    bindHost: 127.9.90.1
   
 mongoUsername : ${mongodb_USER}
 mongoDatabase : ${mongodb_DATABASE}

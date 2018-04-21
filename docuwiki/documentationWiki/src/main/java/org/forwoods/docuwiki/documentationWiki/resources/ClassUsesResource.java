@@ -47,10 +47,12 @@ public class ClassUsesResource extends ClassBasedResource{
 			
 			ClassUses cu = new ClassUses(name);		
 			
+			Long l = System.currentTimeMillis();
 			Bson b = memberSearch("instanceFields",name);
-			reflectedClasses.find(b)
+			reflectedClasses.find(b).batchSize(1)
 			.forEach(new MemberTypeConsumer(cu.getUsesReturns(), name, "F", 
 					cr->cr.getInstanceFields()));
+			System.out.println(System.currentTimeMillis()-l);
 			
 			 b = memberSearch("staticFields",name);
 			reflectedClasses.find(b)
@@ -139,7 +141,12 @@ public class ClassUsesResource extends ClassBasedResource{
 	}
 	
 	private Bson attributeSearch(String memberCollection, String type) {
-		return regex(memberCollection+".attributes", "\\["+type);
+		//TODO Attributes are curently stored simply as the display string - with only simple class names
+		//there is a todo in reflector to fix this
+		type = type.substring(type.lastIndexOf('.')+1);
+		
+		Bson regex = regex(memberCollection+".attributes", "\\["+type);
+		return regex;
 	}
 	
 	private class MemberTypeConsumer implements Consumer<Document> {
@@ -243,7 +250,8 @@ public class ClassUsesResource extends ClassBasedResource{
 		private AttributeTypeConsumer(List<ClassUse> uses, String type, String useType,
 				Function<ClassRepresentation, List<? extends Member>> members) {
 			this.uses = uses;
-			this.matchType = type;
+			//TODO attrbutes should be parsed properly in refelctor
+			this.matchType = type.substring(type.lastIndexOf(".")+1);
 			this.useType = useType;
 			this.membersFunc = members;
 		}
@@ -253,7 +261,7 @@ public class ClassUsesResource extends ClassBasedResource{
 			ClassRepresentation cr;
 			try {
 				cr = mapper.readValue(doc.toJson(), ClassRepresentation.class);
-
+				
 				String match = "["+matchType;
 				List<? extends Member> members = membersFunc.apply(cr);
 				for (Member member:members){

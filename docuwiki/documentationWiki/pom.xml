@@ -224,6 +224,7 @@
 				<name>maven.version</name>
 				<value>!3.0.4</value>
 				</property>
+				<jdk>1.8</jdk>
 			</activation>
 			<build>
 				<plugins>

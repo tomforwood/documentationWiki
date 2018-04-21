@@ -30,7 +30,7 @@ public class XMLDownloadJob extends Job{
 		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 				FileOutputStream fos = new FileOutputStream(docSaveLocation);
 			) {
-			LOGGER.info("Downloading qdaud docs from "+docSaveLocation);
+			LOGGER.info("Downloading sqaud docs from "+docSaveLocation);
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
