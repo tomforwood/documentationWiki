@@ -163,6 +163,9 @@ public class ClassResource extends ClassBasedResource{
 			else if (mergedClass.getObjectType().getTypeName().equals("enum")) {
 				toSave = saveEnum((MergedClass<EnumRepresentation>)mergedClass);
 			}
+			else if (mergedClass.getObjectType().getTypeName().equals("interface")) {
+				toSave = saveClass((MergedClass<ClassRepresentation>)mergedClass);
+			}
 			
 			if ("revert".equals(action)) {
 				toSave.setModifyAction("Reverted to version " + 
@@ -224,6 +227,17 @@ public class ClassResource extends ClassBasedResource{
 		setCommon(mergedClass, enumRep);
 		return enumRep;
 	}
+	
+	/*private TopLevelDocumentable saveInterface(MergedClass<ClassRepresentation> mergedClass) {
+		EnumRepresentation enumRep = new EnumRepresentation();
+		mergedClass.getEnumConsts().stream()
+			.peek(ec->ec.setComment(commentTrim(ec.getComment())))
+			.filter(ec->ec.getComment()!=null)
+			.collect(Collectors.toCollection(()->enumRep.getEnumValues()));
+
+		setCommon(mergedClass, enumRep);
+		return enumRep;
+	}*/
 
 	private TopLevelDocumentable saveClass(MergedClass<ClassRepresentation> mergedClass) {
 		//TODO look up latest version number
